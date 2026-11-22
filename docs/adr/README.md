@@ -15,3 +15,4 @@ Lyhyet päätöskirjaukset: tausta, päätös, seuraukset. Tila: *ehdotettu*, *h
 | [0008](0008-linjaukset-kayttajan-valintoina-lukittavissa.md) | Linjaukset käyttäjän valintoina, jotka voidaan lukita | hyväksytty |
 | [0009](0009-syotteen-muoto-ja-normalisointi.md) | Syötteen muoto: tekstitiedosto, ohjerivit ja normalisoinnin erolista | hyväksytty |
 | [0010](0010-linjauskirjasto-ja-valinnat.md) | Linjauskirjaston muoto ja muunnoksen valinnat | hyväksytty |
+| [0011](0011-viejat-ja-validointi-vaiheessa-1.md) | Viejät ja validointi vaiheessa 1 | hyväksytty |

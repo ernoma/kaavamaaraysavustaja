@@ -18,6 +18,7 @@ LAZY_ONLY = {"anthropic", "mistralai"}
 def modules():
     for sub in QGIS_FREE:
         yield from sorted((PACKAGE / sub).rglob("*.py"))
+    yield PACKAGE / "cli.py"  # the command line uses only the QGIS-free parts
 
 
 def imported(node):

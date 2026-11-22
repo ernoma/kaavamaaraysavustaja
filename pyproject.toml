@@ -12,6 +12,9 @@ requires-python = ">=3.12"
 # Ajonaikaiset riippuvuudet pidetään QGISin mukana tulevissa paketeissa (PyYAML).
 dependencies = ["PyYAML>=6"]
 
+[project.scripts]
+kma = "kaavamaaraysavustaja.cli:main"
+
 [project.optional-dependencies]
 # Kielimalliadapterit: valinnaisia, ydin toimii ilman niitä (sääntöpohjainen tila).
 llm = ["anthropic>=2.12", "mistralai>=1.0"]
@@ -23,7 +26,7 @@ include = ["kaavamaaraysavustaja*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra"
+addopts = "-ra -m 'not live'"
 markers = [
     "live: vaatii verkon ja API-avaimen (ei ajeta CI:ssä)",
 ]
