@@ -1,7 +1,7 @@
 # Katja-asetuksen liitteen 4 vakiomääräysluettelo (generoitu, älä muokkaa käsin).
 # Rakentaja: tools/build_knowledge.py; korjaukset: knowledge/katja/annex4_corrections.yaml
 # Koodit ovat koodiarvoja (codeValue); muun koodiston arvo on muodossa {koodisto, koodi}.
-tietopohja: TP-2026.11-1
+tietopohja: TP-2026.11-2
 katja:
   asetus: 311/2024
   muutokset:

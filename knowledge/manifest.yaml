@@ -1,8 +1,8 @@
 # Tietopohjan manifesti (generoitu: python tools/build_knowledge.py).
 # 'tiedostot' = knowledge/-kansion tiedostot tarkistussummineen (eheystarkistus),
 # 'lahteet' = lähdeaineistot, joista tietopohja on rakennettu.
-# saannot, kehotteet ja linjaukset lisätään vaiheissa 1-2.
-tietopohja: TP-2026.11-1
+# saannot, sanasto, linjaukset ja hyvaksytyt ovat käsin ylläpidettäviä; kehotteet vaiheessa 2.
+tietopohja: TP-2026.11-2
 voimassa_alkaen: '2026-11-22'
 rakentaja: tools/build_knowledge.py
 katja:
@@ -39,9 +39,11 @@ ryhti:
     haettu: '2026-11-22'
     lisenssi: GPL-2.0
     komento: 'gh api -H ''Accept: application/vnd.github.raw'' ''repos/GispoCoding/arho-qgis-plugin/contents/arho_feature_template/resources/configs/validointisaantojen_paluuarvot.csv?ref=507633d005b4193ccd3a53a1a0f20dc70f41b2b9'''
-saannot: null
+saannot: rules/rules_v1.yaml
+sanasto: rules/sanasto_v1.yaml
 kehotteet: null
-linjaukset: null
+linjaukset: org/tampere/linjaukset.yaml
+hyvaksytyt: org/tampere/hyvaksytyt.yaml
 lahteet:
   lahtoaineistot/arho/validointisaantojen_paluuarvot.csv: 65a2c282ab237ef1183505776e6229a547882f297d15b0d10506d8cf8abec237
   lahtoaineistot/katja/LIITE 3_Esitystavan tekniset yksityiskohdat.xlsx: 9ca90db678275aa7043c77bed933088c2b8f5ce519c385d448518ddaccfa538b
@@ -53,8 +55,12 @@ tiedostot:
   codelists/RY_Kaavamaarayksen_Lisatiedonlaji/2026-01-12.json: 3664d8145a76e39542ade939eb4df05245ecc04f907176b2746875e6fe5eb8c1
   codelists/RY_Kaavamaarayslaji/2025-10-07.json: b6bf880867500f0ee720270a72388b490ad5e7b886c80e09361f0da5c6db86e8
   codelists/RY_Sanallisen_Kaavamaarayksen_Laji/2024-06-25.json: 5e8628e7b089c73d82a3cef76e461f1207cf7ace6b34d2023199c7b56e76a37c
-  codelists/index.json: 3aca554ded32cc5fd741e325eb2c7b9175b2bdf4ef60f617b86c0fca11327d19
+  codelists/index.json: f40d8b79f9e530793594a5a416bb8bf5017950f9f029398f3a3e4a0f8e92f7e5
   katja/annex4_corrections.yaml: 12cd9ecc81f00c77734d6511ca7c16dc9aa24741432c91d00d94299ded954ead
-  katja/annex4_katja-ii_393-2025.yaml: 164fe601bbf7c2faa83270aa350f686faad26bd3cb92a178e845f9d253de30f3
+  katja/annex4_katja-ii_393-2025.yaml: 3c8ca4c800fc011087dba4f22702217a3bbed167747f7608b58304ae06698419
+  org/tampere/hyvaksytyt.yaml: 36b363fee5d8c40e8cc3dcc9a6b68d703f53a30f37c092549a6ac605ae338905
+  org/tampere/linjaukset.yaml: 9e08c935797a9a5d7ce153a61fd6b80d18a8a4345d933df23c51ec17235a5479
+  rules/rules_v1.yaml: fb698ba9cbfd9f605f66e531f1eb78c6c9b6295bfc6b3842c4a7712509353a8d
+  rules/sanasto_v1.yaml: 6a70a03ed4d478650868032ec31bdd418ba2d3ca9448189a91cc192cad7f10e9
   ryhti/schema_2026-release-11.json: f248f923465916b08190b53b57512ecdc5d3dfe6d69cc230d86c0b0694c3589d
   ryhti/validation_messages.csv: 65a2c282ab237ef1183505776e6229a547882f297d15b0d10506d8cf8abec237

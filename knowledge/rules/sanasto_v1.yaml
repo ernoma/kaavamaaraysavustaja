@@ -1,0 +1,105 @@
+# Sääntöpohjaisen täsmäyksen sanasto v1 (käsin ylläpidettävä; suunnitelman luku 6.5 kohta 4).
+#
+# Sanat ovat pienaakkosin ja niitä verrataan normalisoituun tekstiin pienaakkosina.
+# "alku" tarkoittaa sanan alkua (vartalo), "sana" kokonaista sanaa. Koodit ovat koodiarvoja;
+# koodisto selviää kentästä. Ydin hakee URIt ja versiot tietopohjan koodistoindeksistä.
+
+versio: 1
+paivitetty: 2026-11-22
+
+# (d) Otsikon määreet → kaavamääräyksen lisätiedon laji (tulkintakysymys K7, jos
+# vahvistettava tai jos määreitä on useita).
+maareet:
+  - { sana: uusi, lisatieto: uusi }
+  - { sana: kehitettävä, lisatieto: kehitettava }
+  - { sana: ohjeellinen, lisatieto: ohjeellinenSijainti }
+  - { sana: tutkittava, lisatieto: vaihtoehtoinen, vahvistettava: true }
+  - { sana: valtakunnallinen, lisatieto: valtakunnallinen }
+  - { sana: valtakunnallisesti, lisatieto: valtakunnallinen }
+  - { sana: maakunnallisesti, lisatieto: maakunnallinen }
+  - { sana: paikallisesti, lisatieto: paikallinen }
+  - { sana: seudullinen, lisatieto: seudullinen }
+  - { sana: alueellinen, lisatieto: alueellinen }
+
+# Otsikon avainsanat, kun liitteestä 4 tai koodien nimistä ei löydy vastinetta (K5).
+# Ehdotus on lähin perusteltu koodi, ja tulkintakysymys jää avoimeksi.
+otsikon_avainsanat:
+  - alku: vyöhyke
+    kaavamaarayslaji: kehittamisvyohyke
+    lisatiedot: [osaAlue]
+    geometria: alue
+  - alku: kehittämisalue
+    kaavamaarayslaji: kehittamisalue
+    lisatiedot: [osaAlue]
+    geometria: alue
+  - alku: tarvealue
+    kaavamaarayslaji: suunnittelutarvealue
+    lisatiedot: [osaAlue]
+    geometria: alue
+  - alku: yhteystarve
+    kaavamaarayslaji: liikennealue
+    lisatiedot: [yhteystarve]
+    geometria: viiva
+
+# Informatiiviset merkinnät (K6): otsikon sana, jonka perusteella merkintä ei ehkä ole
+# kaavamääräys (kaavan rajaus, lähtötieto).
+informatiiviset:
+  - { sana: raja }
+  - { sana: rajaus }
+
+# Sanallisen määräyksen lajit tekstin sanoista. Enintään kolme eniten osumia saanutta
+# lajia, tasatilanteessa ensin esiintyvä (vrt. linjaus L-09).
+sanallisen_lajit:
+  kaupanOhjaus: [vähittäiskaup, kaupan, myymälä, kauppaa]
+  taydennysrakentaminen: [täydennysrakent, täydentävää, täydennettävä, täydentyv]
+  yhdyskuntarakenteenOhjaus: [yhdyskuntarakent, kaupunkirakent, asemakaavoitu, asemakaavaa]
+  kehittamisperiaate: [kehitetään, kehittämis]
+  liikenne: [liikenne, liikentee, liikkumi, väylä]
+  joukkoliikenne: [joukkoliikent, pysäk, raitiotie]
+  jalankulku: [kävely, jalankul]
+  pyoraily: [pyöräily, pyöräliikent]
+  pysakointi: [pysäköin]
+  kulttuuriymparisto: [kulttuuriympäristö, kulttuurihistoria, rakennusperinnö, muinais, arkeolog]
+  maisema: [maisema]
+  luontoarvot: [luontoarvo, luonnonsuojel, suojeluarvo, luonnonympäristö]
+  biodiversiteetti: [monimuotoisuu]
+  virkistys: [virkisty, ulkoilu]
+  hulevedet: [hulevesi, hulevede, huleve]
+  vesihuolto: [vesihuol, jäteved, vedenotta, pohjave]
+  jatehuolto: [jätehuol, kotitalousjät]
+  melu: [melu]
+  tarina: [tärinä]
+  tulva: [tulva]
+  ymparistohairiot: [häiriö, pilaantu, onnettomuusriski, päästö]
+  ilmastonmuutos: [ilmastonmuutos, hiilineutraal]
+  esteettomyys: [esteettöm]
+  rakennusoikeus: [rakennusoikeu, kerrosala]
+  korjausrakentaminen: [perusparant, korjaami]
+
+# Linjauksen L-04 vaihtoehto "alakoodit": sanallisen määräyksen kaavamääräyslaji.
+sanallisen_maarayksen_tyypit:
+  suunnittelumaarays: [suunnittelussa, suunnittelun, suunnitelma, asemakaavoitu, selvitettävä, tutkia]
+  rakentamismaarays: [rakentaminen, rakennuspaikalle, rakentamista, rakennusten]
+  suojelumaarays: [suojel, säilytettävä, säilyttää]
+
+# (e) Numeroarvot ja yksiköt → Suure-hierarkian kaavamääräyslaji (huomio R-18).
+suureet:
+  - { yksikko: "k-m²", kaavamaarayslaji: sallittuKerrosala }
+  - { yksikko: "k-m2", kaavamaarayslaji: sallittuKerrosala }
+  - { yksikko: "e=", kaavamaarayslaji: tehokkuusluku }
+
+# (f) Yleismääräyksen kohdistus tiettyihin merkintöihin (R-16, K3) ja linjauksen L-05
+# vaihtoehdon "sailytys_ja_rakenteinen_lisays" rakenteinen lisäys kohdemerkintöihin.
+kohdistuslisaykset:
+  - ehto: "72 §"
+    lisatieto: rakennusluvanPeruste
+    arvo: { koodisto: oikeusvaik_YK, koodi: "12" }
+    peruste: "Opas alaviite 12: yleiskaavan käyttö rakennusluvan perusteena rantavyöhykkeellä (MRL 72 §)"
+
+# (g) Lakiviittaukset (K12): teksti säilyy, avustaja antaa huomion.
+lakiviittaukset:
+  - lyhenne: MRL
+    huomio: "MRL (maankäyttö- ja rakennuslaki) on nykyisin alueidenkäyttölaki; teksti säilyy ennallaan."
+
+# R-17: velvoittavat ilmaukset kaavasuosituksessa (opas 2.3.4).
+velvoittavat_ilmaukset: [tulee, täytyy, pitää, on oltava, ei saa, on velvollinen]

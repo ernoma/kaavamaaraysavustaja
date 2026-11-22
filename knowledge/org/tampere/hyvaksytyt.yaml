@@ -1,0 +1,24 @@
+# Tampereen hyväksytyt muunnokset (linjauskirjasto; käsin ylläpidettävä, suunnitelman luku 6.5 kohta 4a).
+#
+# Kun kaavoittaja hyväksyy merkinnän muunnoksen Tampereen linjaukseksi (tulkintakysymyksen
+# laajuus "Tampereen linjaus", luku 6.10), rakenne kirjataan tänne. Sääntöpohjainen
+# täsmäys käyttää samaa rakennetta seuraavissa muunnoksissa, kun lähteen otsikko ja
+# kirjaintunnus ovat samat. Sanallinen teksti otetaan aina lähteestä.
+#
+# Muoto:
+#   - lahde: { otsikko: "KESKUSTATOIMINTOJEN ALUE", kirjaintunnus: null }
+#     hyvaksytty: { paivamaara: 2027-03-01, hyvaksyja: yleiskaavoitus, perustelu: "…" }
+#     ryhma:
+#       otsikko: Keskustatoimintojen alue
+#       kirjaintunnus: C
+#       geometria: [alue]
+#       maaraykset:
+#         - laji: keskustatoimintojenAlue
+#           lisatiedot: [{ laji: paakayttotarkoitus }]
+#       sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kaupanOhjaus]
+#
+# Vaiheessa 1 kirjasto on tyhjä: kaavoittajat eivät ole vielä hyväksyneet muunnoksia.
+
+versio: 1
+paivitetty: 2026-11-22
+ryhmat: []

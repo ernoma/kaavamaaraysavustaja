@@ -1,0 +1,150 @@
+# Tampereen yleiskaavoituksen linjaukset (käsin ylläpidettävä; ADR-0008, ADR-0010).
+#
+# Linjaus on käyttäjän muunnoskohtainen valinta, jolla on suositeltu oletus. Kun
+# yleiskaavoitus päättää linjauksesta, pääkäyttäjä lukitsee sen: lukittu: true ja päätös
+# (perustelu, päivämäärä, hyväksyjä). Lukittua valintaa ei voi ohittaa komentoriviltä eikä
+# asetustiedostosta. Jokainen muutos kasvattaa linjauksen versiota ja tiedoston versiota.
+#
+# Kentät:
+#   tunnus        L-01 …
+#   otsikko       lyhyt nimi
+#   kysymys       mitä linjataan
+#   vaihtoehdot   arvo (koneluettava) ja kuvaus (käyttäjälle)
+#   oletus        suositeltu vaihtoehto
+#   peruste       miksi oletus on tämä (suunnitelman luku 14 ADR-0007:n valossa)
+#   lukittu       true = valintaa ei voi muuttaa
+#   paatos        lukittaessa: { perustelu, paivamaara, hyvaksyja }
+#   versio        linjauksen versio
+#   tulkintakysymykset  tulkintakysymystyypit (K1–K15), jotka linjaus ratkaisee
+
+versio: 1
+organisaatio: Tampere
+paivitetty: 2026-11-22
+lahde: "Toteutussuunnitelma luku 14; ADR-0007; ADR-0008"
+
+linjaukset:
+
+  - tunnus: L-01
+    otsikko: Muunnoksen yksikkö
+    kysymys: Muunnetaanko kooste yhtenä kirjastona vai jokainen lähdekaava erikseen?
+    vaihtoehdot:
+      - arvo: kooste
+        kuvaus: Yksi kirjasto koosteesta; samat merkinnät yhdistetään, lähdekaavat kirjataan tietoina.
+      - arvo: lahdekaava
+        kuvaus: Jokainen merkintä kohdistetaan lähdekaavaansa (tulkintakysymys K15).
+    oletus: kooste
+    peruste: >
+      ADR-0007: tuotos on uusien yleiskaavojen pohjaksi tehtävä Arhon kirjasto, ei
+      lähdekaavoittainen Ryhti-toimitus. Lähdekaavat säilyvät yksikön tietoina.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K15]
+
+  - tunnus: L-02
+    otsikko: Rakenteistamisen laajuus
+    kysymys: Kuinka pitkälle voimassa olevat määräykset rakenteistetaan?
+    vaihtoehdot:
+      - arvo: maaraystaso
+        kuvaus: Kaavamääräysryhmät ilman kaavakohteita (kirjasto ja määräystason Ryhti-tarkistus).
+      - arvo: koko_kaava
+        kuvaus: Lisäksi kaavakohteet vektoriaineistosta (vaihe 4).
+    oletus: maaraystaso
+    peruste: >
+      ADR-0007: VOOKA-minimi ei ole ajankohtainen, koska aineistoa ei toimiteta Ryhtiin.
+      Kytkentä vektoriaineistoon tehdään vaiheessa 4.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: []
+
+  - tunnus: L-03
+    otsikko: Sanallisen tekstin pilkkominen
+    kysymys: Jaetaanko merkinnän määräysteksti useaksi sanalliseksi määräykseksi?
+    vaihtoehdot:
+      - arvo: ei_pilkota
+        kuvaus: Koko teksti yhtenä sanallisena määräyksenä, jolla voi olla useita lajeja.
+      - arvo: kappaleittain
+        kuvaus: Yksi sanallinen määräys kappaletta kohden (kappaleraja = tyhjä rivi syötteessä).
+      - arvo: aiheittain
+        kuvaus: Teksti jaetaan aiheittain (vaatii kielimallin, vaihe 2).
+    oletus: ei_pilkota
+    peruste: >
+      Lähdeuskollisuus (P2, ADR-0007): teksti siirtyy kokonaisena, ja uuden kaavan laatija
+      voi jakaa sen itse. Lajit luokittelevat aiheet ilman pilkkomista.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K10]
+
+  - tunnus: L-04
+    otsikko: Sanallisen määräyksen tyyppi yleiskaavassa
+    kysymys: Käytetäänkö sanallisessa määräyksessä yläkoodia vai alakoodeja?
+    vaihtoehdot:
+      - arvo: sanallinenMaarays
+        kuvaus: Aina yläkoodi Sanallinen määräys.
+      - arvo: alakoodit
+        kuvaus: Suunnittelu-, rakentamis- tai suojelumääräys sanaston perusteella, muuten yläkoodi.
+    oletus: sanallinenMaarays
+    peruste: >
+      Opas 3.2: yleiskaavassa alakoodien käyttö on harkinnanvaraista. YM:n muistio 16.2.2026
+      (kohta 34) ehdottaa alakoodien poistoa, joten yläkoodi kestää KATJA III -muutoksen.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K11]
+
+  - tunnus: L-05
+    otsikko: Tiettyjä alueita koskevat yleismääräykset
+    kysymys: Miten käsitellään yleismääräys, joka koskee vain osaa merkinnöistä (esim. "RA ja R -alueilla")?
+    vaihtoehdot:
+      - arvo: sailytys
+        kuvaus: Teksti säilyy yleismääräyksenä; kohdistus näytetään huomiona.
+      - arvo: sailytys_ja_rakenteinen_lisays
+        kuvaus: Teksti säilyy, ja kohdemerkintöjen ryhmiin lisätään sanaston mukainen rakenteinen tieto.
+      - arvo: siirto
+        kuvaus: Kappale siirretään kohdemerkintöjen sanalliseksi määräykseksi (vaatii kappalejaon, vaihe 2).
+    oletus: sailytys
+    peruste: >
+      Suunnitelman VOOKA-suositus oli säilytys ja rakenteinen lisäys. ADR-0007:n mukaan
+      kirjasto on uuden kaavan pohja: rakennusluvan peruste (MRL 72 §) on uuden kaavan
+      oikeusvaikutuspäätös, joten sitä ei lisätä kirjaston ryhmiin oletuksena. Lisäys on
+      valittavissa.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K3]
+
+  - tunnus: L-06
+    otsikko: Kirjaintunnukset
+    kysymys: Käytetäänkö lähteen kirjaintunnuksia vai Katjan liitteen 4 tunnuksia?
+    vaihtoehdot:
+      - arvo: alkuperaiset
+        kuvaus: Lähteen tunnus (esim. c-1); puuttuva tunnus otetaan liitteestä 4.
+      - arvo: katja
+        kuvaus: Liitteen 4 tunnus, kun ryhmä vastaa liitteen riviä; muuten lähteen tunnus.
+    oletus: alkuperaiset
+    peruste: >
+      Katja 2 §:n mukaan tunnukseen saa lisätä numeroindeksin. Alkuperäinen tunnus pitää
+      kirjaston jäljitettävänä voimassa olevaan kaavaan.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K14]
+
+  - tunnus: L-07
+    otsikko: Paikkasidonnaiset numeroarvot
+    kysymys: Annetaanko tiettyä paikkaa koskeva numeroarvo (esim. "Kalevassa 70 000 k-m²") rakenteisena?
+    vaihtoehdot:
+      - arvo: sanallisena
+        kuvaus: Arvo jää sanalliseen määräykseen; huomio näytetään.
+      - arvo: omat_kohteet
+        kuvaus: Erillinen ryhmä suureella ja kohdistuksella (vaatii jaon, vaihe 2).
+    oletus: sanallisena
+    peruste: >
+      ADR-0007: uuden kaavan kohteet piirretään erikseen, joten kirjastossa arvo voi olla
+      sanallisena.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: [K4]

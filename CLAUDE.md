@@ -95,7 +95,7 @@ Monitulkintainen kohta vaihtoehtoineen (tyypit K1–K15), jonka käyttäjä ratk
 **Tietopaketti, tietopohja (knowledge package, knowledge base)**:
 Versioitu muuttuva tieto `knowledge/`-kansiossa: koodistot, Katja-liite 4, korjaukset, säännöt,
 kehotteet, Ryhti-skeema ja linjaukset. Tietopohja on niiden yhdistelmä, jolla on tunnus
-(esim. TP-2026.11-1) ja manifesti tarkistussummineen.
+(esim. TP-2026.11-2) ja manifesti tarkistussummineen.
 
 **Vakiomääräysluettelo (standard regulation list)**:
 Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
@@ -110,9 +110,12 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
 3. **Muuttuva tieto on dataa.** Koodiarvoja, liitteen 4 rivejä, sääntöjen metatietoa, kehotteita
    tai skeemaa ei kovakoodata. Ne luetaan tietopohjasta. Tallenna aina koodin URI ja
    koodistoversio.
-4. **Tietopohja rakennetaan työkalulla.** `knowledge/` paitsi käsin ylläpidettävät
-   `katja/annex4_corrections.yaml` (ja myöhemmin säännöt, kehotteet, linjaukset) on generoitua:
-   muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`. Lähdeaineistoja
+4. **Tietopohja rakennetaan työkalulla.** `knowledge/` on generoitua paitsi käsin ylläpidettävät
+   `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto),
+   `rules/sanasto_v1.yaml` (täsmäyksen sanasto), `org/tampere/linjaukset.yaml` (linjaukset,
+   ADR-0008, ADR-0010) ja `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset); myöhemmin
+   kehotteet. Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
+   käsin ylläpidettävän tiedoston muutoksen jälkeen (tarkistussummat). Lähdeaineistoja
    (`lahtoaineistot/`) ei muokata.
 5. **Kielimallille ei koskaan lähetetä PDF:iä tai kuvia**, vain käyttäjän hyväksymä
    määräysteksti ja tarvittava konteksti. Mallin koodikentät ovat enumeraatioita.

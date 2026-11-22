@@ -38,7 +38,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
-KNOWLEDGE_VERSION = "TP-2026.11-1"
+KNOWLEDGE_VERSION = "TP-2026.11-2"
 VALID_FROM = "2026-11-22"
 RYHTI_RELEASE = "2026-release-11"
 ANNEX4_FILE = "katja/annex4_katja-ii_393-2025.yaml"
@@ -47,6 +47,12 @@ QUALITY_REPORT = "docs/laaturaportti_liite3.md"
 SCHEMA_FILE = f"ryhti/schema_{RYHTI_RELEASE}.json"
 MESSAGES_FILE = "ryhti/validation_messages.csv"
 INDEX_FILE = "codelists/index.json"
+RULES_FILE = "rules/rules_v1.yaml"
+VOCABULARY_FILE = "rules/sanasto_v1.yaml"
+POLICY_FILE = "org/tampere/linjaukset.yaml"
+APPROVED_FILE = "org/tampere/hyvaksytyt.yaml"
+# Hand-maintained knowledge files (CLAUDE.md rule 4): copied as such and checksummed.
+HAND_MAINTAINED = [RULES_FILE, VOCABULARY_FILE, POLICY_FILE, APPROVED_FILE]
 
 CODELIST_SOURCES = "lahtoaineistot/koodistot/codelist_*.json"
 ANNEX_SOURCE = "lahtoaineistot/katja/LIITE 3*.xlsx"
@@ -608,6 +614,35 @@ def openapi_code_uris(node: Any) -> set[str]:
 
 
 # --------------------------------------------------------------------------------------
+# g) Hand-maintained files
+
+
+def check_hand_maintained(relative: str, data: Any) -> None:
+    """Stop the build if a hand-maintained file is malformed (contents are tested in tests/)."""
+
+    def fail(message: str) -> None:
+        raise SystemExit(f"knowledge/{relative}: {message}")
+
+    if not isinstance(data, dict) or "versio" not in data:
+        fail("YAML-sanakirja, jossa on 'versio'")
+    if relative == RULES_FILE:
+        ids = [rule.get("tunnus") for rule in data.get("saannot", [])]
+        if len(ids) != len(set(ids)) or not ids:
+            fail("sääntöjen tunnisteet puuttuvat tai toistuvat")
+        for rule in data["saannot"]:
+            if rule.get("vakavuus") not in ("virhe", "varoitus", "huomio") or not rule.get("tarkistus"):
+                fail(f"{rule.get('tunnus')}: vakavuus tai tarkistus puuttuu")
+    elif relative == POLICY_FILE:
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from kaavamaaraysavustaja.core.policy import PolicyLibrary
+
+        PolicyLibrary.from_dict(data)
+    elif relative == APPROVED_FILE and not isinstance(data.get("ryhmat"), list):
+        fail("'ryhmat' on lista")
+
+
+# --------------------------------------------------------------------------------------
 # Build
 
 
@@ -674,6 +709,12 @@ def build(root: Path = ROOT) -> BuildResult:
         "utf-8"
     )
 
+    # g) hand-maintained rules, vocabulary, policies and approved conversions
+    for relative in HAND_MAINTAINED:
+        data = (root / knowledge / relative).read_bytes()
+        check_hand_maintained(relative, yaml.safe_load(data))
+        files[knowledge + relative] = data
+
     # e) validation messages (copied as such from Arho)
     messages = (root / MESSAGES_SOURCE).read_bytes()
     sources[MESSAGES_SOURCE] = sha256_bytes(messages)
@@ -700,9 +741,11 @@ def build(root: Path = ROOT) -> BuildResult:
             "validointiviestit": MESSAGES_FILE,
             "validointiviestien_lahde": MESSAGES_ORIGIN,
         },
-        "saannot": None,
+        "saannot": RULES_FILE,
+        "sanasto": VOCABULARY_FILE,
         "kehotteet": None,
-        "linjaukset": None,
+        "linjaukset": POLICY_FILE,
+        "hyvaksytyt": APPROVED_FILE,
         "lahteet": dict(sorted(sources.items())),
         "tiedostot": {
             path.removeprefix(knowledge): sha256_bytes(content)
@@ -714,7 +757,7 @@ def build(root: Path = ROOT) -> BuildResult:
         "# Tietopohjan manifesti (generoitu: python tools/build_knowledge.py).\n"
         "# 'tiedostot' = knowledge/-kansion tiedostot tarkistussummineen (eheystarkistus),\n"
         "# 'lahteet' = lähdeaineistot, joista tietopohja on rakennettu.\n"
-        "# saannot, kehotteet ja linjaukset lisätään vaiheissa 1-2.\n"
+        "# saannot, sanasto, linjaukset ja hyvaksytyt ovat käsin ylläpidettäviä; kehotteet vaiheessa 2.\n"
     )
     files[knowledge + "manifest.yaml"] = yaml_bytes(manifest, manifest_header)
     return BuildResult(files, findings, row_counts)

@@ -1,0 +1,231 @@
+# Sääntömoottorin v1 säännöt (käsin ylläpidettävä; suunnitelman luku 6.7 ja liite B).
+#
+# Metatieto on dataa, tarkistuslogiikka Pythonia (kaavamaaraysavustaja/core/rules/checks.py).
+# Kentät:
+#   tunnus      R-01 …
+#   otsikko     lyhyt kuvaus
+#   lahde       opas, koodisto tai Ryhdin sääntö
+#   vakavuus    virhe | varoitus | huomio (oletus)
+#   tapaukset   tarkistuksen alatapausten vakavuudet, jos ne poikkeavat oletuksesta
+#   ryhti       vastaavat Ryhdin sääntötunnisteet (knowledge/ryhti/validation_messages.csv)
+#   kaavatasot  kaavatasot, joilla sääntö on voimassa
+#   tilat       muunnostilat (vooka, laadinta), joilla sääntö on voimassa
+#   tarkistus   tarkistusfunktion nimi
+#   voimassa    { alkaen, paattyen }
+
+versio: 1
+paivitetty: 2026-11-22
+opas: "luonnos 16.2.2026"
+
+saannot:
+
+  - tunnus: R-01
+    otsikko: Koodi on olemassa, voimassa ja kaavatasolle sallittu
+    lahde: "Koodistot ja määrityshierarkiat; Syken validointitesti 22.11.2026"
+    vakavuus: virhe
+    tapaukset:
+      laajennuksen_ulkopuolella: varoitus
+    kuvaus: >
+      Kaavamääräyslaji, lisätiedon laji ja sanallisen määräyksen laji ovat koodistossa ja
+      voimassa. Kaavamääräyslaji ja lisätiedon laji kuuluvat kaavatason määrityshierarkiaan.
+      Syken rajapinta ei tarkista poistuneita koodeja eikä määrityshierarkiaa, joten avustaja
+      tarkistaa ne itse. Laajennuksen ulkopuolinen koodi on varoitus, koska Ryhti sallii sen.
+    ryhti: [quality/rec-codelist-spatialplanregulationtype-plantype-conformity]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: codes_valid
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-02
+    otsikko: Ei otsikkotason koodia
+    lahde: "Koodin kuvaus; Ryhti req-codelist-codevalue-headerlevel"
+    vakavuus: virhe
+    ryhti: [quality/req-codelist-codevalue-headerlevel]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: no_header_codes
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-03
+    otsikko: Sanallisella määräyksellä on sanallisen määräyksen laji, muilla ei
+    lahde: "Opas 3.2"
+    vakavuus: virhe
+    ryhti:
+      - quality/req-codelist-spatialplanregulation-verbal-regulation-codevalue
+      - quality/req-codelist-spatialplanregulation-verbal-regulation-not-allowed
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: verbal_types
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-04
+    otsikko: Suureella on positiivinen numeroarvo; ryhmässä vain yksi suure
+    lahde: "Opas 3.3.9"
+    vakavuus: virhe
+    ryhti:
+      - quality/req-codelist-spatialplanregulationtype-quantity-value-not-null
+      - quality/req-codelist-spatialplanregulationtype-quantity-value-number
+      - quality/req-codelist-spatialplanregulationtype-quantity-value-not-zero
+      - quality/req-planregulationgroup-only-one-quantity-planregulation-is-valid
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: quantity_values
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-05
+    otsikko: Suureen lisätiedoiksi vain ehdottomasti noudatettava ja käyttötarkoituskohdistus
+    lahde: "Opas 3.3.9 alaviite 22"
+    vakavuus: virhe
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: quantity_additional_infos
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-06
+    otsikko: Käyttötarkoituskohdistuksen ja poisluettavan käyttötarkoituksen arvo on kaavamääräyslaji
+    lahde: "Ryhti useclasstarget-säännöt"
+    vakavuus: virhe
+    ryhti:
+      - quality/req-codelist-additionalInfoType-codevalue-readout-useclass-useclasstarget-not-null
+      - quality/req-codelist-additionalInfoType-codevalue-readout-useclass-useclasstarget-codevalue-datatype
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: use_class_target_values
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-07
+    otsikko: Pääkäyttötarkoitus vain Aluevaraus-hierarkian koodille, enintään yksi määräystä kohden
+    lahde: "Opas 3.3.1 alaviite 18"
+    vakavuus: virhe
+    ryhti:
+      - quality/req-codelist-additionalinfotype-mainuseclass-areareservation
+      - quality/req-codelist-spatialplanregulation-additionalinfotype-only-one-mainuseclass
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: main_use_area_reservation
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-08
+    otsikko: Aluemaisen ryhmän muilla kuin sanallisilla määräyksillä sama pääkäyttötarkoitus tai osa-alue
+    lahde: "Opas 3.3.1; muistio 16.2.2026 kohdat 13–14"
+    vakavuus: virhe
+    tapaukset:
+      geometria_tuntematon: huomio
+    kuvaus: >
+      Aluemaisessa ryhmässä kaikilla muilla kuin sanallisilla määräyksillä on sama lisätieto
+      (pääkäyttötarkoitus tai osa-alue). Piste- ja viivakohteet eivät saa kumpaakaan.
+    ryhti:
+      - quality/req-geom-areaobject-additionalinfo-mainuseclass-section-area -mandatory
+      - quality/req-geom-codelist-additionalinfotype-mainuseclass-section-area
+      - quality/req-missing-additionalinfo-sub-area
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: same_main_use_or_sub_area
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-09
+    otsikko: Kaavakohteella on muukin kuin sanallinen tai suureellinen määräys
+    lahde: "Opas 3.3, 3.3.9"
+    vakavuus: virhe
+    ryhti: [quality/req-spatialplanregulationtype-one-without-quantity-mandatory]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: not_only_verbal_or_quantity
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-10
+    otsikko: Yleismääräysryhmässä ei pääkäyttötarkoitusta eikä osa-aluetta; ryhmä ei ole tyhjä
+    lahde: "Ryhti generalregulationgroup-säännöt"
+    vakavuus: virhe
+    ryhti:
+      - quality/req-codelist-generalregulationgroup-additionalinfotype-not-allowed
+      - quality/req-generalregulationgroup-spatialplanregulation-spatialplanrecommendation-not-empty
+      - quality/req-generalregulationgroup-spatialplanregulation-not-empty
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: general_group
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-11
+    otsikko: Kirjaintunnus on pakollinen, kun ryhmässä on pääkäyttötarkoitus
+    lahde: "Ryhti req-planregulationgroup-letteridentifier-not-null"
+    vakavuus: virhe
+    ryhti: [quality/req-planregulationgroup-letteridentifier-not-null]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: letter_code_with_main_use
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-12
+    otsikko: Kehittämisvyöhyke on aluemainen ja siihen liittyy sanallinen suunnittelumääräys
+    lahde: "Opas 3.3.3.1; koodin kuvaus"
+    vakavuus: virhe
+    tapaukset:
+      ei_suunnittelumaaraysta: huomio
+    ryhti: []
+    kaavatasot: [yleiskaava, maakuntakaava]
+    tarkistus: development_zone
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-13
+    otsikko: Yhteystarve on viivamainen
+    lahde: "Opas 3.3.3.2"
+    vakavuus: varoitus
+    ryhti: []
+    kaavatasot: [yleiskaava, maakuntakaava]
+    tarkistus: connection_need_line
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-14
+    otsikko: Määräaikaiseen rajoitukseen liittyy väliaikainen määräys
+    lahde: "Ryhti additionalinfotype-temporaryregulation"
+    vakavuus: virhe
+    ryhti: [quality/additionalinfotype-temporaryregulation]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: temporary_restriction
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-15
+    otsikko: Liitteen 4 yhdistelmälle liitteen otsikko; omalle yhdistelmälle ei liitteen 4 otsikkoa
+    lahde: "Opas 3.1.1"
+    vakavuus: varoitus
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: annex_title
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-16
+    otsikko: Yleismääräys viittaa tiettyihin merkintöihin
+    lahde: "Opas 3.2.1"
+    vakavuus: huomio
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: general_targets_markings
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-17
+    otsikko: Kaavasuosituksessa velvoittavia ilmauksia
+    lahde: "Opas 2.3.4"
+    vakavuus: varoitus
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: recommendation_obligation
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-18
+    otsikko: Numeroarvo sanallisessa tekstissä, vaikka sille on suure
+    lahde: "Opas 3.3.9"
+    vakavuus: huomio
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: number_in_text
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-19
+    otsikko: "VOOKA-tila: sanallinen teksti merkki merkiltä lähteen mukainen"
+    lahde: "Periaate P2; ADR-0007; ADR-0009"
+    vakavuus: virhe
+    ryhti: []
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tilat: [vooka]
+    tarkistus: source_text_intact
+    voimassa: { alkaen: 2024-06-11 }
+
+  - tunnus: R-20
+    otsikko: "Värikoodin muoto #123456"
+    lahde: "Ryhti req-spatialplanregulationgroup-colorcode-form"
+    vakavuus: virhe
+    ryhti: [quality/req-spatialplanregulationgroup-colorcode-form]
+    kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
+    tarkistus: color_code_form
+    voimassa: { alkaen: 2024-06-11 }
