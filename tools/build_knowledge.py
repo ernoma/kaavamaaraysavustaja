@@ -51,13 +51,13 @@ RULES_FILE = "rules/rules_v1.yaml"
 VOCABULARY_FILE = "rules/sanasto_v1.yaml"
 POLICY_FILE = "org/tampere/linjaukset.yaml"
 APPROVED_FILE = "org/tampere/hyvaksytyt.yaml"
-PROMPTS_DIR = "prompts/v1"
+# Active prompt version; earlier versions stay in the knowledge base for traceability.
+PROMPTS_DIR = "prompts/v2"
+PROMPT_VERSIONS = ["prompts/v1", "prompts/v2"]
 PROMPT_FILES = [
-    f"{PROMPTS_DIR}/kehote.yaml",
-    f"{PROMPTS_DIR}/jarjestelmaohje.md",
-    f"{PROMPTS_DIR}/konteksti.md",
-    f"{PROMPTS_DIR}/kysymystyypit.yaml",
-    f"{PROMPTS_DIR}/esimerkit.yaml",
+    f"{directory}/{name}"
+    for directory in PROMPT_VERSIONS
+    for name in ("kehote.yaml", "jarjestelmaohje.md", "konteksti.md", "kysymystyypit.yaml", "esimerkit.yaml")
 ]
 PRICING_FILE = "llm/hinnasto.yaml"
 # Hand-maintained knowledge files (CLAUDE.md rule 4): copied as such and checksummed.

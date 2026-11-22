@@ -112,7 +112,7 @@ def test_request_content(kb, project):
     assert "eheytettavaTaiTiivistettava" in request.static_context  # the policy on additional infos
     task = json.loads(request.task_input)
     assert {"yksikko", "vaihe1", "avoimet_kysymykset", "ratkaistut", "esimerkit"} <= set(task)
-    assert request.metadata["kehote"] == "prompts/v1 v1"
+    assert request.metadata["kehote"] == "prompts/v2 v2"
     assert len({r.static_context for r in provider.requests}) == 1  # identical prefix -> cache hits
     assert "%PDF" not in request.task_input
 
@@ -218,7 +218,7 @@ def test_record_replay_and_reuse(kb, policies, tmp_path):
     recorder = RecordingProvider(FakeProvider(echo))
     run_hybrid(kb, first, HybridSettings(recorder, "claude-opus-5-5", Budget(None)))
     path = tmp_path / "rec.json"
-    recorder.save(path, kehote="prompts/v1 v1")
+    recorder.save(path, kehote="prompts/v2 v2")
     replayed = fresh()
     run_hybrid(kb, replayed, HybridSettings(ReplayProvider.from_file(path), "claude-opus-5-5", Budget(None)))
     assert [u.proposal.confidence for u in first.units] == [u.proposal.confidence for u in replayed.units]

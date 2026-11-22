@@ -2,7 +2,7 @@
 name=Kaavamääräysavustaja
 description=Sanallisten kaava- ja yleismääräysten muuntaminen Katja-asetuksen mukaiseen rakenteiseen muotoon
 about=Muuntaa sanalliset kaava- ja yleismääräykset Katja-asetuksen (YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja Arho-yhteensopivaksi kaavamääräysryhmäkirjastoksi. Kehitysvaiheessa (vaihe 0), ei vielä tuotantokäyttöön.
-version=0.1.0
+version=0.2.0
 qgisMinimumVersion=3.40
 qgisMaximumVersion=4.99
 author=Erno Mäkinen

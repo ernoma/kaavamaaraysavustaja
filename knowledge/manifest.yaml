@@ -42,8 +42,8 @@ ryhti:
 saannot: rules/rules_v1.yaml
 sanasto: rules/sanasto_v1.yaml
 kehotteet:
-  hakemisto: prompts/v1
-  kehote: prompts/v1/kehote.yaml
+  hakemisto: prompts/v2
+  kehote: prompts/v2/kehote.yaml
 hinnasto: llm/hinnasto.yaml
 linjaukset: org/tampere/linjaukset.yaml
 hyvaksytyt: org/tampere/hyvaksytyt.yaml
@@ -69,6 +69,11 @@ tiedostot:
   prompts/v1/kehote.yaml: 1bf2bcfb46894bf98330877737c4abad25794888cb2dd40218f93f855d60f4c0
   prompts/v1/konteksti.md: c6a032d981011d78c299b760380be1ebacb0f70d7bdca8cc61af2619da32cf6e
   prompts/v1/kysymystyypit.yaml: fbb43618d6af9426ef8eb9ba22dce9fc46fd29fea5e371ab2a20c0de8cb549e0
+  prompts/v2/esimerkit.yaml: c6b373e5064de1aeda21acde35515c21fea40f148fb555c410abc357d2a9c5b2
+  prompts/v2/jarjestelmaohje.md: b54e95fb567ee10808234d30b8857bda8475c85b3b903f37add9890970a93b9b
+  prompts/v2/kehote.yaml: 202d6d329577ebcd6c7a18ef868a529cca261f32196545a3cc91f8eae6a8122d
+  prompts/v2/konteksti.md: f8086a1ee38334a3e2879a7898bf4db41442a68aa08730fe4ad1f29b93879116
+  prompts/v2/kysymystyypit.yaml: ecab4cdd64e1bd14b3c6780b1603b3bd80701739601c83497aed1a3496f11832
   rules/rules_v1.yaml: 96748680d2491eac5471d77c01efbf280b04ad30457d6a16c8bb7b1f5bd495fe
   rules/sanasto_v1.yaml: 0ff886f5e523676732e247cb3665c73905cf92d099dfbfce5eff4ed8da61ccf9
   ryhti/schema_2026-release-11.json: f248f923465916b08190b53b57512ecdc5d3dfe6d69cc230d86c0b0694c3589d

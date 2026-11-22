@@ -85,16 +85,40 @@ class ReplayProvider:
 
 
 class RecordingProvider:
-    """Wraps a provider and keeps every response for ``save`` (keys are never recorded)."""
+    """Wraps a provider and keeps every response for ``save`` (keys are never recorded).
 
-    def __init__(self, inner: Any):
+    ``existing`` responses (an earlier, interrupted recording) are returned without a call;
+    with ``autosave`` the record is written after every new response.
+    """
+
+    def __init__(
+        self,
+        inner: Any,
+        existing: dict[str, dict[str, Any]] | None = None,
+        autosave: Path | None = None,
+        meta: dict[str, Any] | None = None,
+    ):
         self.inner = inner
         self.name = inner.name
         self.model = getattr(inner, "model", inner.name)
         self.supports_prompt_caching = getattr(inner, "supports_prompt_caching", True)
-        self.responses: dict[str, dict[str, Any]] = {}
+        self.responses: dict[str, dict[str, Any]] = dict(existing or {})
+        self.reused: set[str] = set()
+        self.autosave = autosave
+        self.meta = dict(meta or {})
 
     def generate_structured(self, request: StructuredRequest) -> StructuredResponse:
+        key = request.metadata.get("avain", "")
+        if key in self.responses:
+            self.reused.add(key)
+            entry = self.responses[key]
+            return StructuredResponse(
+                data=entry["vastaus"],
+                model_id=entry.get("malli", self.model),
+                stop_reason=entry.get("stop_reason", "end_turn"),
+                usage=Usage(),  # already paid in the earlier run; the record keeps the usage
+                warnings=list(entry.get("varoitukset", [])),
+            )
         started = time.monotonic()
         response = self.inner.generate_structured(request)
         self.responses[request.metadata.get("avain", str(len(self.responses)))] = {
@@ -107,6 +131,8 @@ class RecordingProvider:
             "varoitukset": response.warnings,
             "vastaus": response.data,
         }
+        if self.autosave:
+            self.save(self.autosave, **self.meta)
         return response
 
     def record(self, **meta: Any) -> dict[str, Any]:

@@ -406,9 +406,11 @@ yksikot:
   tunnus: null
   kartta: Kartta 2 - Liikenne
   ryhmatyyppi: kaavakohde
-  rakenne: [raideliikenteenAsemaTaiSeisake()]
+  rakenne: ['raideliikenteenAsemaTaiSeisake()']
   hyvaksyttavat:
-  - [liikennealue(paakayttotarkoitus)]
+  - ['henkiloliikenteenTerminaalialue()']
+  - ['henkiloliikenteenTerminaalialue(paakayttotarkoitus)']
+  - ['liikennealue(paakayttotarkoitus)']
   - ['kehittamisvyohyke(kayttotarkoituskohdistus=liikennealue,osaAlue)']
   sanallinen: true
   sanallisen_lajit: [joukkoliikenne, liikenne]
@@ -502,6 +504,7 @@ yksikot:
   - [valtatie()]
   - [liikennetunneli(), valtatie(valtakunnallinen)]
   - [liikennetunneli(), valtatie()]
+  - [liikennetunneli(maanalainenTila), valtatie(valtakunnallinen)]
   sanallinen: false
   kysymykset: [K5]
   huomautus: Pääväylä ja sen tunneliosuus (mahdollisesti kaksi ryhmää).
@@ -562,8 +565,9 @@ yksikot:
   tunnus: null
   kartta: Kartta 2 - Liikenne
   ryhmatyyppi: kaavakohde
-  rakenne: [joukkoliikenteenAlue()]
+  rakenne: ['joukkoliikenteenAlue()']
   hyvaksyttavat:
+  - ['henkiloliikenteenTerminaalialue()']
   - [linjaAutoasema()]
   - [raideliikenteenAsemaTaiSeisake()]
   sanallinen: true

@@ -85,7 +85,7 @@ def replay_provider(name: str):
     if not path.exists():
         return None, None
     provider = ReplayProvider.from_file(path)
-    return provider, provider.record.get("malli", DEFAULT_MODELS[name])
+    return provider, provider.record.get("malli", DEFAULT_MODELS[name.split("_")[0]])
 
 
 def metrics_table(columns: dict[str, tuple[list, object]]) -> list[str]:
@@ -171,20 +171,27 @@ def live(args, kb) -> int:
     if not os.environ.get(key_var):
         print(f"{key_var} puuttuu: live-ajo jää tekemättä.")
         return 2
-    recorder = RecordingProvider(create_provider(name, model))
+    meta = {
+        "kehote": PromptSet.load(kb).label,
+        "tietopohja": kb.version,
+        "laatu": args.laatu,
+        "aineisto": [n for n, _, _ in GOLDEN_SETS],
+    }
+    existing = {}
+    path = recorded_path(name)
+    if path.exists():
+        old = json.loads(path.read_text(encoding="utf-8"))
+        if old.get("kehote") == meta["kehote"] and old.get("malli") == model and not args.uudelleen:
+            existing = old.get("vastaukset", {})
+            print(f"Jatketaan aiempaa tallennusta: {len(existing)} vastausta käytetään uudelleen.")
+    recorder = RecordingProvider(create_provider(name, model), existing=existing, autosave=path, meta=meta)
     budget = Budget(args.budjetti)
     started = time.monotonic()
     projects, evaluations = hybrid(
         kb, recorder, model, budget, progress=print if args.eteneminen else None, quality=args.laatu
     )
     print(f"Live-ajo: {budget.calls} kutsua, {budget.spent:.2f} $, {time.monotonic() - started:.0f} s.")
-    recorder.save(
-        recorded_path(name),
-        kehote=PromptSet.load(kb).label,
-        tietopohja=kb.version,
-        laatu=args.laatu,
-        aineisto=[n for n, _, _ in GOLDEN_SETS],
-    )
+    recorder.save(path, **meta)
     print(f"Vastaukset tallennettu: {recorded_path(name).relative_to(ROOT)}")
     print("\n".join(metrics_table({f"hybridi ({name}, live)": (evaluations, projects)})))
     return 0
@@ -203,6 +210,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--malli", help="mallin tunnus")
     parser.add_argument("--laatu", default="medium", choices=["low", "medium", "high"])
     parser.add_argument("--eteneminen", action="store_true")
+    parser.add_argument(
+        "--uudelleen", action="store_true", help="live: älä käytä aiempia tallennettuja vastauksia"
+    )
     parser.add_argument("--json", type=Path, help="tallenna mittarit JSON-tiedostoon")
     args = parser.parse_args(argv)
     sys.stdout.reconfigure(encoding="utf-8")
@@ -219,7 +229,11 @@ def main(argv: list[str] | None = None) -> int:
     rule_projects, rule_evals = rule_based(kb)
     if args.vertailu or not args.hybridi:
         columns["sääntöpohjainen"] = (rule_evals, rule_projects)
-    wanted = ["claude", "mistral"] if args.vertailu else ([args.hybridi] if args.hybridi else [])
+    wanted = (
+        ["claude_kehote_v1", "claude", "mistral"]
+        if args.vertailu
+        else ([args.hybridi] if args.hybridi else [])
+    )
     for name in wanted:
         provider, model = replay_provider(name)
         if provider is None:

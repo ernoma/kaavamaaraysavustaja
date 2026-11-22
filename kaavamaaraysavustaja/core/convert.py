@@ -869,8 +869,23 @@ def apply_title_policy(
     """L-15: the source heading (Katja 2 §) or the annex 4 title of the same code combination (opas 3.1.1)."""
     if "L-15" not in ctx.choices or not unit.heading:
         return
-    row = annex_row_by_signature(ctx, proposal.regulations)
-    if row is None or fold(row["otsikko"]) == fold(proposal.title.get("fin", "")):
+    rows = annex_rows_by_signature(ctx, proposal.regulations)
+    if not rows or fold(proposal.title.get("fin", "")) in {fold(r["otsikko"]) for r in rows}:
+        return
+    row = next((r for r in rows if r.get("geometria") in proposal.geometry_types), rows[0])
+    if not unit.normalized_text:
+        # No verbal regulation: the information content is not broader (Katja 2 §), so
+        # opas 3.1.1 applies whatever L-15 says.
+        proposal.title = {"fin": row["otsikko"]}
+        rationale.append(
+            Rationale(
+                f'Otsikoksi liitteen 4 otsikko "{row["otsikko"]}" (rivi {row["rivi"]}): koodiyhdistelmä vastaa '
+                f"liitteen riviä eikä ryhmässä ole sanallista määräystä (opas 3.1.1); lähteen otsikko {unit.heading}.",
+                "vakioluettelo",
+                "korkea",
+                reference=f"Opas 3.1.1; Katja liite 4 / rivi {row['rivi']}",
+            )
+        )
         return
     if ctx.policy("L-15") == "katja":
         proposal.title = {"fin": row["otsikko"]}
@@ -917,6 +932,17 @@ def annex_row_by_signature(ctx: Context, regulations: list[Regulation]) -> dict[
         if row.get("otsikko") and signature_of_row(row) == frozenset(items):
             return row
     return None
+
+
+def annex_rows_by_signature(ctx: Context, regulations: list[Regulation]) -> list[dict[str, Any]]:
+    """All annex 4 rows with the same code combination (e.g. the area and the point row)."""
+    from kaavamaaraysavustaja.core.rules.checks import signature_of_row
+
+    first = annex_row_by_signature(ctx, regulations)
+    if first is None:
+        return []
+    signature = signature_of_row(first)
+    return [r for r in ctx.kb.annex.get(ctx.plan_level, []) if r.get("otsikko") and signature_of_row(r) == signature]
 
 
 def structure_from_approved(ctx: Context, unit: SourceUnit, entry: dict[str, Any]) -> Structure:

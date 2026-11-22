@@ -6,7 +6,7 @@ from kaavamaaraysavustaja.core.model import SourceUnit
 
 def test_prompt_set_loads(kb):
     prompts = PromptSet.load(kb)
-    assert prompts.label == "prompts/v1 v1"
+    assert prompts.label == "prompts/v2 v2"
     assert [q["tyyppi"] for q in prompts.question_types] == [f"K{n}" for n in range(1, 16)]
     assert "K8" in prompts.model_resolvable() and "K1" not in prompts.model_resolvable()
     assert "VOOKA" in prompts.system
