@@ -1,0 +1,11 @@
+# Tietopakettien ja lähdeaineistojen tarkistussummat lasketaan tavuista:
+# rivinvaihtoja ei saa muuntaa checkoutissa (Windows core.autocrlf).
+knowledge/** -text
+lahtoaineistot/** -text
+tests/data/** -text
+*.py text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.txt text eol=lf

@@ -24,3 +24,4 @@ Thumbs.db
 # Paikalliset muunnosprojektit ja tallennetut kielimallivastaukset kehityksen aikana
 *.kma.json
 !tests/**/*.kma.json
+lahtoaineistot/*.pdf

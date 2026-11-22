@@ -1,0 +1,257 @@
+# Katja-asetuksen liitteen 4 taulukon (LIITE 3_Esitystavan tekniset yksityiskohdat.xlsx)
+# perustellut korjaukset. Alkuperäistä taulukkoa ei muokata: tools/build_knowledge.py
+# soveltaa nämä korjaukset solutasolla ennen vakiomääräysluettelon muodostamista ja
+# tarkistaa, että solun alkuperäinen arvo on yhä sama (muuten rakennus pysähtyy).
+#
+# Kentät:
+#   id            pysyvä tunniste, johon vakiomääräysluettelon rivi viittaa
+#   valilehti     Asemakaava | Yleiskaava | Maakuntakaava
+#   rivi          Excelin rivinumero (otsikkorivi = 1)
+#   sarake        sarakkeen otsikko taulukossa
+#   alkuperainen  solun arvo taulukossa (null = tyhjä)
+#   korjattu      korvaava arvo (null = tyhjennetään)
+#   perustelu     miksi korjataan
+#   lahde         mihin korjaus perustuu
+#   vahvistettava true = asiantuntijan (kaavoittaja / YM) vahvistettava ennen tuotantokäyttöä
+#
+# Laaturaportti: docs/laaturaportti_liite3.md
+
+versio: 1
+lahde: "LIITE 3_Esitystavan tekniset yksityiskohdat.xlsx"
+laadittu: 2026-11-22
+
+korjaukset:
+
+  # --- Yleiskaava ---------------------------------------------------------------
+
+  - id: YK-046-a
+    valilehti: Yleiskaava
+    rivi: 46
+    sarake: lisatiedonlajin_koodiarvo
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus
+    korjattu: null
+    perustelu: >
+      Rivin lisätiedot ovat siirtyneet yhden sarakkeen verran: lisätiedon laji
+      'kayttotarkoituskohdistus' on arvosarakkeessa ja sen arvo 'tuulivoimalaAlue'
+      lisätiedon lajin sarakkeessa. Pääkäyttötarkoitus ei saa arvoa.
+    lahde: "Koodistot: kayttotarkoituskohdistus on lisätiedon laji, tuulivoimalaAlue kaavamääräyslaji"
+    vahvistettava: false
+  - id: YK-046-b
+    valilehti: Yleiskaava
+    rivi: 46
+    sarake: lisatiedonlaji_koodi_2
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/tuulivoimalaAlue
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus
+    perustelu: Siirtyneen rivin korjaus (ks. YK-046-a).
+    lahde: "Koodistot"
+    vahvistettava: false
+  - id: YK-046-c
+    valilehti: Yleiskaava
+    rivi: 46
+    sarake: lisatiedonlajin_2_koodiarvo
+    alkuperainen: null
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/tuulivoimalaAlue
+    perustelu: >
+      Siirtyneen rivin korjaus (ks. YK-046-a). Huom. rivillä on lisäksi toinen
+      kaavamääräyslaji 'tuulivoimalaAlue'; on vahvistettava, onko se tarkoituksellinen
+      vai saman siirtymän jäänne.
+    lahde: "Koodistot"
+    vahvistettava: true
+  - id: YK-047-a
+    valilehti: Yleiskaava
+    rivi: 47
+    sarake: lisatiedonlajin_koodiarvo
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus
+    korjattu: null
+    perustelu: Kuten YK-046-a (aurinkovoimatuotannon energiahuollon alue).
+    lahde: "Koodistot"
+    vahvistettava: false
+  - id: YK-047-b
+    valilehti: Yleiskaava
+    rivi: 47
+    sarake: lisatiedonlaji_koodi_2
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/aurinkovoimalaAlue
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus
+    perustelu: Siirtyneen rivin korjaus (ks. YK-047-a).
+    lahde: "Koodistot"
+    vahvistettava: false
+  - id: YK-047-c
+    valilehti: Yleiskaava
+    rivi: 47
+    sarake: lisatiedonlajin_2_koodiarvo
+    alkuperainen: null
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/aurinkovoimalaAlue
+    perustelu: Siirtyneen rivin korjaus (ks. YK-046-c, sama huomio toisesta kaavamääräyslajista).
+    lahde: "Koodistot"
+    vahvistettava: true
+  - id: YK-162
+    valilehti: Yleiskaava
+    rivi: 162
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Koodi poistettu käytöstä 18.6.2025; korvaava koodi 'arkeologinenKohde' (sama kuvaus).
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025 (muutoshallintapäätös 18.6.2025)"
+    vahvistettava: false
+  - id: YK-163
+    valilehti: Yleiskaava
+    rivi: 163
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/valtakunnallisestiMerkittavaArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: >
+      Koodi poistettu käytöstä 18.6.2025. Valtakunnallinen merkittävyys ilmaistaan rivillä
+      jo olevalla lisätiedolla 'valtakunnallinen'.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: true
+  - id: YK-215
+    valilehti: Yleiskaava
+    rivi: 215
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-162 (pistemäinen kohde).
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+  - id: YK-216
+    valilehti: Yleiskaava
+    rivi: 216
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/valtakunnallisestiMerkittavaArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-163 (pistemäinen kohde, lisätieto 'valtakunnallinen' rivillä).
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: true
+  - id: YK-335
+    valilehti: Yleiskaava
+    rivi: 335
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: https://koodistot.suomi.fi/code;registryCode=rytj;schemeCode=RY_Kaavamaarayslaji;codeCode=liikennealue
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/liikennealue
+    perustelu: Koodistopalvelun selainosoite URI-tunnuksen sijaan; sama koodi 'liikennealue'.
+    lahde: "RY_Kaavamaarayslaji"
+    vahvistettava: false
+
+  # --- Asemakaava ---------------------------------------------------------------
+
+  - id: AK-057-a
+    valilehti: Asemakaava
+    rivi: 57
+    sarake: lisatiedonlaji_koodi_3
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/tontilleAjoSallittu
+    perustelu: >
+      Käyttötarkoituskohdistuksen arvoksi on merkitty lisätiedon laji 'tontilleAjoSallittu'.
+      Se on itse lisätiedon laji (asemakaavan laajennus), jolla ei ole arvoa, joten se
+      siirretään lisätiedon lajiksi.
+    lahde: "RY_Kaavamaarayksen_Lisatiedonlaji (koodin kuvaus); Ryhti useclasstarget-codevalue-datatype"
+    vahvistettava: true
+  - id: AK-057-b
+    valilehti: Asemakaava
+    rivi: 57
+    sarake: lisatiedonlajin_3_koodiarvo
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji/code/tontilleAjoSallittu
+    korjattu: null
+    perustelu: Ks. AK-057-a.
+    lahde: "RY_Kaavamaarayksen_Lisatiedonlaji"
+    vahvistettava: true
+
+  - id: AK-109
+    valilehti: Asemakaava
+    rivi: 109
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/kunnanTaiKaupunginOsa
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/kaupunginTaiKunnanosa
+    perustelu: Koodi poistettu käytöstä 18.6.2025; korvaava koodi 'kaupunginTaiKunnanosa'.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+  - id: AK-119
+    valilehti: Asemakaava
+    rivi: 119
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/rakennusalaJolleSaaSijoittaaSaunan
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/rakennusala
+    perustelu: >
+      Koodi poistettu käytöstä 18.6.2025 ja tilalle lisätty 'sauna'. Rivillä on jo
+      käyttötarkoituskohdistus 'sauna', joten pääkoodiksi jää 'rakennusala'.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: true
+  - id: AK-132
+    valilehti: Asemakaava
+    rivi: 132
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-162.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+  - id: AK-133
+    valilehti: Asemakaava
+    rivi: 133
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: >
+      Kuten YK-162. Rivin otsikko on 'Valtakunnallisesti merkittävä arkeologinen kohde',
+      ja merkittävyys on rivillä lisätietona 'valtakunnallinen'.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+
+  # --- Maakuntakaava ------------------------------------------------------------
+
+  - id: MK-104
+    valilehti: Maakuntakaava
+    rivi: 104
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-162.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+  - id: MK-105
+    valilehti: Maakuntakaava
+    rivi: 105
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/valtakunnallisestiMerkittavaArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-163; tarkista, että rivillä on lisätieto 'valtakunnallinen' (laaturaportti).
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: true
+  - id: MK-110
+    valilehti: Maakuntakaava
+    rivi: 110
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: "#196840"
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/luonnonRauhanKannaltaTarkeaAlue
+    perustelu: >
+      Koodisarakkeessa on värikoodi. Rivin otsikko 'Luonnon rauhan kannalta tärkeä alue'
+      on sama kuin koodin 'luonnonRauhanKannaltaTarkeaAlue' nimi.
+    lahde: "RY_Kaavamaarayslaji (koodin nimi)"
+    vahvistettava: true
+  - id: MK-133
+    valilehti: Maakuntakaava
+    rivi: 133
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/muuArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten YK-162.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: false
+  - id: MK-134
+    valilehti: Maakuntakaava
+    rivi: 134
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/valtakunnallisestiMerkittavaArkeologinenKohde
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/arkeologinenKohde
+    perustelu: Kuten MK-105.
+    lahde: "RY_Kaavamaarayslaji, muutosloki 23.9.2025"
+    vahvistettava: true
+  - id: MK-210
+    valilehti: Maakuntakaava
+    rivi: 210
+    sarake: kaavamaarayslaji_koodi
+    alkuperainen: https://koodistot.suomi.fi/code;registryCode=rytj;schemeCode=RY_Kaavamaarayslaji;codeCode=liikennealue
+    korjattu: http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/liikennealue
+    perustelu: Kuten YK-335.
+    lahde: "RY_Kaavamaarayslaji"
+    vahvistettava: false

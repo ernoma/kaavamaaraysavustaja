@@ -1,6 +1,151 @@
 # CLAUDE.md
 
-Ohjeet tekoälyavusteiselle kehitykselle tässä säilössä. Tarkempi sanasto, arkkitehtuurisäännöt ja testikomennot lisätään vaiheessa 0 (ks. `docs/Toteutussuunnitelma_Kaavamaaraysavustaja.md`, luku 12.1).
+Ohjeet tekoälyavusteiselle kehitykselle tässä säilössä. Kokonaiskuva ja vaiheistus:
+[`docs/Toteutussuunnitelma_Kaavamaaraysavustaja.md`](docs/Toteutussuunnitelma_Kaavamaaraysavustaja.md).
+Arkkitehtuuripäätökset: [`docs/adr/`](docs/adr/).
+
+Kaavamääräysavustaja muuntaa sanalliset kaava- ja yleismääräykset Katja-asetuksen
+(YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja Arhon
+kaavamääräysryhmäkirjastoksi (YAML). Käyttöliittymäteksti on suomeksi, koodi englanniksi;
+alla jokaisesta termistä molemmat.
+
+## Sanasto
+
+**Kaavamääräysryhmä (plan regulation group)**:
+Otsikon ja kirjaintunnuksen alle koottu joukko kaavamääräyksiä, joka liitetään kaavakohteisiin.
+Ryhti `PlanRegulationGroup`, Arho `plan_regulation_groups[]`.
+_Vältä_: merkintä (merkintä on kartan esitystapa), määräysryhmä
+
+**Kaavamääräys (plan regulation)**:
+Yksi määräys, jolla on kaavamääräyslaji, mahdollinen arvo ja lisätiedot. Ryhti `PlanRegulation`.
+
+**Kaavamääräyslaji (regulation type)**:
+Koodiston RY_Kaavamaarayslaji koodi, joka luokittelee määräyksen koneluettavasti, esim.
+`keskustatoimintojenAlue`. Koodissa `type_code`, tallennetaan aina URI:na.
+_Vältä_: määräystyyppi, kaavamerkintä
+
+**Lisätiedon laji (additional information type)**:
+Koodiston RY_Kaavamaarayksen_Lisatiedonlaji koodi, joka täydentää kaavamääräystä, esim.
+`paakayttotarkoitus`, `osaAlue`, `kayttotarkoituskohdistus`. Osalla on arvo (esim. kohdistuksen
+kaavamääräyslaji). Ryhti `AdditionalInformation`.
+
+**Sanallisen määräyksen laji (verbal regulation type)**:
+Koodiston RY_Sanallisen_Kaavamaarayksen_Laji koodi, joka luokittelee sanallisen määräyksen
+aiheen (esim. `kehittamisperiaate`). Jokaisella sanallisella määräyksellä on vähintään yksi.
+Ryhti `verbalRegulations`.
+
+**Sanallinen määräys (verbal regulation)**:
+Kaavamääräys, jonka laji on `sanallinenMaarays` tai sen alakoodi ja arvo kielistetty teksti.
+Teksti on kaavan oikeusvaikutteista sisältöä; koodit ovat sen luokittelua.
+
+**Yleismääräys (general regulation)**:
+Koko kaava-aluetta koskeva määräys, joka ei liity yksittäiseen kaavakohteeseen.
+Ryhti `GeneralRegulationGroup`. Arhon kirjastomuodossa ei ole yleismääräyksiä.
+_Vältä_: yleinen määräys
+
+**Kaavasuositus (plan recommendation)**:
+Ei-velvoittava suositus; ei velvoittavia ilmauksia ("tulee", "täytyy"). Ryhti
+`PlanRecommendation`, Arho `plan_propositions[]`.
+_Vältä_: kaavaehdotus (kaavaehdotus on elinkaaren vaihe)
+
+**Aluevaraus (area reservation)**:
+Kaavakohde, jonka pääkäyttötarkoitus osoitetaan: lisätieto `paakayttotarkoitus` koodille, joka
+kuuluu Aluevaraus-määrityshierarkiaan. Alueella on vain yksi aluevaraus.
+_Vältä_: käyttötarkoitusalue
+
+**Osa-alue (sub-area)**:
+Aluevarauksen päälle osoitettava alue, jolla on lisätieto `osaAlue` (esim. kehittämisvyöhyke).
+
+**Pääkäyttötarkoitus (main use)**:
+Lisätieto `paakayttotarkoitus`; vain Aluevaraus-määrityshierarkian koodeille ja aluemaisille
+kohteille.
+
+**Suure (quantity)**:
+Määräys, jolla on numeerinen arvo ja yksikkö (Suure-määrityshierarkia), esim. sallittu kerrosala.
+Suureellinen määräys on yksinkertainen: yksi koodi ja yksi arvo.
+
+**Määrityshierarkia (definition hierarchy, extension)**:
+Koodiston laajennus, joka kertoo, mitkä koodit kuuluvat millekin kaavalajille tai roolille:
+Aluevaraus, Yleiskaava, Asemakaava, Maakuntakaava, Suure. Jäsenyydellä voi olla
+voimassaoloaika. Koodissa `extension` / `memberships`.
+_Vältä_: laajennus yksinään ilman koodistoa
+
+**Otsikkotason koodi (header-level code)**:
+Koodistoa jäsentävä koodi, jota ei käytetä määräyksissä. Tunnistetaan kuvauksesta
+("otsikkotason koodi"), ei hierarkiatasosta. Koodissa `header_level`.
+
+**VOOKA-tila (VOOKA mode)**:
+Voimassa olevan kaavan muunnos. Sanallinen teksti siirtyy merkki merkiltä muuttumattomana.
+Ryhdissä voimassa oleville kaavoille on oma VOOKA-soveltamisprofiili.
+
+**Laadintatila (drafting mode)**:
+Uuden kaavan laatiminen; avustaja saa ehdottaa muotoiluja erillisinä ja valinnaisina.
+
+**Linjaus (policy decision)**:
+Tampereen hyväksymä, versioitu tulkintaratkaisu (esim. L-03), jota sovelletaan jatkossa
+automaattisesti. Koodissa `Decision` / `policy`.
+_Vältä_: sääntö (sääntö on sääntömoottorin tarkistus)
+
+**Tulkintakysymys (interpretation question)**:
+Monitulkintainen kohta vaihtoehtoineen (tyypit K1–K15), jonka käyttäjä ratkaisee.
+
+**Tietopaketti, tietopohja (knowledge package, knowledge base)**:
+Versioitu muuttuva tieto `knowledge/`-kansiossa: koodistot, Katja-liite 4, korjaukset, säännöt,
+kehotteet, Ryhti-skeema ja linjaukset. Tietopohja on niiden yhdistelmä, jolla on tunnus
+(esim. TP-2026.11-1) ja manifesti tarkistussummineen.
+
+**Vakiomääräysluettelo (standard regulation list)**:
+Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
+
+## Arkkitehtuurisäännöt
+
+1. **Ydin ilman QGISia.** `core`, `knowledge`, `exporters` ja `validation` eivät tuo `qgis`-,
+   `PyQt`- tai `openpyxl`-moduulia. Vain `plugin` ja `linking` saavat tuoda QGISin.
+   Tarkistaa `tests/unit/test_architecture.py`.
+2. **Valinnaiset SDK:t laiskasti.** `anthropic` ja `mistralai` tuodaan vain adapterin sisällä
+   (funktiossa), jotta ydin toimii ilman niitä.
+3. **Muuttuva tieto on dataa.** Koodiarvoja, liitteen 4 rivejä, sääntöjen metatietoa, kehotteita
+   tai skeemaa ei kovakoodata. Ne luetaan tietopohjasta. Tallenna aina koodin URI ja
+   koodistoversio.
+4. **Tietopohja rakennetaan työkalulla.** `knowledge/` paitsi käsin ylläpidettävät
+   `katja/annex4_corrections.yaml` (ja myöhemmin säännöt, kehotteet, linjaukset) on generoitua:
+   muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`. Lähdeaineistoja
+   (`lahtoaineistot/`) ei muokata.
+5. **Kielimallille ei koskaan lähetetä PDF:iä tai kuvia**, vain käyttäjän hyväksymä
+   määräysteksti ja tarvittava konteksti. Mallin koodikentät ovat enumeraatioita.
+6. **VOOKA-tilassa sanallinen teksti on koskematon.**
+7. **Ei salaisuuksia säilöön tai lokeihin.** API-avaimet `QgsAuthManager`iin
+   (`plugin/auth.py`); kehityksessä ympäristömuuttujat `ANTHROPIC_API_KEY`, `MISTRAL_API_KEY`,
+   `RYHTI_API_KEY`. Avainta ei kirjoiteta projektitiedostoon, `QgsSettings`iin, lokiin,
+   testiaineistoon eikä commitiin.
+8. **Pidä yksinkertaisena.** Yksi kehittäjä tekoälyavusteisesti: stdlib + PyYAML ytimessä, ei
+   omaa sääntökieltä, ei taustapalvelua.
+9. Lisenssi GPL-2.0-or-later. Uudet riippuvuudet GPL-yhteensopivia.
+
+## Komennot
+
+Kehitysympäristö (Windows, PowerShell):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python -m pip install -e ".[dev,llm]"
+```
+
+| Tehtävä | Komento |
+|---|---|
+| Testit | `.\.venv\Scripts\python -m pytest` |
+| Lint ja muotoilu | `.\.venv\Scripts\ruff check .` ja `.\.venv\Scripts\ruff format .` |
+| Tietopohjan rakennus | `.\.venv\Scripts\python tools\build_knowledge.py` |
+| Tietopohja ajan tasalla? (CI) | `.\.venv\Scripts\python tools\build_knowledge.py --check` |
+| Claude-piikki (kuiva / live) | `.\.venv\Scripts\python tools\spike_claude.py [--live]` |
+| Syken validointitesti | `.\.venv\Scripts\python tools\syke_validate.py` |
+
+CI (`.github/workflows/ci.yml`) ajaa ruffin, tietopohjan `--check`-tarkistuksen ja pytestin
+ilman QGISia ja ilman verkkoa.
+
+Ympäristöhuomio: tämän kehityskoneen Bash-työkalu kaatuu, jos komennossa on ä/ö-merkkejä.
+Kirjoita Python-skriptit tiedostoihin, käytä glob-kuvioita (esim. `"LIITE 3*.xlsx"`) tai
+PowerShelliä.
 
 ## Git ja GitHub
 

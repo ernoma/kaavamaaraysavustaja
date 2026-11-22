@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kaavamaaraysavustaja"
+version = "0.0.1"
+description = "Sanallisten kaava- ja yleismääräysten muuntaminen Katja-asetuksen mukaiseen rakenteiseen muotoon (Ryhti-JSON, Arho-kirjasto)"
+readme = "README.md"
+license = "GPL-2.0-or-later"
+requires-python = ">=3.12"
+# Ajonaikaiset riippuvuudet pidetään QGISin mukana tulevissa paketeissa (PyYAML).
+dependencies = ["PyYAML>=6"]
+
+[project.optional-dependencies]
+# Kielimalliadapterit: valinnaisia, ydin toimii ilman niitä (sääntöpohjainen tila).
+llm = ["anthropic>=2.12", "mistralai>=1.0"]
+# Kehitys: testit, lint ja tietopaketin rakentaja (openpyxl vain tools/-skripteille).
+dev = ["pytest>=8", "ruff>=0.6", "openpyxl>=3.1", "jsonschema>=4.18"]
+
+[tool.setuptools.packages.find]
+include = ["kaavamaaraysavustaja*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "live: vaatii verkon ja API-avaimen (ei ajeta CI:ssä)",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["lahtoaineistot", "knowledge"]
+
+[tool.ruff.format]
+exclude = ["*.md"]  # dokumenttien koodiesimerkit jätetään sellaisinaan
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "TID"]
+ignore = ["E501"]  # rivipituuden hoitaa ruff format
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+# Arkkitehtuurisääntö A1 tarkistetaan myös testillä tests/unit/test_architecture.py.
+"openpyxl".msg = "openpyxl on vain kehitysriippuvuus (tools/)."
+
+[tool.ruff.lint.per-file-ignores]
+"tools/**" = ["TID251"]
+"tests/**" = ["TID251"]
