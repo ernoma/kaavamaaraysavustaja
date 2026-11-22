@@ -942,7 +942,11 @@ def annex_rows_by_signature(ctx: Context, regulations: list[Regulation]) -> list
     if first is None:
         return []
     signature = signature_of_row(first)
-    return [r for r in ctx.kb.annex.get(ctx.plan_level, []) if r.get("otsikko") and signature_of_row(r) == signature]
+    return [
+        r
+        for r in ctx.kb.annex.get(ctx.plan_level, [])
+        if r.get("otsikko") and signature_of_row(r) == signature
+    ]
 
 
 def structure_from_approved(ctx: Context, unit: SourceUnit, entry: dict[str, Any]) -> Structure:

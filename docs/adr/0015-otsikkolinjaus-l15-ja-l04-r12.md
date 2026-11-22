@@ -20,6 +20,12 @@
   käyttää liitteen 4 otsikkoa. Oletus perustuu lähdeuskollisuuteen ja jäljitettävyyteen
   (ADR-0007): kaavoittaja tunnistaa merkinnän voimassa olevan kaavan otsikosta, ja
   sanallinen määräys laajentaa tietosisältöä. Ei lukittu; päätetään vaiheessa 5.
+- **Ryhmä ilman sanallista määräystä** saa aina liitteen 4 otsikon, kun koodiyhdistelmä vastaa
+  liitteen riviä (opas 3.1.1): tietosisältö ei ole laajempi, joten Katja 2 §:n poikkeus ei
+  koske sitä (esim. ERITYISTOIMINTOJEN ALUE → *Erityisalue*). Jos saman yhdistelmän rivejä on
+  useita (alue ja piste), valitaan ryhmän geometriaa vastaava rivi, ja lähteen otsikko säilyy,
+  jos se on jonkin niistä otsikko (*Rautatie*). Lisätty vaiheen 2 arvioinnin jälkeen: R-15
+  varoitti yhdeksästä tekstittömästä ryhmästä.
 - **L-04 v2** saa vaihtoehdon `kehittamisvyohyke_suunnittelumaarays`: yläkoodi muuten, mutta
   kehittämisvyöhykkeen sanallinen määräys on suunnittelumääräys (opas 3.3.3.1). Oletus säilyy
   yläkoodina (muistion kohta 34, KATJA III). R-12:n alatapaus pysyy huomiona ja viittaa

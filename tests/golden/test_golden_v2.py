@@ -88,11 +88,17 @@ def test_hybrid_text_is_source_text_character_by_character(hybrid):
     projects, _ = hybrid
     for project in projects:
         for unit in project.units:
-            assert normalization_preserves_content(unit.raw_text, unit.normalized_text, unit.normalization_diff)
-            verbal = [r for r in unit.proposal.regulations if r.value and r.value.data_type == "LocalizedText"]
+            assert normalization_preserves_content(
+                unit.raw_text, unit.normalized_text, unit.normalization_diff
+            )
+            verbal = [
+                r for r in unit.proposal.regulations if r.value and r.value.data_type == "LocalizedText"
+            ]
             if unit.normalized_text and unit.proposal.kind != "ei_maarays":
                 assert "\n\n".join(r.value.text["fin"] for r in verbal) == unit.normalized_text, unit.id
-            assert not [r for r in unit.proposal.rule_results if r.rule_id == "R-19" and r.severity == "virhe"]
+            assert not [
+                r for r in unit.proposal.rule_results if r.rule_id == "R-19" and r.severity == "virhe"
+            ]
 
 
 def test_hybrid_fragments_pass_schema(kb, hybrid):
@@ -109,13 +115,6 @@ def test_hybrid_uses_recorded_responses_for_every_unit(hybrid):
         assert step.details["kehote"] == "prompts/v2 v2"
 
 
-HYBRID_GATE = {
-    # Phase 2 results with the recorded responses (see docs/vaihe2_raportti.md).
-    "hyväksytään sellaisenaan (ehdokas ja oikein)": None,
-    "korkean varmuuden ehdotuksista oikein": None,
-}
-
-
 def test_hybrid_quality_gate(hybrid, rule_based):
     _, evaluations = hybrid
     e = combine(evaluations)
@@ -126,6 +125,17 @@ def test_hybrid_quality_gate(hybrid, rule_based):
     assert m["ryhmätyyppi oikein"] == (107, 107)
     # The hybrid must not be worse than the rule-based conversion.
     assert m["rakenteen osuvuus"][0] >= rm["rakenteen osuvuus"][0]
-    assert m["hyväksytään sellaisenaan (ehdokas ja oikein)"][0] > rm["hyväksytään sellaisenaan (ehdokas ja oikein)"][0]
+    assert (
+        m["hyväksytään sellaisenaan (ehdokas ja oikein)"][0]
+        > rm["hyväksytään sellaisenaan (ehdokas ja oikein)"][0]
+    )
     assert e.f1_scores()["sanallisen määräyksen lajit"][2] >= r.f1_scores()["sanallisen määräyksen lajit"][2]
     assert m["tunnetuista kysymyksistä tunnistettu"][0] >= rm["tunnetuista kysymyksistä tunnistettu"][0]
+    # Phase 2 results with kehote v2 (docs/vaihe2_raportti.md); plan 2.3 targets in comments.
+    assert m["hyväksytään sellaisenaan (ehdokas ja oikein)"][0] >= 84  # ≥ 70 % of 107 = 75
+    hit, total = m["korkean varmuuden ehdotuksista oikein"]
+    assert hit == total and total >= 46  # ≥ 98 %
+    assert m["tunnetuista kysymyksistä tunnistettu"][0] >= 81  # ≥ 90 % of 86 = 78
+    assert m["rakenteen osuvuus"][0] >= 88
+    assert e.f1_scores()["lisätiedot"][2] >= 0.94
+    assert e.f1_scores()["sanallisen määräyksen lajit"][2] >= 0.84

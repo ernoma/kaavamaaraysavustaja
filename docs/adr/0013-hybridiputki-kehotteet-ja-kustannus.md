@@ -60,6 +60,13 @@ tekstiä (P2, R-19). Kehotteet ovat muuttuvaa tietoa, ja kustannuksen on oltava 
   `--budjetti`, `--arvio`, `--eteneminen`; samat asetustiedostoon (`kielimalli`, `malli`,
   `laatu`, `budjetti`).
 
+- **Kehote v2** (`knowledge/prompts/v2/`, aktiivinen): ensimmäisessä live-ajossa (v1) malli
+  nosti K7:n lähes jokaisesta valinnaisesta lisätiedosta ja K1:n, K6:n ja K8:n tapauksissa,
+  jotka nimi, liite 4 tai teksti ratkaisee; sellaisenaan hyväksyttäviä oli 50 %. v2 lisää
+  kysymysten kynnyksen tyypeittäin, kieltää kysymykset valinnaisista lisätiedoista (ne
+  kirjataan hylättyinä vaihtoehtoina) ja rajaa lainaukset yksikön omaan tekstiin. v1 säilyy
+  tietopohjassa ja sen tallenne vertailussa (`golden_v2_claude_kehote_v1.json`).
+
 ## Seuraukset
 
 - Ilman kielimallia kaikki toimii kuten vaiheessa 1, eikä SDK:ita tarvita.
