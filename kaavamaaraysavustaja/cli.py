@@ -1,10 +1,15 @@
-"""Command line: ``kma convert`` and ``kma validate`` (phase 1, rule-based, no language model).
+"""Command line: ``kma convert`` and ``kma validate``.
 
 Examples::
 
     kma convert work/kooste.txt --kartta 1
     kma convert work/kooste.txt --kartta 1 --linjaus L-03=kappaleittain --ulos work/k1
+    kma convert work/kooste.txt --kartta 1 --kielimalli claude --arvio
+    kma convert work/kooste.txt --kartta 1 --kielimalli claude --budjetti 3 --asetukset valinnat.yaml
+    kma convert work/kooste.txt --kartta 1 --projekti work/k1/kooste.kma.json --asetukset valinnat.yaml
     kma validate work/k1/kooste.kma.json --syke --yksikot u003,u004
+
+Without ``--kielimalli`` (default ``ei``) the conversion is rule-based and needs no SDK.
 
 The module is QGIS-free (it only uses the core, knowledge, exporters and validation).
 """
@@ -44,6 +49,7 @@ def _utf8_stdout() -> None:
 
 
 def cmd_convert(args: argparse.Namespace) -> int:
+    from kaavamaaraysavustaja.core import decisions as decision_log
     from kaavamaaraysavustaja.core.convert import convert_units
     from kaavamaaraysavustaja.core.ingest import parse, select_map
     from kaavamaaraysavustaja.core.policy import (
@@ -60,14 +66,31 @@ def cmd_convert(args: argparse.Namespace) -> int:
     if not source.exists():
         _print(f"Syötetiedostoa ei löydy: {source}")
         return EXIT_USAGE
+    previous = None
+    if args.projekti:
+        if not args.projekti.exists():
+            _print(f"Muunnosprojektia ei löydy: {args.projekti}")
+            return EXIT_USAGE
+        previous = ConversionProject.load(args.projekti)
     try:
         settings = load_settings(args.asetukset) if args.asetukset else {"linjaukset": {}}
         overrides = {**settings["linjaukset"], **parse_overrides(args.linjaus)}
         kb = KnowledgeBase.load()
         choices = PolicyLibrary.load(kb.directory / kb.manifest["linjaukset"]).resolve(overrides)
+        decisions = decision_log.merge_decisions(
+            previous.decisions if previous else [], decision_log.parse_decisions(settings.get("ratkaisut"))
+        )
     except PolicyError as error:
         _print(f"Virhe linjausvalinnoissa: {error}")
         return EXIT_USAGE
+    except decision_log.DecisionError as error:
+        _print(f"Virhe ratkaisuissa: {error}")
+        return EXIT_USAGE
+    llm_name = args.kielimalli or settings.get("kielimalli") or "ei"
+    if llm_name not in ("ei", "claude", "mistral"):
+        _print(f"Tuntematon kielimalli {llm_name!r}: ei, claude tai mistral.")
+        return EXIT_USAGE
+    budget_limit = args.budjetti if args.budjetti is not None else settings.get("budjetti", 2.0)
     plan_level = args.kaavataso or settings.get("kaavataso") or "yleiskaava"
     mode = args.tila or settings.get("tila") or "vooka"
     wanted_map = args.kartta or settings.get("kartta")
@@ -88,8 +111,22 @@ def cmd_convert(args: argparse.Namespace) -> int:
         id="s1", title=source.name, file=source.name, sha256=hashlib.sha256(data).hexdigest()
     )
     project = convert_units(
-        kb, units, choices, plan_level=plan_level, mode=mode, name=name, source=document, map_title=map_title
+        kb,
+        units,
+        choices,
+        plan_level=plan_level,
+        mode=mode,
+        name=name,
+        source=document,
+        map_title=map_title,
+        decisions=decisions,
     )
+    hybrid_report = None
+    if llm_name != "ei":
+        result = _hybrid(args, settings, kb, project, previous, llm_name, float(budget_limit), decisions)
+        if isinstance(result, int):
+            return result
+        hybrid_report = result
 
     out: Path = args.ulos or source.parent / f"{source.stem}_muunnos"
     out.mkdir(parents=True, exist_ok=True)
@@ -100,6 +137,7 @@ def cmd_convert(args: argparse.Namespace) -> int:
         "ryhti": out / f"{stem}.ryhti.json",
         "raportti": out / f"{stem}_raportti.md",
         "csv": out / f"{stem}_raportti.csv",
+        "ratkaisupohja": out / f"{stem}_ratkaisut.yaml",
     }
     project.save(paths["projekti"])
     library = arho_yaml.library(project, name=args.kirjaston_nimi, include_incomplete=args.myos_keskeneraiset)
@@ -108,6 +146,7 @@ def cmd_convert(args: argparse.Namespace) -> int:
     paths["ryhti"].write_text(json.dumps(fragments, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     paths["raportti"].write_text(report.markdown(project, kb), encoding="utf-8")
     paths["csv"].write_text(report.csv_text(project), encoding="utf-8-sig")
+    paths["ratkaisupohja"].write_text(decision_log.template(project), encoding="utf-8")
     if args.html:
         paths["html"] = out / f"{stem}_raportti.html"
         paths["html"].write_text(report.html_text(project, kb), encoding="utf-8")
@@ -121,6 +160,18 @@ def cmd_convert(args: argparse.Namespace) -> int:
         f"Varmuus: {dict(sorted(s['varmuus'].items()))}; hyväksyttävissä sellaisenaan {s['automaatioehdokkaat']}."
     )
     _print(f"Avoimet tulkintakysymykset: {dict(sorted(s['avoimet'].items())) or 'ei'}")
+    if project.decisions:
+        _print(f"Käyttäjän ratkaisuja {len(project.decisions)} (tallennettu projektiin).")
+        for warning in project.provenance[0].details.get("ratkaisujen_varoitukset", []):
+            _print(f"  ratkaisu: {warning}")
+    if hybrid_report is not None:
+        t = hybrid_report.totals()
+        _print(
+            f"Kielimalli {llm_name}: {t['kutsuja']} kutsua, uudelleenkäytetty {t['uudelleenkaytettyja']}, "
+            f"budjetin takia ohitettu {t['budjetin_takia_ohitettuja']}, virheitä {t['virheita']}; "
+            f"kustannus {t['kustannus_usd']:.2f} $, tokenit {t['tokenit']}; yhtäpitäviä sääntöjen kanssa "
+            f"{t['yhtapitavia']}, hylättyjä lainauksia {t['hylattyja_lainauksia']}."
+        )
     _print(f"Tekstin poikkeamat lähteestä (R-19): {s['tekstimuutokset']}")
     _print(
         f"Arho-kirjastossa {len(library.get('plan_regulation_groups', []))} ryhmää"
@@ -138,6 +189,44 @@ def cmd_convert(args: argparse.Namespace) -> int:
     for label, path in paths.items():
         _print(f"  {label}: {path}")
     return EXIT_ERROR if s["tekstimuutokset"] else EXIT_OK
+
+
+def _hybrid(args, settings, kb, project, previous, llm_name, budget_limit, decisions):
+    from kaavamaaraysavustaja.core.hybrid import HybridSettings, estimate_run, reuse_from_project, run_hybrid
+    from kaavamaaraysavustaja.core.llm.base import LLMError
+    from kaavamaaraysavustaja.core.llm.budget import Budget
+    from kaavamaaraysavustaja.core.llm.prompts import PromptSet
+    from kaavamaaraysavustaja.core.llm.providers import DEFAULT_MODELS, create_provider
+
+    model = args.malli or settings.get("malli") or DEFAULT_MODELS[llm_name]
+    reuse = reuse_from_project(previous, PromptSet.load(kb).label) if previous else {}
+    try:
+        estimate = estimate_run(kb, project, model, cached=llm_name == "claude", reuse=reuse)
+    except KeyError as error:
+        _print(f"Kustannusarvio: {error}")
+        return EXIT_USAGE
+    _print(f"Kustannusarvio: {estimate.describe()}; budjettiraja {budget_limit:.2f} $.")
+    if reuse:
+        _print(f"Aiemman projektin kielimallivastauksia käytettävissä: {len(reuse)}.")
+    if estimate.usd > budget_limit:
+        _print("Huom. arvio ylittää budjettirajan: osa yksiköistä jää sääntöpohjaisiksi.")
+    if args.arvio:
+        _print("Vain arvio (--arvio): kielimallia ei kutsuttu.")
+        return EXIT_OK
+    try:
+        provider = create_provider(llm_name, model)
+    except LLMError as error:
+        _print(str(error))
+        return EXIT_USAGE
+    hybrid = HybridSettings(
+        provider,
+        model,
+        Budget(budget_limit),
+        quality=args.laatu or settings.get("laatu") or "medium",
+        reuse=reuse,
+        progress=_print if args.eteneminen else None,
+    )
+    return run_hybrid(kb, project, hybrid, decisions)
 
 
 def _schema_check(kb, fragments) -> str:
@@ -276,7 +365,26 @@ def parser() -> argparse.ArgumentParser:
     c.add_argument(
         "--linjaus", action="append", metavar="L-0n=VAIHTOEHTO", help="linjausvalinta (toistettavissa)"
     )
-    c.add_argument("--asetukset", type=Path, help="asetustiedosto (YAML, ADR-0010)")
+    c.add_argument(
+        "--asetukset", type=Path, help="asetustiedosto (YAML, ADR-0010): linjaukset, ratkaisut ym."
+    )
+    c.add_argument(
+        "--kielimalli",
+        choices=["ei", "claude", "mistral"],
+        help="kielimalli epävarmoille yksiköille (oletus ei: sääntöpohjainen, ei SDK:ita)",
+    )
+    c.add_argument("--malli", help="mallin tunnus (oletus claude-opus-5-5 / mistral-large-latest)")
+    c.add_argument("--budjetti", type=float, help="ajon budjettiraja dollareina (oletus 2.00)")
+    c.add_argument(
+        "--laatu", choices=["low", "medium", "high"], help="laatutaso (Claude effort, oletus medium)"
+    )
+    c.add_argument("--arvio", action="store_true", help="näytä kustannusarvio kutsumatta kielimallia")
+    c.add_argument(
+        "--projekti",
+        type=Path,
+        help="aiempi muunnosprojekti (*.kma.json): ratkaisut ja kielimallivastaukset säilyvät uudelleenajossa",
+    )
+    c.add_argument("--eteneminen", action="store_true", help="näytä kielimalliajon eteneminen yksiköittäin")
     c.add_argument("--html", action="store_true", help="tee myös HTML-raportti")
     c.add_argument(
         "--myos-keskeneraiset", action="store_true", help="vie myös virheelliset ryhmät Arho-kirjastoon"

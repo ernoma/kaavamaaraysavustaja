@@ -25,6 +25,7 @@ FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
 class ClaudeProvider:
     name = "claude"
+    supports_prompt_caching = True
 
     def __init__(
         self,
