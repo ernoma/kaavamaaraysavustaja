@@ -16,6 +16,8 @@
 #   sanallinen        onko ryhmässä sanallinen määräys (lähteen teksti)
 #   kysymykset        tulkintakysymykset, jotka on tunnistettava (avoimena tai linjauksella ratkaistuna)
 #   huomautus         kehittäjän perustelu
+#   sanallisen_lajit  odotetut sanallisen määräyksen lajit (pääaiheet; lisätty vaiheessa 2)
+#   sanallisen_lajit_muut  myös perustellut lajit (eivät ole virheitä F1-mittarissa)
 
 tila: vahvistamaton
 laatija: kehittäjä (luonnos)
@@ -29,6 +31,8 @@ yksikot:
     ryhmatyyppi: yleismaarays
     rakenne: []
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kaupanOhjaus]
+    sanallisen_lajit_muut: [rakentamistapa]
     kysymykset: [K3, K12]
     huomautus: Suunnitelma 8.3. RA ja R -alueet (K3), MRL 72 § (K12, teksti säilyy).
 
@@ -37,6 +41,8 @@ yksikot:
     ryhmatyyppi: yleismaarays
     rakenne: []
     sanallinen: true
+    sanallisen_lajit: [virkistys, biodiversiteetti]
+    sanallisen_lajit_muut: [luontoarvot, ymparistoarvot, hulevedet, maisema]
     kysymykset: []
 
   - otsikko: KESKUSTATOIMINTOJEN ALUE
@@ -45,6 +51,8 @@ yksikot:
     rakenne: ["keskustatoimintojenAlue(paakayttotarkoitus)"]
     kirjaintunnus: C
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kaupanOhjaus]
+    sanallisen_lajit_muut: [liikenne, joukkoliikenne, kulttuuriymparisto, taydennysrakentaminen]
     kysymykset: [K10, K11, K14]
     huomautus: Suunnitelma 8.1.
 
@@ -56,6 +64,8 @@ yksikot:
       - ["keskustatoimintojenAlue(eheytettavaTaiTiivistettava,paakayttotarkoitus)"]
     kirjaintunnus: c-1
     sanallinen: true
+    sanallisen_lajit: [kehittamisperiaate, kaupanOhjaus]
+    sanallisen_lajit_muut: [taydennysrakentaminen, yhdyskuntarakenteenOhjaus]
     kysymykset: [K1, K4, K14]
     huomautus: Suunnitelma 8.2 ja 7.2 (suositus osa-alue).
 
@@ -64,6 +74,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["keskustatoimintojenAlue(paakayttotarkoitus)", "virkistysalue(paakayttotarkoitus)"]
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+    sanallisen_lajit_muut: [vesihuolto, ymparistoarvot, kehittamisperiaate, joukkoliikenne, ymparistohairiot, virkistys]
     kysymykset: [K2]
     huomautus: Opas 3.3.2, määräysyhdistelmä (K2). Kirjaintunnus puuttuu lähteestä eikä ole liitteessä 4.
 
@@ -73,6 +85,8 @@ yksikot:
     rakenne: ["asumisenAlue(paakayttotarkoitus)"]
     kirjaintunnus: A
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kulttuuriymparisto]
+    sanallisen_lajit_muut: [tontinKaytto, ymparistohairiot]
     kysymykset: [K14]
 
   - otsikko: ASUMISEN JA VIRKISTYKSEN SEKOITTUNUT ALUE
@@ -80,6 +94,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["asumisenAlue(paakayttotarkoitus)", "virkistysalue(paakayttotarkoitus)"]
     sanallinen: true
+    sanallisen_lajit: [virkistys]
+    sanallisen_lajit_muut: [kehittamisperiaate, taydennysrakentaminen, luontoarvot, yhdyskuntarakenteenOhjaus]
     kysymykset: [K2]
 
   - otsikko: ALUE, JOLLE SAA SIJOITTAA SEUDULLISTA PALJON TILAA VAATIVAA KAUPPAA
@@ -90,6 +106,8 @@ yksikot:
       - ["vahittaiskaupanSuuryksikko(paakayttotarkoitus)"]
     kirjaintunnus: km
     sanallinen: true
+    sanallisen_lajit: [kaupanOhjaus]
+    sanallisen_lajit_muut: [liikenne, yhdyskuntarakenteenOhjaus]
     kysymykset: [K1, K4]
     huomautus: Pienaakkostunnus (K1). Lahdesjärvi, Lielahti ja Hankkio ovat paikkasidonnaisia arvoja (K4).
 
@@ -100,6 +118,8 @@ yksikot:
     hyvaksyttavat:
       - ["teollisuusalue(paakayttotarkoitus)", "varastoalue(paakayttotarkoitus)"]
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+    sanallisen_lajit_muut: [liikenne, ymparistohairiot, melu, tarina]
     kysymykset: [K5]
 
   - otsikko: LOMA-ASUNTOALUE
@@ -108,6 +128,8 @@ yksikot:
     rakenne: ["vapaaAjanAsumisenAlue(paakayttotarkoitus)"]
     kirjaintunnus: RA
     sanallinen: true
+    sanallisen_lajit: [rakennusoikeus]
+    sanallisen_lajit_muut: [korjausrakentaminen, rakentamistapa, tontinKaytto, lisarakennusoikeus]
     kysymykset: [K14]
     huomautus: Loma-asunto = vapaa-ajan asuminen (liitteen 4 RA). Teksti viittaa 170 k-m², ei paikkasidonnainen.
 
@@ -117,6 +139,8 @@ yksikot:
     rakenne: ["vapaaAjanAsumisenJaMatkailunAlue(paakayttotarkoitus)"]
     kirjaintunnus: R(200)
     sanallinen: true
+    sanallisen_lajit: [rakennusoikeus]
+    sanallisen_lajit_muut: [korjausrakentaminen, rakentamistapa, tontinKaytto]
     kysymykset: [K5]
     huomautus: Suluissa oleva luku on kohdekohtainen kerrosala (suure); lähin vakiomääräys R.
 
@@ -136,6 +160,8 @@ yksikot:
       - ["luonnonsuojelualue(osaAlue)"]
     kirjaintunnus: SL
     sanallinen: true
+    sanallisen_lajit: [luontoarvot]
+    sanallisen_lajit_muut: [ymparistoarvot, biodiversiteetti]
     kysymykset: []
 
   - otsikko: VESIALUE
@@ -153,6 +179,8 @@ yksikot:
     hyvaksyttavat:
       - ["vaaraAlue(osaAlue)"]
     sanallinen: true
+    sanallisen_lajit: [ymparistohairiot]
+    sanallisen_lajit_muut: [liikenne, yhdyskuntarakenteenOhjaus]
     kysymykset: [K5]
     huomautus: Suunnitelman K5-esimerkki.
 
@@ -176,6 +204,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["kehittamisvyohyke(osaAlue)"]
     sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kehittamisperiaate]
+    sanallisen_lajit_muut: [joukkoliikenne, liikenne, ilmastonmuutos, taydennysrakentaminen, virkistys, ymparistoarvot]
     kysymykset: [K5]
     huomautus: Suunnitelman K5-esimerkki.
 
@@ -186,6 +216,8 @@ yksikot:
     hyvaksyttavat:
       - ["kehittamisvyohyke(osaAlue)"]
     sanallinen: true
+    sanallisen_lajit: [biodiversiteetti]
+    sanallisen_lajit_muut: [luontoarvot, hulevedet, ilmastonmuutos, kehittamisperiaate, tontinKaytto, ymparistoarvot]
     kysymykset: [K1]
     huomautus: Suunnitelman K1-esimerkki.
 
@@ -195,6 +227,8 @@ yksikot:
     rakenne: ["leirintaAlue(ohjeellinenSijainti,paakayttotarkoitus,uusi)"]
     kirjaintunnus: RL
     sanallinen: true
+    sanallisen_lajit: [luontoarvot, kulttuuriymparisto]
+    sanallisen_lajit_muut: [ymparistoarvot, yhdyskuntarakenteenOhjaus]
     kysymykset: [K7, K14]
 
   - otsikko: VALTAKUNNALLINEN PÄÄVÄYLÄ
@@ -213,6 +247,8 @@ yksikot:
     hyvaksyttavat:
       - ["kokoojakatu(kehitettava)"]
     sanallinen: true
+    sanallisen_lajit: [liikenne]
+    sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus, kehittamisperiaate]
     kysymykset: [K5]
 
   - otsikko: LIIKENTEEN YHTEYSTARVE
@@ -234,6 +270,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["raideliikenteenAlue(kehitettava)"]
     sanallinen: true
+    sanallisen_lajit: [liikenne]
+    sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus]
     kysymykset: []
 
   - otsikko: UUSI ERITASOLIITTYMÄ
@@ -256,6 +294,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["pysakki()"]
     sanallinen: true
+    sanallisen_lajit: [joukkoliikenne]
+    sanallisen_lajit_muut: [pyoraily, liikenne, pysakointi]
     kysymykset: [K8]
     huomautus: Suunnitelman K8-esimerkki (piste tai alue).
 
@@ -264,6 +304,8 @@ yksikot:
     ryhmatyyppi: kaavakohde
     rakenne: ["raideliikenteenAsemaTaiSeisake(ohjeellinenSijainti,vaihtoehtoinen)"]
     sanallinen: true
+    sanallisen_lajit: [joukkoliikenne]
+    sanallisen_lajit_muut: [liikenne]
     kysymykset: [K7]
     huomautus: Suunnitelman K7-esimerkki (TUTKITTAVA OHJEELLINEN).
 

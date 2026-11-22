@@ -85,6 +85,8 @@ class Estimate:
     usd: float
     cached: bool
     verified_prices: bool
+    first_call_usd: float = 0.0  # includes the cache write
+    next_call_usd: float = 0.0
 
     def describe(self) -> str:
         cache = "välimuisti käytössä" if self.cached else "ei välimuistia"
@@ -126,7 +128,16 @@ def estimate(
         usd = (
             static * len(tasks) * prices.input + task_tokens * prices.input + output * prices.output
         ) / 1_000_000
-    return Estimate(model, len(tasks), static, task_tokens, output, usd, cached, prices.verified)
+    per_task = (
+        (task_tokens / len(tasks) * prices.input + pricing.output_tokens_per_unit * prices.output) / 1_000_000
+        if tasks
+        else 0.0
+    )
+    first = static * (prices.cache_write if cached else prices.input) / 1_000_000 + per_task
+    following = static * (prices.cache_read if cached else prices.input) / 1_000_000 + per_task
+    return Estimate(
+        model, len(tasks), static, task_tokens, output, usd, cached, prices.verified, first, following
+    )
 
 
 @dataclass

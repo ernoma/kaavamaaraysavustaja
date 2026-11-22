@@ -1,0 +1,582 @@
+# Testiaineiston v2 odotetut tulokset: tests/golden/keskusta_otos.txt (52 yksikköä).
+#
+# TILA: VAHVISTAMATON. Kehittäjän annotointi 22.11.2026 suunnitelman lukujen 6.10 ja 8 sekä
+# Katja-asetuksen liitteen 4 mukaan (ADR-0012). Paikkatietoasiantuntija tarkistaa kohdat, joissa
+# on 'tarkistettava: true', ja kaavoittajat vahvistavat aineiston vaiheessa 5. Odotukset koskevat
+# linjausten oletuksia (knowledge/org/tampere/linjaukset.yaml v2).
+#
+# Kentät kuten tiedostossa kartta1_odotetut.yaml, lisäksi:
+#   kartta                  yksikön kartta (sama otsikko voi esiintyä usealla kartalla)
+#   sanallisen_lajit        sanallisen määräyksen lajit, jotka odotetaan (pääaiheet, enintään 3)
+#   sanallisen_lajit_muut   lajit, jotka ovat myös perusteltuja (eivät ole virheitä F1-mittarissa)
+#   tarkistettava           kehittäjä on epävarma; paikkatietoasiantuntija tarkistaa
+
+tila: vahvistamaton
+laatija: kehittäjä (luonnos); tarkistettavat kohdat paikkatietoasiantuntijalle
+paivays: '2026-11-22'
+lahde: tests/golden/keskusta_otos.txt
+linjaukset: oletukset
+yksikot:
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kulttuuriymparisto]
+  sanallisen_lajit_muut: [liikenne, joukkoliikenne, jalankulku, pysakointi, kehittamisperiaate, ymparistohairiot,
+    melu, hulevedet, taydennysrakentaminen, virkistys, kaupanOhjaus, maisema]
+  kysymykset: []
+  huomautus: YLEISMÄÄRÄYKSET-lohko alaotsikoineen (Kulttuuriympäristö, Liikkuminen …); teksti yhtenä (L-03).
+- otsikko: Yleiskaavan ohjausvaikutus, tuulivoimarakentaminen ja kaupan ohjaus
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [yhdyskuntarakenteenOhjaus, kaupanOhjaus]
+  sanallisen_lajit_muut: [rakentamistapa]
+  kysymykset: [K3, K12]
+  huomautus: Sama kuin Kartta 1:n yleismääräys; otsikko jatkuu tavutettuna seuraavalle riville.
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [melu]
+  sanallisen_lajit_muut: [ymparistohairiot]
+  kysymykset: []
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [pysakointi, biodiversiteetti]
+  sanallisen_lajit_muut: [virkistys, maisema, yhdyskuntatekniikka, luontoarvot, rakentamistapa, ilmastonmuutos]
+  kysymykset: []
+  huomautus: Alaotsikot Korkean rakentamisen laatu ja Maalämpö ovat tekstin kappaleita.
+- otsikko: YDINKESKUSTAN KEHITTÄMISVYÖHYKE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=keskustatoimintojenAlue,osaAlue)']
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate, kaupanOhjaus]
+  sanallisen_lajit_muut: [jalankulku, pysakointi, taydennysrakentaminen, yhdyskuntarakenteenOhjaus]
+  kysymykset: []
+  huomautus: Kohdistus keskustatoimintoihin (liite 4 cka) on hyväksyttävä vaihtoehto.
+- otsikko: YDINKESKUSTAN LAAJENTUMISVYÖHYKE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=keskustatoimintojenAlue,osaAlue)']
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate]
+  sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus, liikenne, jalankulku, kaupanOhjaus, joukkoliikenne]
+  kysymykset: []
+- otsikko: HÄMEENKATU
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [katu()]
+  hyvaksyttavat:
+  - [kehittamisvyohyke(osaAlue)]
+  - [merkittavaRakennettuKulttuuriymparisto(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  sanallisen_lajit_muut: [kehittamisperiaate, kaupanOhjaus, jalankulku]
+  kysymykset: [K5, K8]
+  huomautus: Katu viivana vai kehittämisperiaate alueena; tarkistettava.
+  tarkistettava: true
+- otsikko: KAUPUNKIYMPÄRISTÖN KEHITTÄMISVYÖHYKE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate]
+  sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus, liikenne, virkistys]
+  kysymykset: [K9]
+  huomautus: 'Numeroidut osa-alueet 1.–3. (K9): ryhmä alakohtaa kohden.'
+- otsikko: SÄRKÄNNIEMEN, ONKINIEMEN JA MUSTANLAHDEN ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate]
+  sanallisen_lajit_muut: [taydennysrakentaminen, jalankulku, pyoraily, kevytLiikenne, liikenne, ymparistohairiot]
+  kysymykset: []
+  huomautus: 'Alakohta 1 (K9): rakenne kuten yläkohdalla.'
+- otsikko: RATINAN SUVANNON ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate]
+  sanallisen_lajit_muut: [taydennysrakentaminen, virkistys]
+  kysymykset: []
+  huomautus: Alakohta 2 (K9).
+- otsikko: OPETUKSEN, TUTKIMUKSEN JA KULTTUURIN SEKÄ NIITÄ HYÖDYNTÄVÄN LIIKETOIMINNAN KAMPUSALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate]
+  sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus]
+  kysymykset: []
+  huomautus: Alakohta 3 (K9).
+- otsikko: ASUNTOVALTAISEN TÄYDENNYSRAKENTAMISEN VYÖHYKE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=asumisenAlue,osaAlue)']
+  sanallinen: true
+  sanallisen_lajit: [taydennysrakentaminen]
+  sanallisen_lajit_muut: [kehittamisperiaate, virkistys, yhdyskuntarakenteenOhjaus]
+  kysymykset: [K9]
+  huomautus: Tekstissä numeroidut alueet 5.–8. (K9).
+- otsikko: KAUPUNKIRAKENTEEN TÄYDENTÄMISESTÄ JOHTUVA UUDEN TAI MERKITTÄVÄSTI KEHITETTÄVÄN JULKISEN PALVELUN TARVE.
+    SIJAINTI OHJEELLINEN.
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [palvelujenAlue(ohjeellinenSijainti)]
+  hyvaksyttavat:
+  - ['palvelujenAlue(ohjeellinenSijainti,uusi)']
+  - ['palvelujenAlue(kehitettava,ohjeellinenSijainti,uusi)']
+  - ['palvelujenAlue(ohjeellinenSijainti,varattuYleiseenKayttoon)']
+  sanallinen: false
+  kysymykset: [K7]
+  huomautus: Pistemäinen palvelun tarve; määreet UUSI TAI KEHITETTÄVÄ ja OHJEELLINEN (K7). Tarkistettava.
+  tarkistettava: true
+- otsikko: KORKEAAN RAKENTAMISEEN SOVELTUVA VYÖHYKE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - [kehittamisalue(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [rakentamistapa]
+  sanallisen_lajit_muut: [maisema, kehittamisperiaate, yhdyskuntarakenteenOhjaus]
+  kysymykset: [K5]
+  huomautus: Korkealle rakentamiselle ei ole Katja-koodia (K5).
+  tarkistettava: true
+- otsikko: NAISTENLAHDEN VOIMALAITOS
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [energiahuollonAlue()]
+  hyvaksyttavat:
+  - [energiahuollonAlue(paakayttotarkoitus)]
+  sanallinen: true
+  sanallisen_lajit: [ymparistohairiot]
+  sanallisen_lajit_muut: [yhdyskuntatekniikka]
+  kysymykset: [K8]
+  huomautus: Piste vai alue (K8).
+- otsikko: KESKUSTATOIMINTOJEN ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [keskustatoimintojenAlue(paakayttotarkoitus)]
+  kirjaintunnus: C
+  sanallinen: false
+  kysymykset: [K14]
+- otsikko: KESKUSTATOIMINTOJEN JA MATKAILUPALVELUJEN SEKOITTUNUT ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [keskustatoimintojenAlue(paakayttotarkoitus), matkailupalvelujenAlue(paakayttotarkoitus)]
+  sanallinen: false
+  kysymykset: [K2]
+  huomautus: Määräysyhdistelmä (opas 3.3.2). Kirjaintunnus puuttuu (R-11).
+- otsikko: ASUNTOALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [asumisenAlue(paakayttotarkoitus)]
+  kirjaintunnus: A
+  sanallinen: false
+  kysymykset: [K14]
+- otsikko: HALLINNON JA PALVELUJEN ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [palvelujenAlue(paakayttotarkoitus)]
+  hyvaksyttavat:
+  - ['palvelujenAlue(paakayttotarkoitus,varattuYleiseenKayttoon)']
+  sanallinen: false
+  kysymykset: []
+  huomautus: Liitteen 4 P tai PY (julkisten palvelujen ja hallinnon alue).
+- otsikko: TORI TAI AUKIO
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [katu(paakayttotarkoitus)]
+  hyvaksyttavat:
+  - [liikennealue(paakayttotarkoitus)]
+  sanallinen: false
+  kysymykset: [K5]
+  huomautus: Katuaukio tai tori -koodi ei kuulu yleiskaavan määrityshierarkiaan; lähin katualue (K5). Tarkistettava.
+  tarkistettava: true
+- otsikko: ERITYISTOIMINTOJEN ALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [erityisalue(paakayttotarkoitus)]
+  kirjaintunnus: E
+  sanallinen: false
+  kysymykset: [K14]
+- otsikko: LIIKENNEALUE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [liikennealue(paakayttotarkoitus)]
+  kirjaintunnus: L
+  sanallinen: false
+  kysymykset: [K14]
+- otsikko: KAUPUNKIRAKENTEEN EPÄJATKUVUUSKOHTA, JOSSA ON ERITYISTÄ TARVETTA LIIKKUMISYMPÄRISTÖN JA KAUPUNKIKUVAN
+    PARANTAMISELLE
+  tunnus: null
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - [kehittamisalue(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [liikenne, kehittamisperiaate]
+  sanallisen_lajit_muut: [jalankulku, yhdyskuntarakenteenOhjaus, maisema]
+  kysymykset: [K5]
+- otsikko: POHJAVESIALUE
+  tunnus: pv
+  kartta: Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [pohjavesialue(osaAlue)]
+  kirjaintunnus: pv
+  sanallinen: true
+  sanallisen_lajit: [hulevedet]
+  sanallisen_lajit_muut: [vesihuolto, ymparistoarvot, ymparistohairiot]
+  kysymykset: []
+  huomautus: Kahdentunut tunnus pvpv → pv.
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [virkistys]
+  sanallisen_lajit_muut: [biodiversiteetti, luontoarvot, jalankulku, pyoraily, joukkoliikenne, kevytLiikenne, ymparistoarvot]
+  kysymykset: []
+- otsikko: NÄSIJÄRVEN JA PYHÄJÄRVEN RANTOJEN KEHITTÄMISVYÖHYKKEET
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [kehittamisvyohyke(osaAlue)]
+  hyvaksyttavat:
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=virkistysalue,osaAlue)']
+  sanallinen: true
+  sanallisen_lajit: [kehittamisperiaate, virkistys]
+  sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus]
+  kysymykset: []
+- otsikko: VIHER- JA VIRKISTYSVERKON TAI LIIKUNTA -ALUEEN KEHITTÄMISEN KOHDE TAI TARVE
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [virkistysalue(kehitettava)]
+  hyvaksyttavat:
+  - [urheiluJaVirkistyspalvelujenAlue(kehitettava)]
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=virkistysalue,osaAlue)']
+  sanallinen: false
+  kysymykset: [K5, K8]
+  huomautus: Kohde (piste) tai tarve (alue). Tarkistettava.
+  tarkistettava: true
+- otsikko: KEHITETTÄVÄ VIHER- JA VIRKISTYSVYÖHYKE
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: ['kehittamisvyohyke(kayttotarkoituskohdistus=virkistysalue,osaAlue)']
+  hyvaksyttavat:
+  - [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [virkistys]
+  sanallisen_lajit_muut: [maisema, kehittamisperiaate]
+  kysymykset: []
+  huomautus: Liitteen 4 vka Virkistyksen kehittämisvyöhyke.
+- otsikko: TAMMERKOSKI
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: ['merkittavaRakennettuKulttuuriymparisto(osaAlue,valtakunnallinen)']
+  hyvaksyttavat:
+  - [merkittavaRakennettuKulttuuriymparisto(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  sanallisen_lajit_muut: [maisema]
+  kysymykset: [K5]
+  huomautus: Kansallisesti merkittävä kulttuuriympäristökokonaisuus. Tarkistettava.
+  tarkistettava: true
+- otsikko: KEHITETTÄVÄ TORIALUE
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [katu(kehitettava)]
+  hyvaksyttavat:
+  - [kehittamisalue(osaAlue)]
+  - ['katu(kehitettava,paakayttotarkoitus)']
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  sanallisen_lajit_muut: [kehittamisperiaate, pysakointi, kaupanOhjaus]
+  kysymykset: [K5, K8]
+  huomautus: Useita toreja pisteinä tai alueina; torille ei yleiskaavan koodia. Tarkistettava.
+  tarkistettava: true
+- otsikko: LUONNONSUOJELULAIN PERUSTEELLA RAUHOITETTU ALUE
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [luonnonsuojelualue(osaAlue)]
+  hyvaksyttavat:
+  - [luonnonsuojelualue(paakayttotarkoitus)]
+  sanallinen: false
+  kysymykset: []
+- otsikko: VALUMA-ALUEET
+  tunnus: null
+  kartta: Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+  ryhmatyyppi: kaavakohde
+  rakenne: [hulevesienHallintaAlue(osaAlue)]
+  hyvaksyttavat:
+  - [kehittamisvyohyke(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [hulevedet]
+  sanallisen_lajit_muut: [tulva, vesihuolto, ymparistoarvot]
+  kysymykset: [K9]
+  huomautus: Valuma-aluekohtaiset määräykset (K9).
+  tarkistettava: true
+- otsikko: VALTAKUNNALLISESTI ARVOKAS MAISEMA- ALUE
+  tunnus: mav
+  kartta: Kartta 1c - Kulttuuriperintö
+  ryhmatyyppi: kaavakohde
+  rakenne: ['maisemallisestiArvokasAlue(osaAlue,valtakunnallinen)']
+  kirjaintunnus: mav
+  sanallinen: true
+  sanallisen_lajit: [maisema]
+  kysymykset: [K14]
+  huomautus: Liitteen 4 vama; lähteen tunnus mav (L-06).
+- otsikko: VALTAKUNNALLISESTI ARVOKAS RAKENNETTU KULTTUURIYMPÄRISTÖ (RKY 2009)
+  tunnus: null
+  kartta: Kartta 1c - Kulttuuriperintö
+  ryhmatyyppi: kaavakohde
+  rakenne: ['merkittavaRakennettuKulttuuriymparisto(osaAlue,valtakunnallinen)']
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  kysymykset: [K14]
+  huomautus: Liitteen 4 rky.
+- otsikko: MUINAISJÄÄNNÖSKOHDE
+  tunnus: null
+  kartta: Kartta 1c - Kulttuuriperintö
+  ryhmatyyppi: kaavakohde
+  rakenne: [muinaismuistoAlue()]
+  hyvaksyttavat:
+  - [muinaismuistoAlue(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  sanallisen_lajit_muut: [maisema]
+  kysymykset: [K8]
+  huomautus: 'Kohde: piste (ei osa-aluetta) tai alue (osa-alue).'
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [jalankulku]
+  sanallisen_lajit_muut: [esteettomyys, pyoraily, kevytLiikenne, liikenne]
+  kysymykset: []
+- otsikko: ASEMAKESKUS
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [raideliikenteenAsemaTaiSeisake()]
+  hyvaksyttavat:
+  - [liikennealue(paakayttotarkoitus)]
+  - ['kehittamisvyohyke(kayttotarkoituskohdistus=liikennealue,osaAlue)']
+  sanallinen: true
+  sanallisen_lajit: [joukkoliikenne, liikenne]
+  sanallisen_lajit_muut: [esteettomyys]
+  kysymykset: [K5, K8]
+  huomautus: Tarkistettava.
+  tarkistettava: true
+- otsikko: RAUTATIE
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [raideliikenteenAlue()]
+  sanallinen: false
+  kysymykset: []
+- otsikko: KÄVELYKESKUSTANA KEHITETTÄVÄ HITAAN LIIKKUMISEN ALUE
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: ['kehittamisvyohyke(kayttotarkoituskohdistus=jalankulkualue,osaAlue)']
+  hyvaksyttavat:
+  - ['jalankulkualue(kehitettava,osaAlue)']
+  - [jalankulkualue(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [jalankulku]
+  sanallisen_lajit_muut: [pyoraily, liikenne, esteettomyys, biodiversiteetti]
+  kysymykset: [K5]
+  huomautus: Tarkistettava.
+  tarkistettava: true
+- otsikko: MAANALAINEN PYSÄKÖINTILAITOS
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [pysakointilaitostenAlue(maanalainenTila)]
+  hyvaksyttavat:
+  - [pysakointilaitostenAlue()]
+  sanallinen: false
+  kysymykset: [K8]
+  huomautus: Pistemäinen; määre MAANALAINEN → maanalainen tila.
+- otsikko: YHTEYSTARVE MAANALAISEEN PYSÄKÖINTIIN
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: ['pysakoinninAlue(maanalainenTila,yhteystarve)']
+  hyvaksyttavat:
+  - [pysakoinninAlue(yhteystarve)]
+  - [liikennealue(yhteystarve)]
+  - ['pysakointilaitostenAlue(maanalainenTila,yhteystarve)']
+  sanallinen: false
+  kysymykset: [K5]
+  huomautus: Yhteystarve viivana. Tarkistettava.
+  tarkistettava: true
+- otsikko: HÄMEENKATU
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [katu(kayttotarkoituskohdistus=joukkoliikenteenAlue)]
+  hyvaksyttavat:
+  - [katu()]
+  - ['katu(kayttotarkoituskohdistus=jalankulkualue,kayttotarkoituskohdistus=joukkoliikenteenAlue)']
+  sanallinen: true
+  sanallisen_lajit: [jalankulku, joukkoliikenne]
+  sanallisen_lajit_muut: [pyoraily, liikenne]
+  kysymykset: [K5]
+  huomautus: Liitteen 4 'katu - jl'. Tarkistettava.
+  tarkistettava: true
+- otsikko: TÄRKEÄ JALANKULUN REITTI
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [jalankulkualue()]
+  sanallinen: true
+  sanallisen_lajit: [jalankulku]
+  kysymykset: []
+  huomautus: Liitteen 4 jk Jalankulkureitti.
+- otsikko: JALANKULUN YHTEYSTARVE
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [jalankulkualue(yhteystarve)]
+  sanallinen: true
+  sanallisen_lajit: [jalankulku]
+  sanallisen_lajit_muut: [liikenne]
+  kysymykset: []
+- otsikko: VALTAKUNNALLINEN MOOTTORIAJONEUVOLIIKENTEEN PÄÄVÄYLÄ (VT12) JA PÄÄVÄYLÄN MAANALAINEN OSUUS (RANTAVÄYLÄN
+    TUNNELI)
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [valtatie(valtakunnallinen)]
+  hyvaksyttavat:
+  - [valtatie()]
+  - [liikennetunneli(), valtatie(valtakunnallinen)]
+  - [liikennetunneli(), valtatie()]
+  sanallinen: false
+  kysymykset: [K5]
+  huomautus: Pääväylä ja sen tunneliosuus (mahdollisesti kaksi ryhmää).
+  tarkistettava: true
+- otsikko: ERITASOLIITTYMÄ
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [eritasoliittyma()]
+  sanallinen: false
+  kysymykset: []
+  huomautus: Poiminnan ERITASOLllTTYMÄ korjattu.
+- otsikko: MAANALAINEN ERITASOLIITTYMÄ
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [eritasoliittyma(maanalainenTila)]
+  hyvaksyttavat:
+  - [eritasoliittyma()]
+  sanallinen: true
+  sanallisen_lajit: [pysakointi]
+  sanallisen_lajit_muut: [liikenne]
+  kysymykset: []
+- otsikko: KESKUSTAN KEHÄ
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [paakatu()]
+  hyvaksyttavat:
+  - [katu()]
+  - [kokoojakatu()]
+  sanallinen: true
+  sanallisen_lajit: [liikenne]
+  sanallisen_lajit_muut: [pysakointi]
+  kysymykset: [K5]
+  tarkistettava: true
+- otsikko: KESKUSTAN PÄÄKATU
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [paakatu()]
+  sanallinen: true
+  sanallisen_lajit: [liikenne]
+  kysymykset: []
+- otsikko: KESKITETTY PYÖRÄPYSÄKÖINTI
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [pysakoinninAlue()]
+  hyvaksyttavat:
+  - [pysakoinninAlue(kayttotarkoituskohdistus=pyorailyalue)]
+  sanallinen: true
+  sanallisen_lajit: [pysakointi, pyoraily]
+  kysymykset: [K5, K8]
+  huomautus: Tarkistettava.
+  tarkistettava: true
+- otsikko: VAIHTOTERMINAALI
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [joukkoliikenteenAlue()]
+  hyvaksyttavat:
+  - [linjaAutoasema()]
+  - [raideliikenteenAsemaTaiSeisake()]
+  sanallinen: true
+  sanallisen_lajit: [joukkoliikenne]
+  sanallisen_lajit_muut: [liikenne, pysakointi]
+  kysymykset: [K5, K8]
+  huomautus: Tarkistettava.
+  tarkistettava: true
+- otsikko: MATKUSTAJALIIKENTEEN LAIVAREITTI
+  tunnus: null
+  kartta: Kartta 2 - Liikenne
+  ryhmatyyppi: kaavakohde
+  rakenne: [laivavayla()]
+  sanallinen: false
+  kysymykset: []
+  huomautus: Liitteen 4 lv Laivaväylä.

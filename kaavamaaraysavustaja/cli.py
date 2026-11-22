@@ -123,10 +123,10 @@ def cmd_convert(args: argparse.Namespace) -> int:
     )
     hybrid_report = None
     if llm_name != "ei":
-        result = _hybrid(args, settings, kb, project, previous, llm_name, float(budget_limit), decisions)
-        if isinstance(result, int):
-            return result
-        hybrid_report = result
+        outcome = _hybrid(args, settings, kb, project, previous, llm_name, float(budget_limit), decisions)
+        if isinstance(outcome, int):
+            return outcome
+        hybrid_report = outcome
 
     out: Path = args.ulos or source.parent / f"{source.stem}_muunnos"
     out.mkdir(parents=True, exist_ok=True)

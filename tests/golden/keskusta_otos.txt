@@ -1,0 +1,373 @@
+# Kaavamääräysavustajan testiaineisto v2: Tampereen kooste 'Voimassa olevat yleiskaavamerkinnät
+# kantakaupungissa' (1.9.2025), keskustan yleiskaavayhdistelmä, kartat 1a, 1b, 1c ja 2 (sivut 16–22).
+# Rivit ovat PDF-poiminnan (tools/extract_pdf_text.py, pypdf) mukaisia, myös tavutus ja rivien lopun
+# välilyönnit. Yksiköt on valittu (ei koko selitettä). Sivun otsikot on korvattu ohjeriveillä (ADR-0009).
+# Käsin tehdyt korjaukset, kuten käyttäjä ne tekisi jäsennystaulukossa:
+#  - Kartta 1a: tekstirivit 'Korkean rakentamisen yhteydessä …' on siirretty otsikon KORKEAAN
+#    RAKENTAMISEEN SOVELTUVA VYÖHYKE alle (PDF:n palstajärjestys toi ne selitteen loppuun).
+#  - Kartta 1a: 'KAUPUNKIRAKE NTEEN' → 'KAUPUNKIRAKENTEEN' (poiminnan välilyönti sanan sisällä).
+# Määräystekstit ovat viranomaispäätöksiä; ote on lyhyt testiaineisto, ei koko koostetta.
+@kartta Kartta 1a - Yhdyskuntarakenne ja sen kehittäminen
+@lahdekaavat Kantakaupungin vaiheyleiskaava - valtuustokausi 2021–2025 ja Keskustan strategisen osayleiskaavan vaiheittainen muutos|8.7.2025; Keskustan strateginen osayleiskaava|16.1.2019
+@sivu 16
+YLEISMÄÄRÄYKSET
+Tampereen keskustaa kehitetään Pirkanmaan maakuntakeskuk -
+sena, valtakunnanosakeskuksena sekä houkuttelevana ja elinvoi-
+maisena kaupunkiseudun ja kaupungin keskuksena. Tampereen 
+keskustaa on kehitettävä viihtyisänä järvenrantakaupunkina. Yritys -
+ten ja kaupan toimintamahdollisuuksia on parannettava.
+Kulttuuriympäristö
+Keskustan kehittäminen tukeutuu olemassa olevaan kulttuuriympä-
+ristöön ja kulttuuriarvoja vahvistetaan. Valtakunnallisesti arvokkai -
+den rakennettujen kulttuuriympäristöjen (RKY 2009) ja muinaisjään-
+nösten lisäksi tarkemmassa suunnittelussa on otettava huomioon 
+maakunnallisesti ja paikallisesti arvokkaat rakennetut kulttuuriym -
+päristöt ja arkeologiset kulttuuriperintökohteet. Erityistä huomiota 
+on kiinnitettävä teollisen Tampereen kulttuuriympäristön säilymi -
+seen ja Tampereen maisemallisiin erityispiirteisiin. Vesialueiden 
+muuttuvan käytön yhteydessä on arvioitava vedenalaiseen kulttuu -
+riperintöön liittyvien selvitysten tarpeellisuus yhteistyössä museovi-
+ranomaisen kanssa.
+Liikkuminen
+Keskustaa kehitetään joukkoliikennekaupungin ytimenä ja Ase -
+makeskusta sen solmukohtana. Suunnittelussa ja rakentamisessa 
+tulee tukea kävelykaupungin kehittämistä luomalla rakennusten 
+maantasokerroksista kaupunkikuvaltaan eläviä ja toteuttamalla jul-
+kiset, puolijulkiset ja puoliyksityiset tilat laadukkaasti. Keskustassa 
+on sovellettava joukkoliikennettä ja kävelykeskustaa tukevia pysä-
+köintiperiaatteita.
+Infrastruktuuri ja ympäristönsuojelu
+Järjestelyratapihasta aiheutuvat rajoitteet maankäytön kehittämi-
+selle on otettava huomioon lähialueiden suunnittelussa erityisesti 
+kaupunkiympäristön kehittämisvyöhykkeellä 3, selvitysalueella ja 
+ydinkeskustan laajentumisvyöhykkeen eteläosassa. Alueiden tar-
+kemmassa suunnittelussa tulee huomioida keskusta-alueen maan-
+alainen rakentaminen. Maalämpökaivojen rakentaminen ei saa hai-
+tata tulevaa maanalaista maankäyttöä eikä infraverkkoa. Hulevesien 
+hallinnassa tulee noudattaa Tampereen hulevesiohjelman tavoit -
+teita. Alueiden ja liikenteen suunnittelussa tulee vähentää meluta-
+soa viher- ja virkistysalueilla, muissa julkisissa ulkotiloissa ja asuin -
+kortteleiden ulko-oleskelualueilla sekä edistää ilmanlaadun paran -
+tumista.
+Asuminen
+Asuinkerrostalokortteleiden täydennysrakentamisen yhteydessä on 
+lisättävä ulko-oleskelutilojen vihreyttä ja vähennettävä maantasopy-
+säköintiä. Erillisiä tonttipihoja on yhdistettävä koko korttelin kokoi-
+siksi sisäpihoiksi mahdollisuuksien mukaan. Täydennysrakentami -
+sella on tuettava perheiden hakeutumista keskustaan esimerkiksi 
+parantamalla ulko-oleskelutilojen turvallisuutta ja rakentamalla las-
+ten leikkipaikkoja laadukkaasti. Asuntoalueilla on huomioitava lähi -
+virkistysalueiden, –palveluiden ja –reittien riittävyys sekä saavutet -
+tavuus. Asemakaavoituksen yhteydessä on arvioitava, voidaanko 
+edellä mainittuja tavoitteita toteuttaa parhaiten korttelin laajuisen 
+suunnitelman avulla. Suunnittelussa on kiinnitettävä erityistä huo -
+miota rakennusten maantasokerroksen kaupunkikuvalliseen elä-
+vyyteen. Keskustaan rakennettavan uuden asuntokannan tulee olla 
+hallintamuodoiltaan ja hintatasoltaan monipuolista.
+YLEISMÄÄRÄYS
+Yleiskaavan ohjausvaikutus, tuulivoimarakentaminen ja kau -
+pan ohjaus
+Yleiskaavan käyttötarkoitusalueilla voidaan sallia käyttötarkoi-
+tuksesta poikkeavaa rakentamista, mikäli siitä ei aiheudu haittaa 
+alueen pääasialliselle käyttötarkoitukselle. Asemakaavoitusta ja 
+muuta alueidenkäytön suunnittelua ohjataan yleiskaavan kartoilla 
+1-5. Yleiskaavan RA ja R -alueilla yleiskaavaa voidaan käyttää MRL 
+72 §:n mukaisesti rakentamisen ohjaamiseen. Muilla alueilla raken -
+taminen edellyttää pääsääntöisesti asemakaavaa. Rakennettaessa 
+yli 50 metriä korkeita tuulivoimaloita tulee pyytää erillinen lausunto 
+Puolustusvoimilta. Seudullisen vähittäiskaupan suuryksiköiden ala-
+rajat ovat paljon tilaa vaativan kaupan osalta 15 000 k-m², keskusta-
+hakuisen vähittäiskaupan osalta 10 000 k-m² ja päivittäistavarakau-
+pan osalta 5 000 k-m². Keskustatoimintojen alueiden ja km-alueiden 
+ulkopuolelle ei saa sijoittaa yli 4 000 k-m² suuruisia vähittäiskaupan 
+suuryksiköitä ja myymäläkeskittymiä.
+YLEISMÄÄRÄYS
+Asemakaavoituksen ja muiden hankkeiden yhteydessä on selvitet -
+tävä tarve melu- ja ilmanlaatuselvityksille.
+YLEISMÄÄRÄYS
+Asumisen kortteleissa pysäköinti osoitetaan pääosin pysäköintilai -
+toksiin siten, että kortteleihin muodostuu mahdollisimman paljon 
+maanvaraista pihaympäristöä.
+Rantojen ja veden saavutettavuutta ja ranta-alueiden virkistyskäyt-
+töä on kehitettävä viileän vyöhykkeen hyödyntämisen näkökul-
+masta. 
+Viheralueille, tonteille, katualueille ja toreille on lisättävä kaupunki -
+luonnon monimuotoisuutta vahvistavaa monilajista puustoa ja kas-
+villisuutta.
+Tammerkosken vesiluonnon kehittämismahdollisuus tulee ottaa 
+huomioon maankäytön suunnittelussa.
+Korkean rakentamisen laatu
+Korkean rakentamisen hankkeissa on huomioitava maisemaan ja 
+kaupunkikuvaan liittyvät vaikutukset. Hankkeen soveltuvuutta kau -
+punkikuvaan ja maisemaan on arvioitava jo ennen kaavahankkeen 
+aloittamista.
+Maalämpö
+Uusien maalämpöjärjestelmien rakentaminen ei saa vaikeuttaa 
+maanalaisen huollon ja pysäköinnin järjestämistä.
+YDINKESKUSTAN KEHITTÄMISVYÖHYKE
+Alueella tulee parantaa ydinkeskustamaisen elinkeinotoi -
+minnan edellytyksiä, saavutettavuutta ja kävelyalueen elä-
+vyyttä. Alueella on tarjottava mahdollisuuksia ennakoimattomaan 
+kohtaamiseen ja tapahtumien järjestämiseen. Tontteja kehite -
+tään koko korttelia koskevien suunnitelmien avulla. Suunnitelmien 
+tulee edistää monipuolisten liiketilojen tarjontaa lisärakentamisen 
+ja sisäpihojen kehittämisen avulla. Toteutuksen tulee tukea kivijal-
+kakauppaa ja sen toimintamahdollisuuksia varaamalla katuihin ja 
+muihin yleisiin alueisiin rajautuvien rakennusten ensimmäiset ker-
+rokset liike- ja palvelukäyttöön. Sisäpihojen liikekäytön lisääminen 
+on sovitettava yhteen asumisen kanssa. Suunnitelmien yhteydessä 
+on tutkittava asumisen lisäämistä ja toteutettava asumisen vaati-
+mat ulko-oleskelutilat. Täydennysrakentamisen yhteydessä on lisät-
+tävä julkiseen oleskeluun soveltuvia tiloja ja kaupunkivihreää. Erilli-
+siä tonttipihoja on yhdistettävä ja korttelien läpi kulkevia jalankul -
+kuyhteyksiä on avattava mahdollisuuksien mukaan. Suunnitelmissa 
+tulee esittää korttelin kytkeytyminen ympäröivään jalankulkuverk -
+koon. Sisäpihat tulee osoittaa ensisijaisesti muuhun käyttöön kuin 
+pysäköintiin ja alueen autopysäköinti tulee toteuttaa ensisijaisesti 
+rakenteellisena tai keskitetyissä pysäköintilaitoksissa.
+YDINKESKUSTAN LAAJENTUMISVYÖHYKE
+Kansainvälistä, valtakunnallista ja alueellista saavutet -
+tavuutta hyödyntävä voimakkaan uudistumisen alue. Keskeisenä 
+osana alueen uudistamisessa on Asemakeskuksen kehittäminen. 
+Alueella sallitaan monipuolisen työn, kaupan, palveluiden, vapaa-
+ajan ja asumisen toiminnat. Alueen elävyyttä on vahvistettava luo -
+malla alueelle uusia, laadukkaita julkisia tiloja, kehittämällä olevien 
+torien ja aukioiden laatua ja viihtyisyyttä sekä varaamalla maanta -
+sossa katutilaan ja/tai julkiseen alueeseen liittyvät tilat aktiiviseen 
+käyttöön kuten liike- ja palvelutiloiksi. Alueen suunnittelussa ja 
+rakentamisessa on huomioitava ympäristön toimintojen välinen kyt-
+keytyminen toisiinsa ja niiden sujuva saavutettavuus. Radan estevai-
+kutusta on vähennettävä luomalla uusia radan ylittäviä ja/tai alitta-
+via yhteyksiä, jotka liittyvät luontevasti olevaan kaupunkirakentee -
+seen ja liikkumisen reitteihin. Alueen yhteyksiä yliopistolle, Tamme-
+laan ja Kalevan suuntaan on kehitettävä.
+HÄMEENKATU
+Hämeenkatu on kaupungin merkittävin katutila, jota on kehitettävä 
+aktiivisena, monipuolisena, viihtyisänä ja laadukkaana ympäristönä 
+turvaamalla kulttuurihistorialliset arvot ja liike-elämän toimintaedel-
+lytykset.
+@sivu 17
+KAUPUNKIYMPÄRISTÖN KEHITTÄMISVYÖHYKE
+Alueen maankäytön ja toimintojen kehittämisen sekä ase -
+makaavoituksen tulee perustua yleispiirteiseen maankäy -
+tön, liikenteen, viherympäristön ja toimintojen kokonaistarkaste -
+luun. Kytkeytyminen muihin keskustan alueisiin on varmistettava.
+1. SÄRKÄNNIEMEN, ONKINIEMEN JA MUSTANLAHDEN ALUE
+Alueen ympäristön laatuun, toiminnallisuuden parantamiseen ja 
+saavutettavuuteen keskustasta tulee kiinnittää huomiota. Alueella 
+sallitaan täydennysrakentaminen. Särkänniemeen ja matkailuun 
+liittyviä toimintoja on sijoitettava Mustanlahden alueelle siten, että 
+alueesta tulee nykyistä kiinteämpi osa keskustaa. Alueiden välistä 
+kytkeytymistä ja liikkumisen sujuvuutta tulee parantaa. Kävelyn ja 
+pyöräilyn asemaa tulee parantaa ja ympäristön häiriötekijät tulee 
+poistaa. Mustanlahden sataman toimintaa ei saa estää eikä haitata.
+2. RATINAN SUVANNON ALUE
+Alueesta tulee kehittää veden läheisyyttä hyödyntävä korkealaatui-
+nen ja monipuolinen osa keskustaa siten, että suvannon rantojen 
+käyttö lisääntyy. Alueen toreja ja aukioita on kehitettävä viihtyisinä ja 
+laadukkaina julkisina kaupunkitiloina. Alueella sallitaan täydennys -
+rakentaminen. Alueella on toimiva satama eikä sen toimintaa saa 
+estää eikä haitata.
+3. OPETUKSEN, TUTKIMUKSEN JA KULTTUURIN SEKÄ NIITÄ HYÖ -
+DYNTÄVÄN LIIKETOIMINNAN KAMPUSALUE
+Alueelle sallitaan myös muut toiminnot, kuten asuminen ja palvelut. 
+Asemakaavoituksen ja muun suunnittelun yhteydessä tulee paran -
+taa alueen sisäistä kytkeytymistä sekä kytkeytymistä ympäröiviin 
+alueisiin.
+ASUNTOVALTAISEN TÄYDENNYSRAKENTAMISEN 
+VYÖHYKE
+5. Amuri. Alueen täydennysrakentamisen ja asemakaavoituksen 
+pohjana tulee olla yleispiirteinen kokonaistarkastelu. Pyynikintorin 
+ja sen ympäristön muodostamaa kokonaisuutta on kehitettävä viih-
+tyisänä ja laadukkaana julkisena tilana.
+6. Tammela. Alueen täydennysrakentamisen ja asemakaavoituk-
+sen pohjana on yleissuunnitelma. Alueen toreja ja aukioita on kehi-
+tettävä viihtyisinä ja laadukkaina julkisina tiloina. Virkistysyhteyksiä 
+Tammelasta ja ydinkeskustasta Kauppiin on kehitettävä.
+7. Koukkuniemi. Alueella lisätään asumista muillekin kuin erityis-
+ryhmille. Alueella on erityisiä viherympäristöön ja virkistykseen liit -
+tyviä arvoja. Aluekokonaisuus tulee suunnitella siten, että syntyy 
+koko keskustaa palvelevia monipuolisia virkistäytymiseen soveltuvia 
+alueita ja reittejä.
+8. Kaupin sairaala. Alueella lisätään asumista muillekin kuin erityis-
+ryhmille. Alueella on erityisiä viherympäristöön ja virkistykseen liit -
+tyviä arvoja. Aluekokonaisuus tulee suunnitella siten, että syntyy 
+koko keskustaa palvelevia monipuolisia virkistäytymiseen soveltu -
+via alueita ja reittejä. Virkistysyhteyksiä Tammelasta ja ydinkeskus -
+tasta Kauppiin on kehitettävä. Alueen kehittämisessä tulee huo -
+mioida sairaala-alueen kaupunkikuvallinen sijainti näkymäakselin 
+päätteenä.
+KAUPUNKIRAKENTEEN TÄYDENTÄMISESTÄ JOHTUVA 
+UUDEN TAI MERKITTÄVÄSTI KEHITETTÄVÄN JULKISEN 
+PALVELUN TARVE. SIJAINTI OHJEELLINEN.
+KORKEAAN RAKENTAMISEEN SOVELTUVA VYÖHYKE
+Korkean rakentamisen yhteydessä tulee parantaa lähiym -
+päristön laatua. Korkealla rakentamisella tarkoitetaan yli 12-kerrok-
+sista rakentamista.
+NAISTENLAHDEN VOIMALAITOS
+Voimalaitoksen toiminnasta aiheutuvat rajoitteet ja suojaetäisyydet 
+on huomioitava ympäröivien alueiden suunnittelussa.
+KESKUSTATOIMINTOJEN ALUE
+KESKUSTATOIMINTOJEN JA MATKAILUPALVELUJEN 
+SEKOITTUNUT ALUE
+ASUNTOALUE
+HALLINNON JA PALVELUJEN ALUE
+TORI TAI AUKIO
+ERITYISTOIMINTOJEN ALUE
+LIIKENNEALUE
+ KAUPUNKIRAKENTEEN EPÄJATKUVUUSKOHTA, JOSSA 
+ON ERITYISTÄ TARVETTA LIIKKUMISYMPÄRISTÖN JA 
+KAUPUNKIKUVAN PARANTAMISELLE
+Tarkemmassa suunnittelussa on vähennettävä liikenneväylien aihe-
+uttamaa estevaikutusta siten, että aluerajausta ympäröivät alueet 
+kytkeytyvät toisiinsa nykyistä paremmin. Tarkemmassa suunnitte-
+lussa on tutkittava myös alueen maankäytön mahdollisuuksia siten, 
+että kaupunkikuvaa ja -rakennetta, liikkumisympäristöä ja viheryhte-
+yksiä voidaan parantaa.
+pvpv POHJAVESIALUE
+Aluetta koskevat toimenpiteet on suunniteltava ja toteutet-
+tava niin, etteivät ne heikennä pohjaveden laatua tai vähennä poh -
+javeden antoisuutta. Alueelle ei saa sijoittaa toimintoja, joista voi 
+aiheutua pohjaveden pilaantumisvaaraa. Pohjaveden muodostu-
+misen turvaamiseksi puhtaat hulevedet on imeytettävä maaperään 
+ja suosittava läpäiseviä pintoja. Likaisia hulevesiä ei saa imeyttää 
+pohjavesialueella vaan ne tulee johtaa alueen ulkopuolelle. Hule-
+vedet on johdettava pois pohjavesialueille sijoittuvilta liikennealu-
+eilta. Hulevesien imeyttämisen ja käsittelyn suunnittelussa on sovel-
+lettava kaupungin hulevesiohjelmassa pohjavesialueille laadittuja 
+periaatteita.
+@kartta Kartta 1b - Viher- ja virkistysympäristö ja sen kehittäminen
+@sivu 19
+YLEISMÄÄRÄYS
+Viheralueverkoston, ekologisen verkoston ja virkistysverkoston jat -
+kuvuus, saavutettavuus ja toimivuus tulee turvata. Lähiluonnon 
+monimuotoisuutta ja viheralueiden kestävyyttä tulee kehittää sekä 
+ekosysteemipalveluiden tarjontaa vahvistaa. Viher- ja virkistysaluei-
+den sekä rantojen saavutettavuutta kävellen, pyörällä ja julkisella lii-
+kenteellä tulee edistää.
+NÄSIJÄRVEN JA PYHÄJÄRVEN RANTOJEN 
+KEHITTÄMISVYÖHYKKEET
+Rantojen kehittämisen on vahvistettava Tampereen keskustaa jär-
+venrantakaupunkina. Rantojen maankäyttöä on kehitettävä siten, 
+että rannoille syntyy pääkäyttötarkoituksen lisäksi monipuolisia vir-
+kistyspalveluita ja -toimintoja sekä korkeatasoisia virkistäytymiseen 
+soveltuvia alueita. Reittien jatkuvuutta rantojen suuntaisesti ja ran-
+tojen saavutettavuutta osana kaupungin keskustaa on parannet -
+tava. Rantojen julkinen käyttö on turvattava. Alueilla on useita toimi-
+via satamia ja venevalkamia. Niiden toimintaa tulee tukea. Tarkem -
+massa suunnittelussa määritellään toimintaan liittyvät rakennukset, 
+rakennelmat, laitteet ja sallittu rakentamisen määrä.
+VIHER- JA VIRKISTYSVERKON TAI LIIKUNTA -ALUEEN 
+KEHITTÄMISEN KOHDE TAI TARVE
+KEHITETTÄVÄ VIHER- JA VIRKISTYSVYÖHYKE
+Viher- ja virkistysvyöhykkeellä on kehitettävä viher- ja vir -
+kistyspalveluiden laatua ja jatkuvuutta siten, että Pyynikin, Kaupin 
+ja Iidesjärven saavutettavuus keskustasta sekä yhteydet järveltä jär-
+velle paranevat. Vyöhykettä tulee kehittää kaupungin viihtyisyys- ja 
+vetovoimatekijänä sekä tärkeänä kaupunkimaiseman osana.
+ TAMMERKOSKI
+Koski, sen ympäristössä oleva rakentaminen ja maisema 
+sekä arkeologiset kohteet muodostavat kansallisesti merkittävän 
+kulttuuriympäristökokonaisuuden ja ovat kaupungin keskeinen 
+identiteettitekijä. Rakentamisen ja muiden toimenpiteiden on tuet -
+tava arvokkaan kulttuuriympäristön säilymistä ja kehittämistä.
+ KEHITETTÄVÄ TORIALUE
+Asemanaukiota, Keskustoria, Laukontoria, Pyynikintoria, Sorin 
+aukiota ja Tammelantoria on kehitettävä viihtyisinä, laadukkaina 
+ja aktiivisina julkisina tiloina kulttuurihistorialliset arvot huomioon 
+ottaen. Torien maantason alapuolelle voidaan sijoittaa liiketiloja ja 
+pysäköintiä.
+LUONNONSUOJELULAIN PERUSTEELLA RAUHOITETTU 
+ALUE
+VALUMA-ALUEET
+Valuma-aluekohtaiset määräykset:
+Keskustan valuma-alue / Hulevesien luonnonmukaista hallintaa on 
+edistettävä kokonaisvaltaisesti. Alueelle on laadittava sekaviemä -
+röinnin eriyttämissuunnitelma. 
+Näsijärven lähivaluma-alue / Ryydynpohjan, Siivikkalanlahden, 
+Olkahistenlahden ja Halimasjärven laadullista hulevesikuormitusta 
+on vähennettävä. Hulevesien luonnonmukaista hallintaa ja tulva -
+reittejä on parannettava Lielahden ja Hiedanrannan alueella. Sel-
+lupuiston suljetun kaatopaikan hulevesille on lisättävä laadullinen 
+käsittely. 
+Pyhäjärven lähivaluma-alue  / Hatanpään alueen hulevesitulvien 
+hallintaa on kehitettävä. 
+Viinikanojan valuma-alue / Huleveden laadullista ja määrällistä 
+hallintaa on kehitettävä erityisesti herkkien Kaukajärven ja Alas-
+järven tilan säilyttämiseksi sekä Vuohenojan, Pyhäojan, Viinikano -
+jan ja Iidesjärven tilan parantamiseksi. Viinikanojaan, Ritaojaan ja 
+Vuohenojaan kohdistuvaa hulevesivirtaamaa on rajoitettava. Valu-
+ma-alueen merkittävät laadulliset kuormittajat on tunnistettava ja 
+kohdistettava niihin hulevesien hallinnan laadullisia toimenpiteitä.
+@kartta Kartta 1c - Kulttuuriperintö
+@sivu 20
+mavmav VALTAKUNNALLISESTI ARVOKAS MAISEMA- ALUE  
+Alueen suunnittelussa on varmistettava, että valtakunnallisesti 
+merkittävät maisema-arvot säilyvät.
+VALTAKUNNALLISESTI ARVOKAS RAKENNETTU KULTTUURI-
+YMPÄRISTÖ  (RKY 2009)
+Alueella tapahtuva kehittäminen on sovitettava arvokkaan kulttuuriympäris-
+tön vaatimuksiin.
+ MUINAISJÄÄNNÖSKOHDE 
+Muinaismuistolailla rauhoitettu muinaismuistokohde, kiinteä muinaisjään -
+nös. Alueen kaivaminen, peittäminen, muuttaminen ja muu siihen kajoami -
+nen on muinaismuistolain nojalla kielletty. Aluetta koskevista toimenpiteistä 
+on neuvoteltava museoviranomaisen kanssa ja pyydettävä lausunto. Mui -
+naisjäännöksen laajuus tulee selvittää ennen alueen asemakaavoittamista. 
+Asemakaavoituksen yhteydessä on huomioitava myös kohteen kytkeytymi -
+nen riittävän laajasti arvokkaisiin kulttuuriympäristöihin ja maisemaan. Koh -
+teiden indeksi viittaa selostuksessa esitettyyn luetteloon.
+@kartta Kartta 2 - Liikenne
+@sivu 22
+YLEISMÄÄRÄYS
+Suunnittelussa ja rakentamisessa tulee parantaa kävely-yhteyksien 
+jatkuvuutta, sujuvuutta, esteettömyyttä ja viihtyisyyttä. Suunnitte -
+lussa on edistettävä kävelyn ja pyöräilyn liikenneturvallisuutta.
+ASEMAKESKUS
+Asemakeskus on ihmisvirtojen, joukkoliikenteen käyttä -
+jien ja eri liikennemuotojen solmukohta. Kaikkien alueella tehtä -
+vien suunnitelmien ja toimenpiteiden on tuettava sujuvia, viihtyisiä 
+ja esteettömiä liikenteen ja muita palveluita. Asemakeskusta kehite-
+tään myös lentoliikenteen palveluterminaalina.
+  RAUTATIE
+KÄVELYKESKUSTANA KEHITETTÄVÄ HITAAN 
+LIIKKUMISEN ALUE 
+Liikenneympäristöä on kehitettävä kävelyn ehdoilla. Alueella kehite-
+tään jalankulkijoiden olosuhteita viihtyisien, monipuolisten, laaduk-
+kaiden ja esteettömien kävelyalueiden, kävelypainotteisten katu-
+jen, kävelykatujen ja -reittien avulla. Alueen monimuotoista kaupun-
+kivihreää on vahvistettava. Hitaan liikkumisen alueella pyöräily on 
+ohjattava ajoradoille lukuun ottamatta pyöräilyn pääreittejä.
+ MAANALAINEN PYSÄKÖINTILAITOS
+ YHTEYSTARVE MAANALAISEEN PYSÄKÖINTIIN
+HÄMEENKATU
+Jalankululle ja joukkoliikenteelle varattu katu, jolla pyöräily on mahdol-
+lista. Katutilaa on kehitettävä siten, että jalankulun asema paranee.
+TÄRKEÄ JALANKULUN REITTI
+Reitin laatua ja jatkuvuutta on parannettava.
+JALANKULUN YHTEYSTARVE
+Yhteyden toteuttamisedellytykset on tutkittava tarkemmassa suun-
+nittelussa. Liikenneväylien ja vesistöjen kävelylle aiheuttamaa este -
+vaikutusta on vähennettävä mahdollisuuksien mukaan.
+VALTAKUNNALLINEN MOOTTORIAJONEUVOLIIKEN-
+TEEN PÄÄVÄYLÄ (VT12) JA PÄÄVÄYLÄN MAANALAINEN 
+OSUUS (RANTAVÄYLÄN TUNNELI)
+ERITASOLllTTYMÄ
+MAANALAINEN ERITASOLIITTYMÄ
+Eritasoliittymästä voidaan toteuttaa yhteydet maanalai -
+seen pysäköintiverkostoon ja katuverkkoon.
+KESKUSTAN KEHÄ
+Kehän liikenteellinen toimivuus on turvattava kaikessa suunnitte-
+lussa ja rakentamisessa. Yhteydet maanalaiseen pysäköintiin raken-
+netaan kehän yhteyteen tai sen välittömään läheisyyteen.
+KESKUSTAN PÄÄKATU
+Työ- ja asiointiliikenteen pääyhteys, jota koskevissa suunnitelmissa 
+on huomioitava keskustan kehän sujuva saavutettavuus.
+KESKITETTY PYÖRÄPYSÄKÖINTI
+Pysäköinti sijoitetaan ensisijaisesti sisätilaan tai katoksen 
+alle.
+VAIHTOTERMINAALI
+Liikenteen solmupiste ja tulevaisuuden liikkumiskeskus, jonka suun-
+nittelussa varataan riittävät tilavaraukset eri liikennemuodoille, lii-
+tyntäpysäköinnille ja sujuville vaihdoille.
+MATKUSTAJALIIKENTEEN LAIVAREITTI

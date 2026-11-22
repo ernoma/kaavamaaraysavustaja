@@ -1,0 +1,132 @@
+# Kaavamääräysavustajan testiaineisto v2: Tampereen kooste 'Voimassa olevat yleiskaavamerkinnät
+# kantakaupungissa' (1.9.2025), kantakaupungin yleiskaavayhdistelmä, kartat 2, 3 ja 4 (sivut 6–11).
+# Rivit ovat PDF-poiminnan mukaisia. Yksiköt on valittu: viiva- ja pistekohteet, yleismääräykset,
+# informatiiviset merkinnät ja alaotsikot (YHDYSKUNTATEKNINEN HUOLTO / ENERGIAHUOLTO …).
+# Käsin tehdyt korjaukset: Z-tunnukselliset sähkölinjat on merkitty ohjerivillä @merkinta, koska
+# isolla kirjoitettu yksikirjaiminen tunnus ei erotu otsikosta.
+@kartta Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+@lahdekaavat Kantakaupungin vaiheyleiskaava - valtuustokausi 2021–2025 ja Keskustan strategisen osayleiskaavan vaiheittainen muutos|8.7.2025; Kantakaupungin vaiheyleiskaava - valtuustokausi 2017–2021|9.6.2023; Kantakaupungin yleiskaava 2040|20.1.2020
+@sivu 6
+YLEISMÄÄRÄYS
+Viheralueverkoston, ekologisen verkoston ja virkistys-
+verkoston jatkuvuus, saavutettavuus ja toimivuus tulee 
+turvata. Lähiluonnon monimuotoisuutta ja viheraluei -
+den kestävyyttä tulee kehittää sekä ekosysteemipalve-
+luiden tarjontaa vahvistaa. Viher- ja virkistysalueiden 
+sekä rantojen saavutettavuutta kävellen, pyörällä ja jul-
+kisella liikenteellä tulee edistää.
+nat NATURA-ALUE
+Alueella sijaitsee luonnonsuojelulain tarkoittamia suo -
+jeluarvoja. Alueen suunnittelussa on varmistettava, 
+että suojeluarvot eivät vaarannu tai heikenny. Luon -
+nonsuojelualueen tarkempi rajaus ja suojelun perus-
+teet määritellään luonnonsuojelulain mukaisella 
+rajaus- tai perustamispäätöksellä.
+Vu
+KEHITETTÄVÄ KESKITETTYJEN LIIKUNTA-, 
+URHEILU- JA VAPAA-AJANPALVELUIDEN ALUE 
+TAI KOHDE
+Alue on varattu liikunta-, urheilu- tai vapaa-ajan pal -
+veluille ja niiden tarvitsemille rakennuksille ja raken -
+teille. Suunnittelussa tulee ottaa huomioon palvelui -
+den monipuolisuus ja -käyttöisyys, hyvä saavutetta -
+vuus erityisesti kävellen, pyörällä sekä julkisella liiken-
+teellä, tapahtumien järjestäminen, keskitetyn pysä-
+köinnin mahdollisuudet sekä luonto- ja muut arvot.
+ge-1
+GEOLOGISESTI ARVOKAS KALLIOALUE
+Alueen suunnittelussa on otettava huomioon geologis-
+ten, maisemallisten ja luonnontieteellisten arvojen säi-
+lyminen.
+OHJEELLINEN LUONNON YDINALUE
+Luonnon ydinalue tulee säilyttää rakentamattomana 
+sekä riittävän laajana ja yhtenäisenä. Hiljaisten aluei-
+den (alle 35 dB) säilymiseen tulee kiinnittää erityistä 
+huomiota.
+@sivu 7
+KANSALLISEN KAUPUNKIPUISTON ALUE, 
+HAKEMUKSEN RAJAUS (KH 7.12.2020)
+ERIKOISPUISTO
+Alueita ylläpidetään ja kehitetään omista lähtökohdis -
+taan seudullisesti merkittävinä virkistyspalveluiden, 
+tapahtumien, matkailun ja vapaa-ajan alueina. Tarkem-
+man suunnittelun yhteydessä tulee ottaa huomioon 
+erikoispuistojen hyvä saavutettavuus ja esteettömyys 
+sekä olemassa olevat ominaispiirteet ja arvot.
+UIMARANTA
+E-ha HAUTAUSMAA
+YLEISKAAVA-ALUEEN RAJA
+@kartta Kartta 3 - Kulttuuriperintö
+@sivu 9
+YLEISMÄÄRÄYS
+Muuttuvan maankäytön alueilla on arvioitava kult -
+tuuriympäristöjä koskeva selvitystarve yhteistyössä 
+museoviranomaisen kanssa. Vesialueiden muuttu -
+van käytön yhteydessä on arvioitava vedenalaiseen 
+kulttuuriperintöön liittyvien selvitysten tarpeellisuus 
+yhteistyössä museoviranomaisen kanssa. Selvitystar -
+vetta arvioitaessa on huomioitava myös arkeologisen 
+tiedon jatkuva täydentyminen. Erityistä huomiota on 
+kiinnitettävä Tampereen maisemallisten erityispiirtei-
+den säilymiseen. Yksityiskohtaisessa suunnittelussa on 
+huomioitava myös palstoittamalla syntyneiden pienta-
+loalueiden arvot.
+ARVOALUEET JA KOHTEET
+sm-2sm-2 ALUEEN OSA, JOLLA SIJAITSEE  MUINAIS-
+MUISTOLAILLA RAUHOITETTUJA KIINTEITÄ 
+MUINAISJÄÄNNÖKSIÄ 
+Alueen kaivaminen, peittäminen, muuttaminen ja muu 
+siihen kajoaminen on muinaismuistolain nojalla kiel-
+letty. Turveradan ja kokoojakadun risteämiskohtia ei 
+saa muuttaa ilman museoviranomaisen lupaa. Risteä -
+miskohdissa tulee asemakaavan yhteydessä tehdä riit-
+tävä arkeologinen dokumentointi ja kadun rakennus -
+vaiheessa tulee varautua radanpohjan arkeologiseen 
+dokumentointiin. Kokoojakadun leveys risteämiskoh -
+dassa saa olla rakenteineen enintään 15 metriä. Ase -
+makaavavaiheessa korttelit on suunniteltava siten, 
+että muinaisjäännösalue säilyy yhtenäisenä. Aluetta ja 
+sen lähiympäristöä koskevat maankäyttösuunnitelmat 
+tulee lähettää museoviranomaiselle lausuntoa varten.
+LAILLA SUOJELTU KOHDE
+Merkinnän kohteet on suojeltu kirkkolailla. Kohteiden 
+indeksi viittaa selostuksessa esitettyyn luetteloon.
+@kartta Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+@sivu 11
+YLEISMÄÄRÄYS
+Täydennysrakentamisen yhteydessä, tonttitehokkuu -
+den ollessa yli e=0,8 on pyrittävä muodostamaan kort-
+telikohtaisia kotitalousjätteiden keräyspaikkoja. 
+YMPÄRISTÖTERVEYS
+sv-1 SUOJAVYÖHYKE
+Alueella ei saa rakentaa päiväkoteja tai hoitolaitoksia.
+Saa-2 SAASTUNUT MAA-ALUE
+Alueelle sijoittuvien direktiivilajien elinympäristöjä ei 
+saa hävittää tai heikentää.
+lmlm LENTOMELUALUE
+Alue, jonka lentomelutason (Lden) vuonna 2040 on 
+arvioitu olevan 55-60 dB. Alueelle ei tule osoittaa uutta 
+melun haitoille herkkää toimintaa. Korvaavan raken -
+tamisen tulee perustua melumääräykset sisältävään 
+asemakaavaan. Asumiseen ja muille melulle herk-
+kiin toimintoihin käytettävien rakennusten ulkovaipan 
+ääneneristävyyden lento- ja tieliikennemelua vastaan 
+on oltava vähintään 35 dB. 
+YHDYSKUNTATEKNINEN HUOLTO
+ENERGIAHUOLTO
+k KAASULINJA
+SÄHKÖNJAKELU
+E-sä UUSI SÄHKÖASEMA       
+@merkinta Z 110-400 kV SÄHKÖLINJA
+@merkinta Z KEHITETTÄVÄ SÄHKÖLINJA
+Sähkölinjan saneerauksen yhteydessä tai viereisen 
+maankäytön muuttuessa tutkittava mahdollisuutta lin-
+jan maakaapelointiin.
+VOIMALINJAN YHTEYSTARVE
+VESIHUOLTO
+vj UUSI OHJEELLINEN VESIJOHTO
+JÄTEHUOLTO
+E-jä JÄTEASEMA
+E-jä TARVEALUE UUDELLE JÄTEASEMALLE
+Alueelta tulee varata sijoituspaikka vaarallisen kotitalo-
+usjätteen vastaanottoasemalle.

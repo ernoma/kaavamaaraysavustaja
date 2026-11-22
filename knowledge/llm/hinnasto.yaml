@@ -9,7 +9,8 @@
 #   valimuisti_kirjoitus  välimuistiin kirjoitettu syöte (Claude: noin 1,25 × syöte, 5 min)
 #   valimuisti_luku       välimuistista luettu syöte
 #   merkkia_per_token     karkea suomenkielisen tekstin merkkimäärä tokenia kohden arviota varten
-#                         (kalibroitu vaiheen 0 piikillä: 28 210 tokenia staattista kontekstia)
+#                         (kalibroitu vaiheen 2 live-ajolla: staattinen konteksti ja skeema
+#                         48 775 tokenia, tehtävä 2 200–3 700 tokenia; JSON ja suomi ≈ 1,75)
 
 versio: 1
 paivitetty: 2026-11-22
@@ -59,4 +60,4 @@ mallit:
 # Arvion oletukset tulosteen pituudelle (tokenia yksikköä kohden), vaiheen 0 piikin mukaan.
 arvio:
   tulostetokenit_yksikko: 3000
-  merkkia_per_token: 3.0
+  merkkia_per_token: 1.75

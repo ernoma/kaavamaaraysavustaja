@@ -597,9 +597,8 @@ def run_hybrid(
     engine = RuleEngine(kb)
     send, duplicates = plan_units(project)
     responses: dict[str, tuple[dict[str, Any], UnitOutcome]] = {}
-    per_call = (
-        (report.estimate.usd / report.estimate.units) if report.estimate and report.estimate.units else 0.0
-    )
+    first_cost = report.estimate.first_call_usd if report.estimate else 0.0
+    next_cost = report.estimate.next_call_usd if report.estimate else 0.0
     first_call = True
 
     def say(text: str) -> None:
@@ -617,7 +616,7 @@ def run_hybrid(
                 entry.get("malli", ""),
             )
         else:
-            expected = per_call * (1.5 if first_call and cached else 1.0)
+            expected = first_cost if first_call else next_cost
             if not settings.budget.allows(expected):
                 outcome.status, outcome.message = "ohitettu_budjetti", "budjettiraja"
                 settings.budget.stopped.append(unit.id)
@@ -649,7 +648,7 @@ def run_hybrid(
         report.outcomes.append(outcome)
         say(
             f"{n}/{len(send)} {unit.id} {unit.heading}: {outcome.status}, varmuus {unit.proposal.confidence}"
-            + (f", {outcome.cost:.3f} $" if outcome.cost else "")
+            + (f", {outcome.cost:.3f} $, tokenit {outcome.usage.__dict__}" if outcome.cost else "")
         )
 
     for unit_id, original in duplicates.items():

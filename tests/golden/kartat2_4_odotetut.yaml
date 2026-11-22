@@ -1,0 +1,271 @@
+# Testiaineiston v2 odotetut tulokset: tests/golden/kartat2_4_otos.txt (25 yksikköä).
+#
+# TILA: VAHVISTAMATON. Kehittäjän annotointi 22.11.2026 suunnitelman lukujen 6.10 ja 8 sekä
+# Katja-asetuksen liitteen 4 mukaan (ADR-0012). Paikkatietoasiantuntija tarkistaa kohdat, joissa
+# on 'tarkistettava: true', ja kaavoittajat vahvistavat aineiston vaiheessa 5. Odotukset koskevat
+# linjausten oletuksia (knowledge/org/tampere/linjaukset.yaml v2).
+#
+# Kentät kuten tiedostossa kartta1_odotetut.yaml, lisäksi:
+#   kartta                  yksikön kartta (sama otsikko voi esiintyä usealla kartalla)
+#   sanallisen_lajit        sanallisen määräyksen lajit, jotka odotetaan (pääaiheet, enintään 3)
+#   sanallisen_lajit_muut   lajit, jotka ovat myös perusteltuja (eivät ole virheitä F1-mittarissa)
+#   tarkistettava           kehittäjä on epävarma; paikkatietoasiantuntija tarkistaa
+
+tila: vahvistamaton
+laatija: kehittäjä (luonnos); tarkistettavat kohdat paikkatietoasiantuntijalle
+paivays: '2026-11-22'
+lahde: tests/golden/kartat2_4_otos.txt
+linjaukset: oletukset
+yksikot:
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [virkistys]
+  sanallisen_lajit_muut: [biodiversiteetti, luontoarvot, jalankulku, pyoraily, joukkoliikenne, kevytLiikenne, ymparistoarvot]
+  kysymykset: []
+- otsikko: NATURA-ALUE
+  tunnus: nat
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: [natura2000VerkostonAlue(osaAlue)]
+  kirjaintunnus: nat
+  sanallinen: true
+  sanallisen_lajit: [luontoarvot]
+  sanallisen_lajit_muut: [biodiversiteetti, ymparistoarvot]
+  kysymykset: []
+- otsikko: KEHITETTÄVÄ KESKITETTYJEN LIIKUNTA-, URHEILU- JA VAPAA-AJANPALVELUIDEN ALUE TAI KOHDE
+  tunnus: Vu
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: ['urheiluJaVirkistyspalvelujenAlue(kehitettava,paakayttotarkoitus)']
+  hyvaksyttavat:
+  - [urheiluJaVirkistyspalvelujenAlue(kehitettava)]
+  kirjaintunnus: Vu
+  sanallinen: true
+  sanallisen_lajit: [virkistys]
+  sanallisen_lajit_muut: [liikenne, pysakointi, joukkoliikenne, luontoarvot, jalankulku, pyoraily]
+  kysymykset: [K8]
+  huomautus: 'ALUE TAI KOHDE: alue tai piste (K8). Liitteen 4 VU.'
+- otsikko: GEOLOGISESTI ARVOKAS KALLIOALUE
+  tunnus: ge-1
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: [arvokasGeologinenMuodostuma(osaAlue)]
+  kirjaintunnus: ge-1
+  sanallinen: true
+  sanallisen_lajit: [maisema]
+  sanallisen_lajit_muut: [luontoarvot, ymparistoarvot]
+  kysymykset: [K14]
+- otsikko: OHJEELLINEN LUONNON YDINALUE
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: ['luonnonMonimuotoisuudenKannaltaErityisenTarkeaAlue(ohjeellinenSijainti,osaAlue)']
+  hyvaksyttavat:
+  - [luonnonMonimuotoisuudenKannaltaErityisenTarkeaAlue(osaAlue)]
+  - ['luonnonRauhanKannaltaTarkeaAlue(ohjeellinenSijainti,osaAlue)']
+  - [luonnonRauhanKannaltaTarkeaAlue(osaAlue)]
+  sanallinen: true
+  sanallisen_lajit: [luontoarvot]
+  sanallisen_lajit_muut: [biodiversiteetti, melu, ymparistoarvot]
+  kysymykset: [K5]
+  huomautus: Tarkistettava.
+  tarkistettava: true
+- otsikko: KANSALLISEN KAUPUNKIPUISTON ALUE, HAKEMUKSEN RAJAUS (KH 7.12.2020)
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: ei_maarays
+  rakenne: []
+  sanallinen: false
+  kysymykset: [K6]
+  huomautus: 'Hakemuksen rajaus: lähtötieto (L-08).'
+- otsikko: ERIKOISPUISTO
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: [puisto(paakayttotarkoitus)]
+  hyvaksyttavat:
+  - [virkistysalue(paakayttotarkoitus)]
+  - [urheiluJaVirkistyspalvelujenAlue(paakayttotarkoitus)]
+  sanallinen: true
+  sanallisen_lajit: [virkistys]
+  sanallisen_lajit_muut: [esteettomyys, kehittamisperiaate]
+  kysymykset: [K5]
+  tarkistettava: true
+- otsikko: UIMARANTA
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: [uimaranta(paakayttotarkoitus)]
+  hyvaksyttavat:
+  - [uimaranta()]
+  sanallinen: false
+  kysymykset: [K8]
+  huomautus: Alue (VV) tai piste.
+- otsikko: HAUTAUSMAA
+  tunnus: E-ha
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: kaavakohde
+  rakenne: [hautausmaa(paakayttotarkoitus)]
+  kirjaintunnus: E-ha
+  sanallinen: false
+  kysymykset: [K14]
+  huomautus: Lähteen tunnus E-ha, liitteessä 4 EH.
+- otsikko: YLEISKAAVA-ALUEEN RAJA
+  tunnus: null
+  kartta: Kartta 2 - Viherympäristö ja vapaa-ajan palvelut
+  ryhmatyyppi: ei_maarays
+  rakenne: []
+  sanallinen: false
+  kysymykset: [K6]
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 3 - Kulttuuriperintö
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  sanallisen_lajit_muut: [maisema]
+  kysymykset: []
+- otsikko: ALUEEN OSA, JOLLA SIJAITSEE MUINAISMUISTOLAILLA RAUHOITETTUJA KIINTEITÄ MUINAISJÄÄNNÖKSIÄ
+  tunnus: sm-2
+  kartta: Kartta 3 - Kulttuuriperintö
+  ryhmatyyppi: kaavakohde
+  rakenne: [muinaismuistoAlue(osaAlue)]
+  kirjaintunnus: sm-2
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  kysymykset: [K14]
+  huomautus: Kahdentunut tunnus sm-2sm-2. Kokoojakadun leveys 15 m on paikkasidonnainen suure (huomio).
+- otsikko: LAILLA SUOJELTU KOHDE
+  tunnus: null
+  kartta: Kartta 3 - Kulttuuriperintö
+  ryhmatyyppi: kaavakohde
+  rakenne: [suojeltuKirkollinenRakennus()]
+  sanallinen: true
+  sanallisen_lajit: [kulttuuriymparisto]
+  kysymykset: [K5, K8]
+  huomautus: Kirkkolailla suojellut kohteet (pisteet).
+  tarkistettava: true
+- otsikko: null
+  tunnus: null
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: yleismaarays
+  rakenne: []
+  sanallinen: true
+  sanallisen_lajit: [jatehuolto]
+  sanallisen_lajit_muut: [taydennysrakentaminen]
+  kysymykset: []
+- otsikko: SUOJAVYÖHYKE
+  tunnus: sv-1
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [suojavyohyke(osaAlue)]
+  kirjaintunnus: sv-1
+  sanallinen: true
+  sanallisen_lajit: [ymparistohairiot]
+  sanallisen_lajit_muut: [yhdyskuntarakenteenOhjaus]
+  kysymykset: [K14]
+- otsikko: SAASTUNUT MAA-ALUE
+  tunnus: Saa-2
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [pilaantunutMaaAlue(osaAlue)]
+  kirjaintunnus: Saa-2
+  sanallinen: true
+  sanallisen_lajit: [luontoarvot]
+  sanallisen_lajit_muut: [biodiversiteetti]
+  kysymykset: [K5]
+  huomautus: Saastunut = pilaantunut maa-alue; teksti koskee direktiivilajeja. Tarkistettava.
+  tarkistettava: true
+- otsikko: LENTOMELUALUE
+  tunnus: lm
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [melualue(osaAlue)]
+  kirjaintunnus: lm
+  sanallinen: true
+  sanallisen_lajit: [melu]
+  sanallisen_lajit_muut: [liikenne]
+  kysymykset: [K14]
+- otsikko: KAASULINJA
+  tunnus: k
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [kaasulinja()]
+  kirjaintunnus: k
+  sanallinen: false
+  kysymykset: []
+- otsikko: UUSI SÄHKÖASEMA
+  tunnus: E-sä
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [energiahuollonAlue(uusi)]
+  hyvaksyttavat:
+  - ['energiahuollonAlue(paakayttotarkoitus,uusi)']
+  kirjaintunnus: E-sä
+  sanallinen: false
+  kysymykset: [K8]
+  huomautus: 'Sähköasema: piste tai alue.'
+- otsikko: 110-400 kV SÄHKÖLINJA
+  tunnus: Z
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [sahkolinja()]
+  kirjaintunnus: Z
+  sanallinen: false
+  kysymykset: []
+  huomautus: Liitteen 4 z Sähkölinja tai muu voimajohto.
+- otsikko: KEHITETTÄVÄ SÄHKÖLINJA
+  tunnus: Z
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [sahkolinja(kehitettava)]
+  kirjaintunnus: Z
+  sanallinen: true
+  sanallisen_lajit: [yhdyskuntatekniikka]
+  kysymykset: []
+- otsikko: VOIMALINJAN YHTEYSTARVE
+  tunnus: null
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [sahkolinja(yhteystarve)]
+  sanallinen: false
+  kysymykset: []
+  huomautus: Liitteen 4 z yhteystarve.
+- otsikko: UUSI OHJEELLINEN VESIJOHTO
+  tunnus: vj
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: ['vesijohtoTaiViemari(ohjeellinenSijainti,uusi)']
+  kirjaintunnus: vj
+  sanallinen: false
+  kysymykset: [K7]
+  huomautus: Määreyhdistelmä UUSI OHJEELLINEN (K7).
+- otsikko: JÄTEASEMA
+  tunnus: E-jä
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [jatehuollonAlue()]
+  hyvaksyttavat:
+  - [jatehuollonAlue(paakayttotarkoitus)]
+  kirjaintunnus: E-jä
+  sanallinen: false
+  kysymykset: [K8]
+- otsikko: TARVEALUE UUDELLE JÄTEASEMALLE
+  tunnus: E-jä
+  kartta: Kartta 4 - Kestävä vesitalous, ympäristöterveys ja yhdyskuntatekninen huolto
+  ryhmatyyppi: kaavakohde
+  rakenne: [jatehuollonAlue(uusi)]
+  hyvaksyttavat:
+  - ['jatehuollonAlue(paakayttotarkoitus,uusi)']
+  - ['jatehuollonAlue(ohjeellinenSijainti,uusi)']
+  kirjaintunnus: E-jä
+  sanallinen: true
+  sanallisen_lajit: [jatehuolto]
+  kysymykset: [K7, K8]
+  huomautus: 'TARVEALUE UUDELLE: määreen tulkinta (K7). Tarkistettava.'
+  tarkistettava: true

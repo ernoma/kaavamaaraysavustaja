@@ -61,7 +61,7 @@ tiedostot:
   codelists/index.json: 86a90e984e59db720b9ad36cb9d18de92ae0b1c5ede0d28aa822ed7a9829cd25
   katja/annex4_corrections.yaml: 12cd9ecc81f00c77734d6511ca7c16dc9aa24741432c91d00d94299ded954ead
   katja/annex4_katja-ii_393-2025.yaml: 6b57c742b8064459a12bc2e1141e49ceb3d0bb936543337ff889323e5ee2499e
-  llm/hinnasto.yaml: 851a07c1fc23c9662ad51491a225b1819823f6c4b287353c3893a8fa10b7e241
+  llm/hinnasto.yaml: 89c9e05dd4c1ba3e6e35d9aff01882cd124416346b7a008df47594e85b85c48d
   org/tampere/hyvaksytyt.yaml: 36b363fee5d8c40e8cc3dcc9a6b68d703f53a30f37c092549a6ac605ae338905
   org/tampere/linjaukset.yaml: 98725832dafdf024d6153827a5faa850effb8e0c8b3b67f322c96957e40a0198
   prompts/v1/esimerkit.yaml: c6b373e5064de1aeda21acde35515c21fea40f148fb555c410abc357d2a9c5b2
