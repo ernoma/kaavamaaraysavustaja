@@ -127,9 +127,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     plan = json.loads(args.plan.read_text(encoding="utf-8")) if args.plan else minimal_plan()
-    plan_type = (
-        args.plan_type if args.plan_type.startswith("http") else URI + "RY_Kaavalaji/code/" + args.plan_type
-    )
+    # The query parameter takes the bare code value ("21"); a full code URI is rejected with
+    # quality__req_invalid_query_param (tested 22.11.2026). Accept a URI and strip it.
+    plan_type = args.plan_type.rstrip("/").rsplit("/", 1)[-1]
     query = urllib.parse.urlencode({"planType": plan_type, "administrativeAreaIdentifiers": args.area})
     base = (args.url or BASE_URLS[args.env]).rstrip("/")
     if not base.endswith(VALIDATE_PATH):

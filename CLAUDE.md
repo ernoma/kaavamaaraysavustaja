@@ -76,7 +76,8 @@ Koodistoa jäsentävä koodi, jota ei käytetä määräyksissä. Tunnistetaan k
 
 **VOOKA-tila (VOOKA mode)**:
 Voimassa olevan kaavan muunnos. Sanallinen teksti siirtyy merkki merkiltä muuttumattomana.
-Ryhdissä voimassa oleville kaavoille on oma VOOKA-soveltamisprofiili.
+Tulosta käytetään uusien yleiskaavojen pohjana (Arho-kirjasto). Sitä ei toimiteta Ryhtiin
+VOOKA-soveltamisprofiilin mukaisena aineistona (ADR-0007), vaikka termi tulee profiilista.
 
 **Laadintatila (drafting mode)**:
 Uuden kaavan laatiminen; avustaja saa ehdottaa muotoiluja erillisinä ja valinnaisina.

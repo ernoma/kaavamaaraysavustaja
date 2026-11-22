@@ -8,12 +8,12 @@ tekoälyä jatkamaan.
 | # | Tehtävä | Kesto | Tulos kirjataan | Tila 22.11.2026 |
 |---|---|---|---|---|
 | 1 | SDK-asennustesti Tampereen QGIS-työasemalla | 1–2 h | ADR-0002 | tehty (ei välityspalvelinta) |
-| 2 | Syken kehittäjäportaali ja validointirajapinnan testi | 1 h | tämä tiedosto | avain haettu; ajo odottaa avaimen tallennusta |
+| 2 | Syken kehittäjäportaali ja validointirajapinnan testi | 1 h | tämä tiedosto | tehty |
 | 3 | Claude-piikin live-ajo | 15 min | ADR-0005 | tehty |
-| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) | |
-| 5 | QgsAuthManager-avainten ja lisäosan latauksen testi | 30 min | ADR-0004 | osittain: avaimet testattu ilman käyttöliittymää |
-| 6 | VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys | 2–4 h | tämä tiedosto, L-02 ja L-12 | |
-| 7 | Liitteen 4 korjausten vahvistus | 30 min | `knowledge/katja/annex4_corrections.yaml` | |
+| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) | mittarit: alustavat tavoitteet käyttöön; L-01–L-07 avoinna |
+| 5 | QgsAuthManager-avainten ja lisäosan latauksen testi | 30 min | ADR-0004 | tehty |
+| 6 | VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys | 2–4 h | tämä tiedosto, L-02 ja L-12 | rajattu pois (ADR-0007) |
+| 7 | Liitteen 4 korjausten vahvistus | 30 min | `knowledge/katja/annex4_corrections.yaml` | siirretty myöhemmäksi |
 
 Muista: säilö on julkinen. API-avaimia, välityspalvelimen tunnuksia tai Tampereen sisäisiä
 osoitteita ei kirjoiteta tähän tiedostoon eikä mihinkään säilön tiedostoon.
@@ -142,9 +142,35 @@ Kaavalaji- ja elinkaarikoodit (`--plan-type 21`, `kaavaelinkaari/code/03`,
 |---|---|
 | Portaali ja tuote, jonka tilasit | testiportaali (api-test-developer.ymparisto.fi), tilausavain haettu |
 | Testiympäristön osoite | `https://api-test.ymparisto.fi/ryhti/plan-public` + `/api/Plan/Validate` |
-| HTTP-koodi | |
-| Laukeavat säännöt (sääntötunnisteet) | |
-| Huomioita (esim. puuttuvat pakolliset kentät) | |
+| HTTP-koodi | **200** (synteettinen testikaava läpäisi validoinnin, vastausrunko tyhjä) |
+| Laukeavat säännöt (sääntötunnisteet) | perustapauksessa ei yhtään; tahallisesti virheelliset muunnelmat alla |
+| Huomioita (esim. puuttuvat pakolliset kentät) | `planType` annetaan pelkkänä koodiarvona (`21`); URI → 422 `quality__req_invalid_query_param`, `2` (otsikkotaso) → HTTP 500. Skripti korjattu. |
+
+Tahallisesti virheelliset muunnelmat (testiympäristö 22.11.2026, kaavalaji 21, kunta 837):
+
+| Muunnelma | HTTP | Sääntö |
+|---|---|---|
+| Tuntematon kaavamääräyslaji (`eiOlemassa`) | 400 | `quality__req_json_deserialization_failure` (enumeraatio `EPlanRegulationType`) |
+| Poistunut koodi `muuArkeologinenKohde` + `paakayttotarkoitus` | 422 | vain `quality__req_codelist_additionalinfotype_mainuseclass_areareservation`; poistunutta koodia ei tunnistettu poistuneeksi |
+| Ei `paakayttotarkoitus`-lisätietoa | 422 | `quality__req_geom_areaobject_additionalinfo_mainuseclass_section_area_mandatory` |
+| Asemakaavan koodi `asuinpientaloalue` yleiskaavassa | **200** | ei mitään: kaavalajin määrityshierarkiaa ei tarkisteta |
+| `sanallinenMaarays` ilman `verbalRegulations`-koodia | 422 | `quality__req_codelist_spatialplanregulation_verbal_regulation_codevalue` (+ pääkäyttötarkoitus puuttuu) |
+| Kirjaintunnus puuttuu | 422 | `quality__req_planregulationgroup_letteridentifier_not_null` |
+| Sama yleiskaava kaavalajilla 31 (asemakaava) | **200** | ei mitään |
+
+Johtopäätökset vaiheeseen 1:
+
+- Rajapinta tarkistaa enumeraation, aluevarauslaajennuksen, pakolliset lisätiedot,
+  sanallisen määräyksen lajin ja kirjaintunnuksen.
+- Se ei tarkista poistuneita koodeja eikä kaavalajin määrityshierarkiaa. Avustajan omat
+  säännöt R-01 (voimassaolo) ja määrityshierarkiatarkistus ovat siis tarpeen.
+- Syken säännöt eivät myöskään estä laajennuksen ulkopuolista koodia, joten se kannattaa
+  sallia varoituksella eikä estää.
+- Vastauksissa on `ruleId` ja suomenkielinen `localizedMessage.fi`. Rajapinnan `ruleId` on eri
+  muodossa kuin tietopohjan `ryhti/validation_messages.csv`:n tunniste:
+  `quality__req_planregulationgroup_letteridentifier_not_null` vastaa CSV:n tunnistetta
+  `quality/req-planregulationgroup-letteridentifier-not-null` (`__` → `/`, `_` → `-`).
+  Vaiheessa 1 tunnisteet normalisoidaan ennen yhdistämistä.
 
 ---
 
@@ -203,17 +229,25 @@ aineistoksi (`tests/recorded_llm/`), sillä siinä ei ole avainta.
     80–120 yksikköä vaiheeseen 2.
 11. **Seuraavat linjaukset** (5 min): L-08–L-14 seuraavaan palaveriin.
 
-### Mittarien tavoitearvot (luku 2.3, sovitaan palaverissa)
+### Mittarien tavoitearvot (luku 2.3)
 
-| Mittari | Alustava tavoite | Sovittu |
+**Päätös 22.11.2026:** alustavat tavoitteet otetaan käyttöön sellaisinaan, ikään kuin
+yleiskaavoitus olisi ne sopinut. Yleiskaavoituksen kanssa niitä ei ole vielä käsitelty, ja
+niitä voidaan säätää myöhemmin tarpeen mukaan.
+
+| Mittari | Alustava tavoite | Käytössä |
 |---|---|---|
-| Merkinnät, joiden ehdotus hyväksytään sellaisenaan | ≥ 70 % | |
-| Korkean varmuuden ehdotuksista oikein | ≥ 98 % | |
-| Tunnetuista monitulkintaisista kohdista nousee tulkintakysymykseksi | ≥ 90 % | |
-| Voimassa olevan kaavan määräystekstin muutokset | 0 kpl | |
-| Ryhmät latautuvat Arhoon ja läpäisevät Ryhdin määräystason validoinnin | 100 % hyväksytyistä | |
-| Käsittelyaika merkintää kohden verrattuna käsin tehtyyn | vähintään puolittuu | |
-| Kustannus koko koosteen muunnokselle (lisäehdotus) | ≤ 30 $ | |
+| Merkinnät, joiden ehdotus hyväksytään sellaisenaan | ≥ 70 % | ≥ 70 % |
+| Korkean varmuuden ehdotuksista oikein | ≥ 98 % | ≥ 98 % |
+| Tunnetuista monitulkintaisista kohdista nousee tulkintakysymykseksi | ≥ 90 % | ≥ 90 % |
+| Voimassa olevan kaavan määräystekstin muutokset | 0 kpl | 0 kpl |
+| Ryhmät latautuvat Arhoon ja läpäisevät Ryhdin määräystason validoinnin | 100 % hyväksytyistä | 100 % hyväksytyistä |
+| Käsittelyaika merkintää kohden verrattuna käsin tehtyyn | vähintään puolittuu | vähintään puolittuu |
+| Kustannus koko koosteen muunnokselle (lisäehdotus) | ≤ 30 $ | ≤ 30 $ |
+
+Asialistan muut kohdat (L-01–L-07, korjaukset, testiaineisto) ovat yhä avoinna. Ne
+arvioidaan ADR-0007:n näkökulmasta: määräykset muunnetaan uusien yleiskaavojen pohjaksi, ei
+VOOKA-toimitukseksi.
 
 Kirjaa päätökset muodossa *L-xx, päätös, perustelu, päivämäärä, hyväksyjä*. Kehittäjä vie ne
 vaiheessa 1 tiedostoon `knowledge/org/tampere/linjaukset.yaml`.
@@ -227,7 +261,8 @@ vaiheessa 1 tiedostoon `knowledge/org/tampere/linjaukset.yaml`.
 toimivat, eikä avain näkynyt asetustiedostoissa (ADR-0004). Lisäosapaketti ja tietopohja
 latautuvat QGISin Pythonissa (TP-2026.11-1). **Jäljellä käyttäjälle** (käyttöliittymä):
 lisäosan käyttöönotto lisäosien hallinnassa, *Tietoja*-ikkuna ja pääsalasanaikkuna alla olevilla
-ohjeilla.
+ohjeilla. **Käyttöliittymäosa tehty 22.11.2026** (käyttäjä, QGIS 3.44.7): onnistui,
+tunniste `QgsSettings`issa sama kuin tallennetun määrityksen (ADR-0004).
 
 **Lisäosan lataus:** linkki on luotu tälle työasemalle 22.11.2026 (`default`-profiili). Muilla
 koneilla linkitä paketti QGIS-profiilin lisäosakansioon (PowerShell, säilön juuresta):
@@ -262,6 +297,11 @@ virheilmoitukset (erityisesti `storeAuthenticationConfig`-paluuarvon muoto).
 ---
 
 ## 6 VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys (L-02, L-12)
+
+**Rajattu pois 22.11.2026 (ADR-0007).** Voimassa olevien kaavojen määräyksiä ei viedä
+Ryhtiin VOOKA-aineistona, vaan niitä käytetään uusien yleiskaavojen valmistelussa. Alla oleva
+selvitysohje säilytetään siltä varalta, että VOOKA-toimitus tulee myöhemmin ajankohtaiseksi.
+VOOKA-profiili: https://iri.suomi.fi/model/vooka/.
 
 **Lähteet:** https://ryhti.syke.fi/alueidenkaytto/tietomallimuotoinen-kaavoitus/
 (soveltamisprofiilit, VOOKA), Syken validointisäännöt, sykefi/Ryhti-rajapintakuvaukset
@@ -306,6 +346,10 @@ virheilmoitukset (erityisesti `storeAuthenticationConfig`-paluuarvon muoto).
 ---
 
 ## 7 Liitteen 4 korjausten vahvistus
+
+**Siirretty myöhemmäksi 22.11.2026.** Korjaukset pysyvät tietopohjassa merkinnällä
+`vahvistettava: true`. Vaiheessa 1 avustajan kannattaa näyttää ne käyttäjälle
+vahvistamattomina.
 
 Korjaustiedostossa `knowledge/katja/annex4_corrections.yaml` on korjauksia, joissa
 `vahvistettava: true`. Ne perustuvat koodistojen muutoslokiin tai rivin otsikkoon, mutta

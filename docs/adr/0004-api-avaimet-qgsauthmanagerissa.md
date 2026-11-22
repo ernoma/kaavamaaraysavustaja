@@ -1,7 +1,7 @@
 # ADR-0004 API-avaimet QgsAuthManagerissa
 
-- Tila: hyväksytty 22.11.2026; `plugin/auth.py` testattu QGIS 3.44.7:ssä ilman käyttöliittymää
-  (ks. Testitulos); käyttöliittymän pääsalasanaikkuna testaamatta
+- Tila: hyväksytty 22.11.2026; `plugin/auth.py` testattu QGIS 3.44.7:ssä sekä ilman
+  käyttöliittymää että käyttöliittymässä (ks. Testitulokset)
 - Lähde: toteutussuunnitelma A7, 6.13
 
 ## Päätös
@@ -23,7 +23,20 @@
   QgsAuthManageria.
 - Testausohje: `docs/vaihe0_kayttajan_tehtavat.md`, tehtävä 5.
 
-## Testitulos 22.11.2026
+## Testitulokset 22.11.2026
+
+### Käyttöliittymä (käyttäjän ajama)
+
+QGIS 3.44.7-Solothurn, Tampereen työasema, lisäosa linkitettynä `default`-profiiliin:
+
+- Lisäosa otettiin käyttöön lisäosien hallinnassa, ja *Tietoja*-ikkuna näytti tietopohjan.
+- `docs/vaihe0_kayttajan_tehtavat.md`:n tehtävän 5 Python-konsolin rivit toimivat, myös
+  pääsalasanan kysely. `print(cfg_id, auth.stored_authcfg_id("claude"))` tulosti saman
+  tunnisteen kahdesti (`7koj60d 7koj60d`), joten `QgsSettings`iin tallentui määrityksen
+  tunniste.
+- Tulos: onnistui ilman virheilmoituksia.
+
+### Ilman käyttöliittymää (tekoälyn ajama)
 
 QGIS 3.44.7-Solothurn (OSGeo4W, Python 3.12.12), `QgsApplication` ilman käyttöliittymää,
 kertakäyttöinen profiili ja tunnistetietokanta (`QGIS_AUTH_DB_DIR_PATH`), testipääsalasana ja
