@@ -2,6 +2,11 @@
 
 *22.11.2026 · tietopohja TP-2026.11-2 · avustaja 0.1.0 · sääntöpohjainen, ei kielimallikutsuja*
 
+> **Päivitys 22.11.2026 (ADR-0012):** työkalun on ensin toimittava QGISissa itsenäisesti
+> paikkatietoasiantuntijan käytössä ilman Arhoa ja ilman kaavoittajia. Arhon latautumistesti
+> (luku 5) siirtyy vaiheeseen 6 ja kaavoittajien tehtävät vaiheeseen 5. Luvut 6 ja 7 on
+> päivitetty tämän mukaisiksi.
+
 ## 1 Mitä tehtiin
 
 | Osa | Toteutus | ADR |
@@ -50,8 +55,8 @@ kehittämisperiaatemerkintöjä. Niitä ratkaistaan vaiheessa 2.
 .\.venv\Scripts\python tools\evaluate.py --yksikot
 ```
 
-Odotetut tulokset ovat kehittäjän luonnoksia (`tila: vahvistamaton`), koska kaavoittajat
-eivät ole vielä annotoineet aineistoa. Mittarit kertovat siksi, miten hyvin sääntöpohjainen
+Odotetut tulokset ovat kehittäjän luonnoksia (`tila: vahvistamaton`). Kaavoittajat
+vahvistavat ne vaiheessa 5 (ADR-0012). Mittarit kertovat siksi, miten hyvin sääntöpohjainen
 muunnos vastaa suunnitelman suosituksia, eivät kaavoittajien hyväksyntää.
 
 | Mittari (luku 2.3) | Tavoite | Vaihe 1 | Huomio |
@@ -60,8 +65,8 @@ muunnos vastaa suunnitelman suosituksia, eivät kaavoittajien hyväksyntää.
 | Korkean varmuuden ehdotuksista oikein | ≥ 98 % | 3/3 (100 %) | Otos on pieni. Sanallisen määräyksen lajit ovat aina keskitasoa (suunnitelma 8.1), joten korkeaan varmuuteen pääsevät vain tekstittömät merkinnät. |
 | Tunnetuista monitulkintaisista kohdista nousee tulkintakysymykseksi | ≥ 90 % | **93 %** (28/30) | Puuttuvat: K1 *Kaupunkivihreän kehittämisalue* (nousee K5:nä) ja K14 *Loma-asuntoalue* (koodia ei löydy). |
 | Voimassa olevan kaavan määräystekstin muutokset | 0 kpl | **0** | R-19 ja testi `test_verbal_text_is_source_text_character_by_character`; myös Arho-YAMLin edestakainen luku. |
-| Ryhmät latautuvat Arhoon ja läpäisevät Ryhdin määräystason validoinnin | 100 % hyväksytyistä | skeema 100 %; Syke 12/12 valittua ja 27/28 paikallisesti virheetöntä | Arhon latautuminen testataan käsin (luku 5). |
-| Käsittelyaika merkintää kohden | vähintään puolittuu | ei mitattavissa | Vaatii käyttäjät; kone käsittelee kartan 1,4 sekunnissa. |
+| Ryhmät läpäisevät Ryhdin määräystason validoinnin | 100 % hyväksytyistä | skeema 100 %; Syke 12/12 valittua ja 27/28 paikallisesti virheetöntä | Arhoon latautuminen on vaiheen 6 mittari (luku 5). |
+| Käsittelyaika merkintää kohden | vähintään puolittuu | ei mitattavissa | Mitataan paikkatietoasiantuntijan koekäytössä vaiheessa 3; kone käsittelee kartan 1,4 sekunnissa. |
 
 Muut luvun 10.3 mittarit:
 
@@ -107,7 +112,10 @@ kantava aluevaraus (ADR-0011).
   pelkkä yleismääräysryhmä vaatii kaavakohteen (HTTP 400), ja aluevarausten on peitettävä
   kaavan rajaus.
 
-## 5 Arho-kirjaston testiohje (QGIS 3.44.7, Arho asennettuna)
+## 5 Arho-kirjaston testiohje (QGIS 3.44.7, Arho asennettuna) – vaihe 6
+
+Tämä testi ei ole nyt avoin tehtävä. Se tehdään vaiheessa 6, kun työkalu toimii
+itsenäisesti (ADR-0012). Ohje säilytetään valmiina sitä varten.
 
 YAMLin latautumista Arhoon ei voi testata ilman QGISia ja Arhon tietokantaa. Testi kestää
 noin 15 minuuttia.
@@ -152,17 +160,29 @@ noin 15 minuuttia.
 
 ## 6 Mitä jäi käyttäjälle
 
-- **Arho-latautumistesti** (luku 5).
+Nyt, paikkatietoasiantuntijalle (ei edellytä Arhoa eikä kaavoittajia):
+
+- **Normalisoinnin vahvistettavat kohdat**: raportissa ovat kohdassa "Vahvistettavat
+  normalisoinnit" (esim. `vapaa-⏎ajan`, `MRL128`, kahdentuneet tunnukset `pvpv`). Ne koskevat
+  tekstinpoimintaa eivätkä tulkintaa.
+- **Liitteen 4 korjausten vahvistus** (tehtävä 7, ennallaan).
+- **Testiaineiston laajennus** 80–120 yksikköön vaiheessa 2 kehittäjän kanssa
+  (`tila: vahvistamaton`).
+
+Vaiheessa 5, kaavoittajien kanssa:
+
 - **Odotettujen tulosten vahvistus**: kaavoittajat käyvät `tests/golden/kartta1_odotetut.yaml`:n
   läpi. Erityisesti K1-tapaukset (c-1–c-4, km), sekoittuneet alueet (K2), VAK-ratapiha ja
   loma-asuntoalueet. Kun odotukset on vahvistettu, `tila: vahvistettu` ja mittarit ajetaan uudelleen.
-- **Normalisoinnin vahvistettavat kohdat**: raportissa ovat kohdassa "Vahvistettavat
-  normalisoinnit" (esim. `vapaa-⏎ajan`, `MRL128`, kahdentuneet tunnukset `pvpv`). Lähde on
-  kooste, joten teksti on lisäksi tarkistettava alkuperäistä kaava-asiakirjaa vasten
-  (suunnitelma 3.7).
 - **Linjausten lukitus** (ADR-0010), kun yleiskaavoitus päättää. Erityisesti L-04 ja L-05,
-  joiden oletus poikkeaa suunnitelman alkuperäisestä VOOKA-suosituksesta.
-- **Liitteen 4 korjausten vahvistus** (tehtävä 7, ennallaan).
+  joiden oletus poikkeaa suunnitelman alkuperäisestä VOOKA-suosituksesta. Siihen asti
+  käytetään oletuksia ja muunnoskohtaisia valintoja.
+- **Tekstin tarkistus alkuperäisiä kaava-asiakirjoja vasten**, koska lähde on kooste
+  (suunnitelma 3.7).
+
+Vaiheessa 6:
+
+- **Arho-latautumistesti** (luku 5).
 
 ## 7 Havaintoja vaiheen 2 kannalta
 
@@ -192,9 +212,10 @@ noin 15 minuuttia.
 7. **Jäsennin on koosteeseen sidottu.** Keskustan kartoilla (1a–2) on alaotsikoita ja
    numeroituja osa-alueita (K9), joita jäsennin ei vielä erottele kunnolla. Kielimallin
    jäsennysapu (luku 6.5 kohta 3) tai `@`-ohjeet ratkaisevat ne.
-8. **Vahvistamaton testiaineisto rajoittaa mittareita.** Ennen kuin kielimallia arvioidaan,
-   tarvitaan kaavoittajien annotointi (luku 10.2) ja testiaineiston laajennus 80–120
-   yksikköön. Muuten mitataan vain vastaavuutta kehittäjän tulkintaan.
+8. **Vahvistamaton testiaineisto rajoittaa mittareita.** Vaiheessa 2 testiaineisto
+   laajennetaan 80–120 yksikköön kehittäjän ja paikkatietoasiantuntijan annotoimana
+   (suunnitelma 10.2). Mittarit kertovat silloin vastaavuuden heidän tulkintaansa, ja ne
+   mitataan uudelleen, kun kaavoittajat vahvistavat aineiston vaiheessa 5.
 
 ## Arho-testin tulokset
 

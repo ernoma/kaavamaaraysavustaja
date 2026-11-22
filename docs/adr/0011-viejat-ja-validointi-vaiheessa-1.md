@@ -47,7 +47,7 @@ määräystason tarkistukseen. Arhon kirjastomuoto ja Ryhdin skeema muuttuvat it
 ## Seuraukset
 
 - Arhon latautumista ei voi testata ilman QGISia. Käsin tehtävä testiohje on
-  `docs/vaihe1_raportti.md`:ssä, ja automaattinen latautumistesti Arhon mallilla on vaiheen 3 työtä.
+  `docs/vaihe1_raportti.md`:ssä, ja automaattinen latautumistesti Arhon mallilla on vaiheen 6 työtä (ADR-0012).
 - Jos Arhon kirjastomuoto muuttuu (`format_version` 3), viejään tehdään uusi versio ja
   LAHDE.md:hen kirjataan uusi commit.
 - Syken vastausmuoto (`ruleId`, `localizedMessage.fi`) tunnetaan vaiheen 0 testistä. Jäsennin

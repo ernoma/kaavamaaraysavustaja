@@ -1,8 +1,10 @@
 # Kaavamääräysavustaja
 
-Työkalu sanallisten kaava- ja yleismääräysten muuntamiseen Katja-asetuksen (YM 311/2024) mukaiseen rakenteiseen muotoon: Ryhti-JSONiksi ja [Arho](https://github.com/GispoCoding/arho-qgis-plugin)-yhteensopiviksi kaavamääräysryhmiksi. Avustaja perustelee jokaisen muunnospäätöksen, nostaa monitulkintaiset kohdat käyttäjän ratkaistaviksi ja kestää koodistojen ja asetuksen muutokset.
+Työkalu sanallisten kaava- ja yleismääräysten muuntamiseen Katja-asetuksen (YM 311/2024) mukaiseen rakenteiseen muotoon: Ryhti-JSONiksi ja kaavamääräysryhmiksi. Avustaja perustelee jokaisen muunnospäätöksen, nostaa monitulkintaiset kohdat käyttäjän ratkaistaviksi ja kestää koodistojen ja asetuksen muutokset.
 
-**Tila:** vaihe 1 (ydin ja sääntöpohjainen muunnos) valmis. Komentorivi `kma convert` muuntaa koosteen kartan sääntöpohjaisesti muunnosprojektiksi, Arhon kirjastoksi, Ryhti-fragmenteiksi ja raportiksi; `kma validate` tarkistaa säännöillä, skeemalla ja Syken rajapinnalla. Tulokset: [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md). Kielimalli tulee vaiheessa 2 (suunnitelman luku 12).
+Työkalu on QGIS-lisäosa, jonka päävastuullinen käyttäjä on paikkatietoasiantuntija. Se toimii itsenäisesti ilman [Arhoa](https://github.com/GispoCoding/arho-qgis-plugin). Arhon kirjastomuoto on yksi vientimuodoista, ja Arho-integraatio tehdään, kun työkalu toimii itsenäisesti. Kaavoittajat validoivat muunnetut määräykset ennen kuin aineistoa toimitetaan eteenpäin, esimerkiksi Ryhtiin ([ADR-0012](docs/adr/0012-itsenainen-qgis-tyokalu-ensin.md)).
+
+**Tila:** vaihe 1 (ydin ja sääntöpohjainen muunnos) valmis. Komentorivi `kma convert` muuntaa koosteen kartan sääntöpohjaisesti muunnosprojektiksi, Ryhti-fragmenteiksi, raportiksi ja Arhon kirjastoksi; `kma validate` tarkistaa säännöillä, skeemalla ja Syken rajapinnalla. Tulokset: [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md). Seuraavaksi kielimalli (vaihe 2) ja itsenäinen QGIS-lisäosa (vaihe 3); suunnitelman luku 12.
 
 Kehittäjän ohjeet ja komennot: [`CLAUDE.md`](CLAUDE.md).
 
@@ -14,7 +16,7 @@ Kehittäjän ohjeet ja komennot: [`CLAUDE.md`](CLAUDE.md).
 | [`docs/adr/`](docs/adr/) | Arkkitehtuuripäätökset |
 | [`docs/laaturaportti_liite3.md`](docs/laaturaportti_liite3.md) | Katja-liitteen 4 taulukon tarkistus koodistoja vasten |
 | [`docs/vaihe0_kayttajan_tehtavat.md`](docs/vaihe0_kayttajan_tehtavat.md) | Vaiheen 0 tehtävät, jotka tehdään Tampereen työasemalla tai kaavoittajien kanssa |
-| [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md) | Vaiheen 1 tulokset, mittarit, Syke-testi ja Arhon testiohje |
+| [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md) | Vaiheen 1 tulokset, mittarit, Syke-testi ja Arhon testiohje (vaihe 6) |
 | `kaavamaaraysavustaja/` | Python-paketti ja QGIS-lisäosa (`core` ilman QGISia, `knowledge`, `exporters`, `validation`, `plugin`) |
 | `knowledge/` | Tietopohja: koodistot ja indeksi, Katja-liitteen 4 vakiomääräysluettelo ja korjaukset, Ryhti-skeema, validointiviestit, säännöt, sanasto, Tampereen linjaukset, manifesti |
 | `tools/` | Tietopaketin rakentaja, PDF:n tekstinpoiminta, arviointi, Claude-piikki, Syken validointitesti, SDK-ympäristön tarkistus |

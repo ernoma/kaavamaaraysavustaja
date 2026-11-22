@@ -17,7 +17,8 @@ vaatimusten ja `digitalOrigin`-koodien selvitys (L-02, L-12).
   `digitalOrigin`-koodeja ei selvitetä nyt.
 - Voimassa olevien yleiskaavojen sanalliset määräykset muunnetaan rakenteisiksi
   kaavamääräysryhmiksi **uusien yleiskaavojen valmistelun pohjaksi**. Pääasiallinen tuotos on
-  Arhon kaavamääräysryhmäkirjasto. Ryhti-JSON tuotetaan määräystason tarkistusta varten
+  Arhon kaavamääräysryhmäkirjasto (tarkennettu ADR-0012:lla: päätuotos on tarkistettu
+  muunnosprojekti, ja Arhon kirjasto on yksi sen vientimuodoista). Ryhti-JSON tuotetaan määräystason tarkistusta varten
   (Syken validointirajapinta tavallisella profiililla, jolla uudet kaavat validoidaan).
 
 ## Seuraukset

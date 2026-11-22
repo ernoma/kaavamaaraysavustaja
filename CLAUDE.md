@@ -5,9 +5,13 @@ Ohjeet tekoälyavusteiselle kehitykselle tässä säilössä. Kokonaiskuva ja va
 Arkkitehtuuripäätökset: [`docs/adr/`](docs/adr/).
 
 Kaavamääräysavustaja muuntaa sanalliset kaava- ja yleismääräykset Katja-asetuksen
-(YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja Arhon
+(YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja valinnaisesti Arhon
 kaavamääräysryhmäkirjastoksi (YAML). Käyttöliittymäteksti on suomeksi, koodi englanniksi;
 alla jokaisesta termistä molemmat.
+
+Päävastuullinen käyttäjä on paikkatietoasiantuntija. Lisäosan on toimittava QGISissa ilman
+Arhoa ja ilman kaavoittajia. Arho-integraatio (vaihe 6) ja kaavoittajia edellyttävät
+tehtävät (vaihe 5) tehdään vasta, kun työkalu toimii itsenäisesti (ADR-0012).
 
 ## Sanasto
 
@@ -76,7 +80,7 @@ Koodistoa jäsentävä koodi, jota ei käytetä määräyksissä. Tunnistetaan k
 
 **VOOKA-tila (VOOKA mode)**:
 Voimassa olevan kaavan muunnos. Sanallinen teksti siirtyy merkki merkiltä muuttumattomana.
-Tulosta käytetään uusien yleiskaavojen pohjana (Arho-kirjasto). Sitä ei toimiteta Ryhtiin
+Tulosta käytetään uusien yleiskaavojen pohjana (esim. Arho-kirjastona). Sitä ei toimiteta Ryhtiin
 VOOKA-soveltamisprofiilin mukaisena aineistona (ADR-0007), vaikka termi tulee profiilista.
 
 **Laadintatila (drafting mode)**:
@@ -127,6 +131,9 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
 8. **Pidä yksinkertaisena.** Yksi kehittäjä tekoälyavusteisesti: stdlib + PyYAML ytimessä, ei
    omaa sääntökieltä, ei taustapalvelua.
 9. Lisenssi GPL-2.0-or-later. Uudet riippuvuudet GPL-yhteensopivia.
+10. **Ei Arho-riippuvuutta.** Mikään toiminto tai hyväksymiskriteeri ei saa edellyttää Arhoa,
+    Arhon tietokantaa tai kaavoittajien työpanosta ennen vaiheita 5–6 (ADR-0012). Arhon
+    kirjasto-YAML on valinnainen vientimuoto.
 
 ## Komennot
 

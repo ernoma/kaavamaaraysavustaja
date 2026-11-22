@@ -1,18 +1,19 @@
 # Kaavamääräysavustaja – toteutussuunnitelma
 
-*Työkalu sanallisten kaava- ja yleismääräysten muuntamiseen Katja-asetuksen mukaiseen rakenteiseen muotoon (Ryhti-JSON) ja Arho-yhteensopiviksi kaavamääräysryhmiksi*
+*Työkalu sanallisten kaava- ja yleismääräysten muuntamiseen Katja-asetuksen mukaiseen rakenteiseen muotoon (Ryhti-JSON) QGISissa, valinnaisesti myös Arho-yhteensopiviksi kaavamääräysryhmiksi*
 
 | | |
 |---|---|
-| Versio | 0.1 – luonnos kommentoitavaksi |
+| Versio | 0.2 – vaiheistus päivitetty vaiheen 1 jälkeen (ADR-0012) |
 | Päivämäärä | 22.11.2026 |
 | Työnimi | Kaavamääräysavustaja (nimi tarkentuu) |
-| Toteutus | yksi kehittäjä tekoälyavusteisesti, kaavoittajat sisällön asiantuntijoina |
+| Toteutus | yksi kehittäjä tekoälyavusteisesti; päävastuullinen käyttäjä paikkatietoasiantuntija; kaavoittajat sisällön asiantuntijoina vaiheesta 5 alkaen |
 | Pohja-aineisto | säilön `lahtoaineistot/`-kansio (liite C) ja Arho-lisäosan lähdekoodi ([GispoCoding/arho-qgis-plugin](https://github.com/GispoCoding/arho-qgis-plugin)) |
 
 **Lähtöoletukset (vahvistettu 22.11.2026):**
 
-- Ensimmäinen versio on **erillinen QGIS-lisäosa**, joka tuottaa Arhon kirjastomuotoa ja Ryhti-JSONia ilman muutoksia Arhoon. Käyttöliittymäintegraatio Arhoon tehdään myöhemmin yhdessä Gispon kanssa.
+- Ensimmäinen versio on **erillinen QGIS-lisäosa, joka on itsessään toimiva ilman Arhoa**. Se tuottaa Ryhti-JSONia ja muunnosraportin, ja Arhon kirjastomuoto on yksi vientimuodoista. Arho ei ole käytön edellytys vaan tavoiteltu integraatio, joka tehdään yhdessä Gispon kanssa vasta, kun työkalu toimii itsenäisesti käytettävästi ja tehokkaasti (ADR-0012, päivitetty vaiheen 1 jälkeen).
+- **Päävastuullinen käyttäjä on paikkatietoasiantuntija.** Kaavoittajia edellyttävät tehtävät (odotettujen tulosten vahvistus, linjausten lukitus, pilotti, uusien määräysten laatiminen) tehdään, kun lisäosa toimii. Ryhtiin toimittaminen on järkevää vasta, kun kaavoittajat ovat osallistuneet muunnettujen määräysten validointiin (ADR-0012).
 - Tampereen voimassa olevista yleiskaavoista on **vektorimuotoiset kaavakohteet**, joten muunnetut kaavamääräysryhmät voidaan myöhemmin kytkeä geometrioihin.
 - **Määräystekstit saa lähettää kielimallille, kaava-PDF:iä ei.** Käyttäjä kopioi merkintöjen otsikot ja määräystekstit sovellukseen (tai teksti poimitaan PDF:stä paikallisesti). Claude API:n tilalle on voitava vaihtaa esim. Mistral API tai vastaava.
 - Toteutuksen tekee **yksi kehittäjä tekoälyavusteisesti**.
@@ -45,20 +46,21 @@ Liitteet: [A Hakemistorakenne](#liite-a-hakemistorakenne) · [B Sääntöluettel
 
 **Tarve.** Uudet kaavat on toimitettava Ryhtiin valtakunnallisesti yhteentoimivassa tietomallimuodossa (laki 431/2023, 5 §, jota sovelletaan 1.1.2029 alkaen). Kaavamääräysten koneluettava sisältö määräytyy Katja-asetuksen (YM 311/2024, muutos 393/2025) koodistoista ja esitystavasta. Tampereella on lisäksi voimassa olevia yleiskaavoja, joiden määräykset ovat vain sanallisina, esimerkiksi kantakaupungin voimassa olevien yleiskaavamerkintöjen kooste 1.9.2025 (Tampereen PDF, ei tässä säilössä). Kaavoittajan ei pitäisi joutua opettelemaan satoja koodiarvoja ja teknisiä sääntöjä voidakseen kirjoittaa määräyksen.
 
-**Ratkaisu.** Kaavamääräysavustaja on erillinen, Arho-yhteensopiva QGIS-lisäosa, jonka ytimenä on QGIS:stä riippumaton Python-kirjasto. Avustaja
+**Ratkaisu.** Kaavamääräysavustaja on erillinen QGIS-lisäosa, joka toimii itsenäisesti ilman Arhoa ja jonka ytimenä on QGIS:stä riippumaton Python-kirjasto. Päävastuullinen käyttäjä on paikkatietoasiantuntija. Avustaja
 
 1. ottaa vastaan merkintöjen otsikot ja määräystekstit (kirjoitettuna, PDF:stä kopioituna tai PDF:stä paikallisesti poimittuna) ja jäsentää ne määräysyksiköiksi
 2. tunnistaa ensin sääntöpohjaisesti kaiken, minkä voi: Katja-asetuksen liitteen 4 vakiomääräykset, Tampereen aiemmin hyväksymät tulkinnat sekä numeroarvot ja yksiköt
 3. käyttää kielimallia (aluksi Claude, vaihdettavissa esim. Mistraliin) vain jäljelle jäävään tulkintaan. Malli voi valita vain voimassa olevista koodiarvoista, ja sen on perusteltava valintansa lainauksilla lähdetekstistä.
 4. tarkistaa jokaisen ehdotuksen sääntömoottorilla (Katja, oppaan säännöt, Ryhdin validointisäännöt)
-5. näyttää käyttäjälle ehdotuksen kaavoittajan kielellä sekä perustelut, varmuusasteen ja **tulkintakysymykset**. Käyttäjän vastaukset tallentuvat Tampereen **linjauksiksi**, joita sovelletaan jatkossa automaattisesti.
-6. vie tuloksen Arhon kaavamääräysryhmäkirjastoksi (YAML), Ryhti-JSONiksi ja muunnosraportiksi. Tulos validoidaan paikallisesti ja halutessa Syken julkisella validointirajapinnalla.
+5. näyttää käyttäjälle ehdotuksen kaavoittajan kielellä sekä perustelut, varmuusasteen ja **tulkintakysymykset**. Käyttäjän vastaukset tallentuvat muunnoskohtaisina valintoina, ja kun Tampere päättää, ne lukitaan **linjauksiksi**, joita sovelletaan jatkossa automaattisesti.
+6. kytkee kaavamääräysryhmät QGISissa voimassa olevien kaavojen vektoriaineistoon
+7. vie tuloksen Ryhti-JSONiksi, muunnosraportiksi ja valinnaisesti Arhon kaavamääräysryhmäkirjastoksi (YAML). Tulos validoidaan paikallisesti ja halutessa Syken julkisella validointirajapinnalla.
 
 **Muutoksiin varautuminen.** Kaikki muuttuva tieto on versioituja **tietopaketteja**, ei ohjelmakoodia: koodistot, Katja-liite 4, säännöt, kehotteet, Ryhdin skeema ja Tampereen linjaukset. Tietopaketin päivitys tuottaa vaikutusanalyysin (mitkä jo muunnetut määräykset muuttuvat) ja ajaa regressioarvioinnin testiaineistolla.
 
 **Tietosuoja ja riippumattomuus.** Kielimallille lähetetään vain käyttäjän hyväksymä määräysteksti, ei PDF-tiedostoja. API-avain tallennetaan QGISin salattuun tunnistetietovarastoon. Avustaja ei tarvitse taustajärjestelmää. Ilman kielimallia se toimii rajoitetusti: sääntöpohjainen tunnistus ja rakenteistus käsin toimivat silti.
 
-**Vaiheet.** 0 käynnistys ja tekninen piikki → 1 ydin ja sääntöpohjainen muunnos (komentorivi) → 2 kielimalli, perustelut ja tulkintakysymykset → 3 QGIS-lisäosa ja pilotti → 4 kytkentä Tampereen vektoriaineistoon ja koko kaavan vienti → 5 integraatio Arhon käyttöliittymään yhdessä Gispon kanssa ja tuki uusien kaavojen laatimiseen. Työmääräarvio: pilotoitava lisäosa noin 12–18 kehitysviikossa, kytkentä noin 15–23 viikossa (luku 12).
+**Vaiheet.** 0 käynnistys ja tekninen piikki → 1 ydin ja sääntöpohjainen muunnos (komentorivi) → 2 kielimalli, perustelut ja tulkintakysymykset → 3 itsenäinen QGIS-lisäosa → 4 kytkentä vektoriaineistoon ja koko kaavan vienti → 5 kaavoittajien validointi ja linjausten lukitus → 6 Arho-integraatio yhdessä Gispon kanssa ja tuki uusien kaavojen laatimiseen. Vaiheet 2–4 eivät edellytä Arhoa eivätkä kaavoittajia (ADR-0012). Työmääräarvio: paikkatietoasiantuntijan itsenäisesti käyttämä lisäosa noin 12–18 kehitysviikossa, kytkentä mukaan lukien noin 15–23 viikossa (luku 12).
 
 ---
 
@@ -89,20 +91,22 @@ Liitteet: [A Hakemistorakenne](#liite-a-hakemistorakenne) · [B Sääntöluettel
 | T4 | Tukea uusien määräysten laatimista: kaavoittaja kirjoittaa sisällön, avustaja ehdottaa rakenteen, Katja-otsikon ja kirjaintunnuksen sekä huomauttaa ristiriidoista. |
 | T5 | Kestää koodistojen, asetuksen, oppaan, Ryhdin ja Arhon muutokset ilman uudelleenkirjoitusta. |
 | T6 | Toimia ilman taustajärjestelmää; kielimallitoimittaja on vaihdettavissa. |
-| T7 | Integroitua Arhoon: ensin tiedostomuotojen ja Arhon tuontitoimintojen kautta, myöhemmin käyttöliittymätasolla. |
+| T7 | Toimia QGISissa itsenäisesti paikkatietoasiantuntijan työkaluna ilman Arhoa ja ilman kaavoittajien jatkuvaa osallistumista. |
+| T8 | Integroitua Arhoon, kun T7 täyttyy: ensin tiedostomuotojen ja Arhon tuontitoimintojen kautta, myöhemmin käyttöliittymätasolla. Arho on tavoite, ei edellytys. |
 
 ### 2.3 Alustavat onnistumisen mittarit
 
-Tavoitearvot sovitaan vaiheessa 0. Ne mitataan testiaineistolla (luku 10).
+Tavoitearvot sovitaan vaiheessa 0. Ne mitataan testiaineistolla (luku 10): vaiheissa 2–4 kehittäjän ja paikkatietoasiantuntijan annotoimalla (vahvistamaton) ja vaiheessa 5 uudelleen kaavoittajien vahvistamalla.
 
-| Mittari | Alustava tavoite |
-|---|---|
-| Merkinnät, joiden ehdotus hyväksytään sellaisenaan | ≥ 70 % |
-| Korkean varmuuden ehdotuksista oikein | ≥ 98 % |
-| Tunnetuista monitulkintaisista kohdista nousee tulkintakysymykseksi | ≥ 90 % |
-| Voimassa olevan kaavan määräystekstin muutokset | 0 kpl (tarkistetaan koneellisesti) |
-| Muunnetut ryhmät latautuvat Arhoon ja läpäisevät Ryhdin määräystason validoinnin | 100 % hyväksytyistä |
-| Käsittelyaika merkintää kohden verrattuna käsin tehtyyn | vähintään puolittuu |
+| Mittari | Alustava tavoite | Vaihe |
+|---|---|---|
+| Merkinnät, joiden ehdotus hyväksytään sellaisenaan | ≥ 70 % | 2– |
+| Korkean varmuuden ehdotuksista oikein | ≥ 98 % | 2– |
+| Tunnetuista monitulkintaisista kohdista nousee tulkintakysymykseksi | ≥ 90 % | 1– |
+| Voimassa olevan kaavan määräystekstin muutokset | 0 kpl (tarkistetaan koneellisesti) | 1– |
+| Hyväksytyt ryhmät läpäisevät Ryhdin määräystason validoinnin (Syken testiympäristö) | 100 % | 1– |
+| Paikkatietoasiantuntijan käsittelyaika merkintää kohden verrattuna käsin tehtyyn | vähintään puolittuu | 3– |
+| Hyväksytyt ryhmät latautuvat Arhoon | 100 % | 6 |
 
 ### 2.4 Rajaukset
 
@@ -110,7 +114,8 @@ Tavoitearvot sovitaan vaiheessa 0. Ne mitataan testiaineistolla (luku 10).
 - Skannatuista kaavoista (esim. koosteen Vuoreksen osayleiskaavat) teksti syötetään käsin. Paikallinen tekstintunnistus (OCR) on mahdollinen myöhempi lisä.
 - Avustaja ei hyväksy kaavaa eikä tee oikeudellisia ratkaisuja käyttäjän puolesta. Ihminen hyväksyy aina muunnoksen.
 - Kaavakartan digitointi ei kuulu avustajaan. Olemassa olevan vektoriaineiston kytkentä kuuluu (luku 9).
-- Kaava-asian elinkaari-, käsittely- ja vuorovaikutustiedot hoidetaan Arhossa.
+- Kaava-asian elinkaari-, käsittely- ja vuorovaikutustiedot hoidetaan Arhossa tai muussa kaavoitusjärjestelmässä.
+- Avustaja ei toimita aineistoa Ryhtiin. Ryhti-JSON tuotetaan tarkistusta ja jatkokäyttöä varten, ja toimittaminen on mahdollista vasta kaavoittajien validoinnin jälkeen (ADR-0007, ADR-0012).
 
 ---
 
@@ -248,6 +253,7 @@ Samaan aikaan liitteen 4 taulukko viittaa jo nyt poistuneisiin koodeihin, opas o
 | P8 | **Toimittajariippumattomuus** | Kielimalli on adapterin takana: ensin Claude, toisena Mistral. Kehotteet ja tulosteskeema ovat toimittajasta riippumattomia. |
 | P9 | **Tietojen minimointi** | Mallille lähetetään vain määräysteksti ja tarvittava konteksti. Lähetettävä sisältö on esikatseltavissa. PDF:iä ei lähetetä. |
 | P10 | **Toimii ilman taustajärjestelmää** | Kaikki toimii työasemalla. Taustapalvelu on myöhempi valinnainen lisä (avainten keskitetty hallinta, yhteinen kirjasto). |
+| P11 | **Itsenäinen ensin, integraatiot sitten** | Lisäosa on paikkatietoasiantuntijan työkalu, joka toimii QGISissa ilman Arhoa ja ilman kaavoittajia. Arho-integraatio ja kaavoittajia edellyttävät tehtävät tehdään vasta, kun lisäosa toimii käytettävästi ja tehokkaasti (ADR-0012). |
 
 ---
 
@@ -255,13 +261,15 @@ Samaan aikaan liitteen 4 taulukko viittaa jo nyt poistuneisiin koodeihin, opas o
 
 | # | Käyttötapaus | Kuka | Vaihe |
 |---|---|---|---|
-| UC1 | **Voimassa olevan kaavan määräysten muunnos erissä**: liitä kopioitu selite tai yleismääräykset → jäsennys → ehdotukset → tarkistus → vienti | paikkatieto- tai kaavoitusasiantuntija | 1–3 |
-| UC2 | **Yksittäisen uuden määräyksen laatiminen**: kirjoita otsikko ja teksti → rakenne-ehdotus, Katja-otsikko, kirjaintunnus ja huomautukset reaaliajassa | kaavoittaja | 3, 5 |
-| UC3 | **Tulkintakysymysten ratkaiseminen ja linjausten hallinta** | kaavoittaja, pääkäyttäjä | 2–3 |
-| UC4 | **Kytkentä vektoriaineistoon**: kohdetason merkintätunnukset ↔ kaavamääräysryhmät → Arhoon tai Ryhti-JSONiksi | paikkatietoasiantuntija | 4 |
-| UC5 | **Tietopohjan päivitys ja vaikutusanalyysi**: uusi koodisto- tai asetusversio → mitkä muunnokset muuttuvat → siirtoehdotukset | pääkäyttäjä | 1–3 (jatkuva) |
-| UC6 | **Validointi**: paikallinen sääntötarkistus ja valinnaisesti Syken julkinen validointirajapinta | kaikki | 1–4 |
-| UC7 | **Muunnosraportti**: määräyskohtaiset perustelut ja päätökset dokumentointia ja laadunvarmistusta varten | kaikki | 1–3 |
+| UC1 | **Voimassa olevan kaavan määräysten muunnos erissä**: liitä kopioitu selite tai yleismääräykset → jäsennys → ehdotukset → tarkistus → vienti | paikkatietoasiantuntija | 1–3 |
+| UC2 | **Yksittäisen uuden määräyksen laatiminen**: kirjoita otsikko ja teksti → rakenne-ehdotus, Katja-otsikko, kirjaintunnus ja huomautukset reaaliajassa | kaavoittaja | 6 |
+| UC3 | **Tulkintakysymysten ratkaiseminen**: muunnoskohtaiset valinnat; linjausten lukitus, kun Tampere päättää | paikkatietoasiantuntija; kaavoittajat lukitsevat linjaukset | 2–3; lukitus 5 |
+| UC4 | **Kytkentä vektoriaineistoon**: kohdetason merkintätunnukset ↔ kaavamääräysryhmät → kytketty kaavakohdetaso ja koko kaavan Ryhti-JSON QGISissa | paikkatietoasiantuntija | 4 |
+| UC5 | **Tietopohjan päivitys ja vaikutusanalyysi**: uusi koodisto- tai asetusversio → mitkä muunnokset muuttuvat → siirtoehdotukset | paikkatietoasiantuntija (pääkäyttäjä) | 1–4 (jatkuva) |
+| UC6 | **Validointi**: paikallinen sääntötarkistus ja valinnaisesti Syken julkinen validointirajapinta | paikkatietoasiantuntija | 1–4 |
+| UC7 | **Muunnosraportti**: määräyskohtaiset perustelut ja päätökset dokumentointia ja laadunvarmistusta varten | paikkatietoasiantuntija; kaavoittajat katselmoivat | 1–3; 5 |
+| UC8 | **Kaavoittajien validointi**: raportin ja odotettujen tulosten katselmointi, normalisointien ja tulkintojen vahvistus, linjausten lukitus | kaavoittajat, paikkatietoasiantuntija | 5 |
+| UC9 | **Vienti Arhoon**: kirjasto Arhon *Kirjastot*-toimintoon, *Tuo kaavakohteita*, *Tuo kaavasuunnitelma* | paikkatietoasiantuntija | 6 |
 
 **Käyttäjäpolku UC1 (koosteen yksi kartta):**
 
@@ -269,7 +277,7 @@ Samaan aikaan liitteen 4 taulukko viittaa jo nyt poistuneisiin koodeihin, opas o
 2. Käyttäjä liittää selitteen tekstin. Avustaja jäsentää sen ja näyttää taulukon: YLEISMÄÄRÄYS-lohkot, merkinnät ja kirjaintunnukset. Käyttäjä korjaa yhdistämiset ja jaot.
 3. *Muunna*: sääntöpohjainen vaihe ratkaisee osan heti, ja kielimalli käsittelee loput taustalla. Käyttäjä näkee kustannusarvion ennen lähetystä.
 4. Käyttäjä käy läpi kohteet, joilla on tulkintakysymyksiä tai varoituksia, ja hyväksyy loput erissä suodattamalla korkean varmuuden ehdotukset.
-5. *Vie*: Arhon kirjasto-YAML, Ryhti-JSON ja muunnosraportti. Kirjasto lisätään Arhoon toiminnolla *Kirjastot* (Kirjastojen hallinta).
+5. *Vie*: muunnosprojekti, muunnosraportti ja Ryhti-JSON (validointi Syken testiympäristössä). Valinnaisesti Arhon kirjasto-YAML, jonka voi lisätä Arhoon toiminnolla *Kirjastot* (Kirjastojen hallinta); Arhoon lataamisen testaus ja ohjeistus kuuluvat vaiheeseen 6.
 
 **Käyttäjäpolku UC2 (uusi yleiskaava):** Kaavoittaja kirjoittaa "Kerrostalovaltainen asuntoalue. Alueen täydennysrakentamisessa tulee…". Avustaja ehdottaa: AK, `asuinkerrostaloalue` + pääkäyttötarkoitus, Katja-otsikko ja sanallinen määräys lajeineen. Lisäksi se huomauttaa, jos esimerkiksi otsikko on muokattu Katja-otsikoksi, joka ei vastaa koodeja, tai jos teksti sisältää numeroarvon, joka kannattaisi antaa suureellisena määräyksenä.
 
@@ -281,7 +289,7 @@ Samaan aikaan liitteen 4 taulukko viittaa jo nyt poistuneisiin koodeihin, opas o
 
 | # | Päätös | Perustelu |
 |---|---|---|
-| A1 | Erillinen QGIS-lisäosa ja **QGIS:stä riippumaton ydin** (`core` ei saa tuoda `qgis`-moduulia) | Ydin on testattavissa ilman QGISia ja ajettavissa komentoriviltä ja CI:ssä, myöhemmin myös palvelimena. Arho-integraatio onnistuu ilman Arhon muutoksia. |
+| A1 | Erillinen QGIS-lisäosa ja **QGIS:stä riippumaton ydin** (`core` ei saa tuoda `qgis`-moduulia) | Ydin on testattavissa ilman QGISia ja ajettavissa komentoriviltä ja CI:ssä, myöhemmin myös palvelimena. Lisäosa toimii ilman Arhoa, ja myöhempi Arho-integraatio onnistuu ilman Arhon muutoksia. |
 | A2 | **Sisäinen välimalli**, ja viejät Ryhti-JSONiin ja Arho-YAMLiin | Ryhdin tai Arhon muutos vaikuttaa vain viejään. Välimalli kantaa myös perustelut, kysymykset ja lähdeviitteet. |
 | A3 | **Hybridimuunnos**: sääntöpohjainen → kielimalli → sääntömoottori | Laatu, kustannus ja selitettävyys paranevat, eikä malli voi keksiä koodeja. |
 | A4 | **Tietopaketit** versioituina datatiedostoina ja manifestina | Muutokset hoituvat ilman koodimuutoksia, ja vaikutusanalyysi on mahdollinen. |
@@ -290,14 +298,16 @@ Samaan aikaan liitteen 4 taulukko viittaa jo nyt poistuneisiin koodeihin, opas o
 | A7 | **API-avaimet `QgsAuthManager`iin** (salattu, pääsalasanalla suojattu) | Avaimet eivät päädy projektitiedostoon, lokiin tai `QgsSettings`iin selväkielisinä. |
 | A8 | **Muunnosprojekti on JSON-tiedosto** (esim. `*.kma.json`) | Muunnos on siirrettävissä ja vertailtavissa, ja sen voi tallentaa Gitiin. Päätökset säilyvät ja muunnoksen voi ajaa uudelleen. |
 | A9 | **Lisenssi GPL-2.0-yhteensopiva** | Koodi voidaan myöhemmin yhdistää Arhoon (GPLv2) tai jakaa muille kunnille. |
+| A10 | **Itsenäinen käyttö ensin** (ADR-0012): mikään vaiheiden 2–4 toiminto ei edellytä Arhoa, Arhon tietokantaa tai kaavoittajien työpanosta | Paikkatietoasiantuntija voi käyttää työkalua heti. Arho-integraatio ja kaavoittajien validointi rakentuvat valmiin, toimivan työkalun päälle. |
 
 ### 6.2 Kokonaiskuva
 
 ```mermaid
 flowchart LR
   subgraph QGIS["QGIS"]
-    UI["Kaavamääräysavustaja-lisäosa<br/>syöte · tarkistus · vienti"]
-    ARHO["Arho-lisäosa<br/>kirjastot · kaavakohteiden tuonti"]
+    UI["Kaavamääräysavustaja-lisäosa<br/>syöte · tarkistus · kytkentä · vienti"]
+    LAYERS["Vektoriaineisto<br/>voimassa olevat kaavakohteet"]
+    ARHO["Arho-lisäosa (valinnainen, vaihe 6)<br/>kirjastot · kaavakohteiden tuonti"]
   end
   subgraph CORE["Ydin (puhdas Python)"]
     ING["Syöte ja jäsennys"] --> DET["Sääntöpohjainen tunnistus"]
@@ -313,7 +323,8 @@ flowchart LR
   KP --> RULES
   LLM <--> PROV{{"Kielimalliadapteri<br/>Claude · Mistral · testi"}}
   UI <--> CORE
-  EXP --> ARHO
+  UI <--> LAYERS
+  EXP -.-> ARHO
   EXP --> SYKE["Syken julkinen<br/>validointirajapinta"]
 ```
 
@@ -332,7 +343,7 @@ flowchart LR
 | `exporters` | Ryhti-JSON (fragmentit ja koko kaava), Arho-YAML, raportti (HTML/Markdown/CSV), kytkentätaulukko | stdlib, PyYAML |
 | `validation` | JSON-skeemavalidointi Ryhdin OpenAPI:sta, sääntöjen ajo, Syken julkinen validointirajapinta | kevyt validaattori (esim. `fastjsonschema`) |
 | `tools` | Tietopaketin rakentaja (koodisto-JSON, LIITE 3 -taulukko, Arhon sääntö-CSV, OpenAPI), arviointiajuri, koodistojen muutosvertailu | `openpyxl` (vain kehityskäytössä) |
-| `plugin` (QGIS) | Telakka, dialogit, asetukset, taustatehtävät (`QgsTask`), Arho-vienti | QGIS 3.40–4.x (`qgis.PyQt`) |
+| `plugin` (QGIS) | Telakka, dialogit, asetukset, taustatehtävät (`QgsTask`), vienti; Arho-ohjaus vaiheessa 6 | QGIS 3.40–4.x (`qgis.PyQt`) |
 | `linking` (vaihe 4) | Vektoritasojen kytkentä ja topologiatarkistukset | QGIS |
 
 **Riippuvuuksien toimitus QGISiin.** QGIS ei asenna lisäosien pip-riippuvuuksia automaattisesti. Vaihtoehdot ovat QPIP-tyyppinen asennus, lisäosan oma asennusapuri ja lisäosan mukana toimitettavat paketit. Vaiheessa 0 testataan Tampereen työasemalla (OSGeo4W, välityspalvelin), mikä tapa toimii, ja päätös kirjataan. Välityspalvelinasetukset luetaan QGISista ja välitetään SDK:n HTTP-asiakkaalle. Ydin toimii myös ilman SDK:ita, jolloin käytössä on vain sääntöpohjainen tila.
@@ -570,17 +581,20 @@ Tunnistetut kysymystyypit Tampereen koosteen esimerkein:
 1. **Skeemavalidointi**: Ryhdin OpenAPI:n komponenttiskeemoista generoitu JSON Schema, Ryhdin julkaisukohtaisesti versioituna.
 2. **Paikalliset säännöt**: luvun 6.7 sääntömoottori. Toimii ilman verkkoa.
 3. **Syken julkinen validointirajapinta** (valinnainen, käyttäjän oma API-avain): määräysryhmät kääritään testikaavaksi, jossa on synteettiset geometriat ryhmää kohden. Geometria- ja elinkaarisääntöjen virheet suodatetaan pois sääntötunnisteen perusteella. Vaiheesta 4 alkaen validoidaan varsinainen kaava geometrioineen.
+Kohdat 1–3 riittävät itsenäiseen käyttöön. Arhoon liittyvät tarkistukset tehdään vaiheessa 6:
+
 4. **Arhossa**: tuonnin jälkeen Arhon oma validointi taustajärjestelmän kautta.
-5. **Arho-yhteensopivuus**: kirjasto-YAMLin koodit tarkistetaan Arhon koodistotasoja vasten, jos Arho on ladattuna. Lisäksi automaattinen testi lataa kirjaston Arhon mallilla, jotta `TemplateSyntaxError` ei pääse käyttäjälle asti.
+5. **Arho-yhteensopivuus**: kirjasto-YAMLin koodit tarkistetaan Arhon koodistotasoja vasten, jos Arho on ladattuna. Lisäksi automaattinen testi lataa kirjaston Arhon mallilla, jotta `TemplateSyntaxError` ei pääse käyttäjälle asti. Siihen asti kirjaston koodit tarkistetaan tietopohjan koodistoja vasten (vaihe 1).
 
 ### 6.12 Tulosteet
 
 | Tuloste | Sisältö | Käyttö |
 |---|---|---|
-| **Arhon kaavamääräysryhmäkirjasto** (YAML, `format_version: 2`) | hyväksytyt ryhmät, kategoria = lähde ja kartta | lisätään Arhoon toiminnolla *Kirjastot*, käytetään piirrettäessä ja *Tuo kaavakohteita* -toiminnossa |
-| **Ryhti-JSON** | `planRegulationGroups[]`, `generalRegulationGroups[]`, avaimet UUID:nä; vaiheesta 4 alkaen koko `Plan` (`planObjects`, `planRegulationGroupRelations`) | validointi, Arhon *Tuo kaavasuunnitelma* -toiminto, arkistointi |
-| **Muunnosraportti** (HTML/Markdown + CSV) | yksikkökohtaisesti lähdeteksti, rakenne, perustelut, päätökset, avoimet kysymykset, validointi ja tietopohjan versiot | laadunvarmistus, dokumentointi, hyväksyntä |
-| **Kytkentätaulukko** (CSV) | vektoriaineiston merkintäarvot ↔ ryhmäavaimet | luku 9 |
+| **Muunnosprojekti** (`*.kma.json`) | kaikki yksiköt, ehdotukset, valinnat, perustelut ja tietopohjan versiot | paikkatietoasiantuntijan työtiedosto; uudelleenajo ja vertailu |
+| **Ryhti-JSON** | `planRegulationGroups[]`, `generalRegulationGroups[]`, avaimet UUID:nä; vaiheesta 4 alkaen koko `Plan` (`planObjects`, `planRegulationGroupRelations`) | validointi Syken rajapinnalla, arkistointi; vaiheesta 6 Arhon *Tuo kaavasuunnitelma* -toiminto; Ryhtiin vasta kaavoittajien validoinnin jälkeen |
+| **Muunnosraportti** (HTML/Markdown + CSV) | yksikkökohtaisesti lähdeteksti, rakenne, perustelut, päätökset, avoimet kysymykset, validointi ja tietopohjan versiot | laadunvarmistus, dokumentointi, kaavoittajien katselmointi (vaihe 5) |
+| **Kytketty kaavakohdetaso** (GeoPackage) ja **kytkentätaulukko** (CSV) | vektoriaineiston kohteet ryhmäavaimineen; merkintäarvot ↔ ryhmäavaimet | QGISissa ilman Arhoa (luku 9) |
+| **Arhon kaavamääräysryhmäkirjasto** (YAML, `format_version: 2`, valinnainen) | hyväksytyt ryhmät, kategoria = lähde ja kartta | vaiheesta 6: lisätään Arhoon toiminnolla *Kirjastot*, käytetään piirrettäessä ja *Tuo kaavakohteita* -toiminnossa |
 | **Katja-puutelista** (CSV/Markdown) | tapaukset, joihin ei löytynyt sopivaa koodia | palaute YM:lle (KATJA III) |
 
 ### 6.13 Tietoturva ja tietosuoja
@@ -624,7 +638,7 @@ Tunnistetut kysymystyypit Tampereen koosteen esimerkein:
   - *Tekninen näkymä* koodeineen ja URIneen
   - *Esikatselu* määräysosan muodossa (otsikko, kirjaintunnus, "Suunnittelumääräys: …")
   - muokkaus koodinvalitsimilla, joissa on haku ja koodin kuvaus. Valitsimet voi toteuttaa Arhon `tree_with_search_widget`in kaltaisina.
-- **Vienti**: tulosteiden valinta, validointi ja kirjaston lisäysohje Arhoon.
+- **Vienti**: tulosteiden valinta ja validointi. Arhon kirjasto on valinnainen tuloste; Arhoon lisäämisen ohjaus tulee vaiheessa 6.
 
 ### 7.2 Tulkintakysymyskortti (esimerkki)
 
@@ -654,7 +668,7 @@ Tunnistetut kysymystyypit Tampereen koosteen esimerkein:
 
 ## 8 Esimerkkejä muunnoksista
 
-Esimerkit ovat havainnollistavia. Lopulliset tulkinnat ratkaistaan kaavoittajien kanssa.
+Esimerkit ovat havainnollistavia. Paikkatietoasiantuntija tekee tulkintavalinnat muunnoskohtaisesti, ja kaavoittajat vahvistavat lopulliset tulkinnat vaiheessa 5.
 
 ### 8.1 KESKUSTATOIMINTOJEN ALUE – sääntöpohjainen tunnistus
 
@@ -777,10 +791,14 @@ Vaihe 4 hyödyntää Tampereen voimassa olevien yleiskaavojen vektoriaineistoa.
    - Peittävyys tarkistetaan suhteessa kaavan rajaukseen (Ryhdin sääntö `req-geom-spatialplan-area-reservation-cover`).
 4. **Monikäyttöiset kohteet**: alueella voi olla vain yksi pääkäyttötarkoitus- tai osa-alueryhmä. Päällekkäiset teemat (esim. pohjavesialue C-alueen päällä) muodostetaan siksi erillisiksi kaavakohteiksi.
 5. **Lähdekaava**: kohteet jaetaan lähdekaavoittain (K15), koska Ryhti-JSON tehdään kaavaa kohden.
-6. **Vientitavat**:
-   - (a) **ohjattu käyttö Arhon Tuo kaavakohteita -toiminnolla** merkintä kerrallaan, kirjasto valmiina; ei muutoksia Arhoon
-   - (b) **koko kaavan Ryhti-JSON** (`planObjects` ja `planRegulationGroupRelations`), joka validoidaan Syken rajapinnalla ja tuodaan Arhoon *Tuo kaavasuunnitelma* -toiminnolla (taustajärjestelmän kautta)
-   - (c) myöhemmin eräajo suoraan Arhoon yhdessä Gispon kanssa
+6. **Vientitavat** ilman Arhoa (vaihe 4):
+   - (a) **kytketty kaavakohdetaso** (GeoPackage), jossa jokaisella kohteella on ryhmäavain, sekä kytkentätaulukko
+   - (b) **koko kaavan Ryhti-JSON** (`planObjects` ja `planRegulationGroupRelations`), joka validoidaan Syken rajapinnan testiympäristössä. Ryhtiin sitä ei toimiteta ennen kaavoittajien validointia (vaihe 5).
+
+   Arhon kautta (vaihe 6):
+   - (c) ohjattu käyttö Arhon *Tuo kaavakohteita* -toiminnolla merkintä kerrallaan, kirjasto valmiina; ei muutoksia Arhoon
+   - (d) koko kaavan Ryhti-JSONin tuonti Arhoon *Tuo kaavasuunnitelma* -toiminnolla (taustajärjestelmän kautta)
+   - (e) myöhemmin eräajo suoraan Arhoon yhdessä Gispon kanssa
 7. **Digitaalinen alkuperä**: kaava-asian `digitalOrigin` (koodisto RY_DigitaalinenAlkupera) asetetaan Syken VOOKA-ohjeen mukaan. Tämä on tarkistettava (luku 14).
 
 ---
@@ -797,7 +815,8 @@ Vaihe 4 hyödyntää Tampereen voimassa olevien yleiskaavojen vektoriaineistoa.
   - viejät (Ryhti-skeema, Arho-YAML)
   - tietopaketin rakentaja (LIITE 3 -taulukon laaturaportti)
 - **Kielimallitestit ilman verkkoa**: tallennetut vastaukset ja testiadapteri. CI on deterministinen ja ilmainen.
-- **Integraatiotestit**: kirjasto latautuu Arhon mallilla, ja käyttöliittymätestit ajetaan kuten Arhossa (pytest, pytest-qt ja QGIS-testiajuri). Testit ajetaan QGIS 3.40:llä ja 4.x:llä.
+- **QGIS-testit** (vaiheesta 3): käyttöliittymätestit ajetaan kuten Arhossa (pytest, pytest-qt ja QGIS-testiajuri) QGIS 3.40:llä ja 4.x:llä ilman Arhoa.
+- **Arho-integraatiotestit** (vaihe 6): kirjasto latautuu Arhon mallilla.
 - **Arkkitehtuuritesti**: `core` ei tuo `qgis`-moduulia.
 
 ### 10.2 Kultainen testiaineisto
@@ -805,8 +824,11 @@ Vaihe 4 hyödyntää Tampereen voimassa olevien yleiskaavojen vektoriaineistoa.
 - 80–120 Tampereen määräysyksikköä, joissa on edustettuina:
   - aluevaraukset, osa-alueet, kehittämisperiaatteet, viiva- ja pistekohteet
   - yleismääräykset, numeroarvot, informatiiviset merkinnät ja alakohtaiset määräykset
-- Kaavoittajat annotoivat odotetun rakenteen. Annotointiin kuuluvat myös **hyväksyttävät vaihtoehdot** (oikeita vastauksia voi olla useita) ja **odotetut tulkintakysymykset**.
-- Kahden kaavoittajan erimielisyydet ovat arvokasta tietoa: ne osoittavat linjausta vaativat kohdat.
+- Annotointi tehdään kahdessa vaiheessa (ADR-0012):
+  1. Vaiheissa 1–4 kehittäjä ja paikkatietoasiantuntija annotoivat odotetun rakenteen suunnitelman suositusten mukaan (`tila: vahvistamaton`). Mittarit kertovat silloin vastaavuuden heidän tulkintaansa.
+  2. Vaiheessa 5 kaavoittajat vahvistavat tai korjaavat annotoinnit (`tila: vahvistettu`), ja mittarit mitataan uudelleen.
+- Annotointiin kuuluvat myös **hyväksyttävät vaihtoehdot** (oikeita vastauksia voi olla useita) ja **odotetut tulkintakysymykset**.
+- Kaavoittajien keskinäiset ja paikkatietoasiantuntijan kanssa syntyvät erimielisyydet ovat arvokasta tietoa: ne osoittavat linjausta vaativat kohdat.
 
 ### 10.3 Mittarit
 
@@ -834,7 +856,7 @@ Arviointi ajetaan aina, kun tietopaketti, säännöt, kehotteet, malli tai toimi
 | Katja-asetuksen muutos (KATJA III) | uusi liite 4 / LIITE 3 -taulukko | rakentaja tuottaa uuden vakiomääräysluettelon ja laaturaportin; säännöt voimassaoloaikoineen; rinnakkaiset versiot |
 | Oppaan lopullinen versio | uudet tai muuttuneet periaatteet | sääntöjen metatiedon päivitys, kehotteiden sääntötiivistelmä, linjausten tarkistus |
 | Ryhdin rajapintajulkaisu | uusi OpenAPI | skeeman generointi, viejien sopimustestit, julkaisukohtainen skeemaversio |
-| Arhon kirjastomuoto tai mallit | uusi `format_version` | viejän versio, integraatiotesti Arhon versioita vasten, yhteydenpito Gispoon |
+| Arhon kirjastomuoto tai mallit | uusi `format_version` | viejän versio; vaiheesta 6 integraatiotesti Arhon versioita vasten ja yhteydenpito Gispoon. Muutos ei estä työkalun käyttöä, koska Arho ei ole edellytys. |
 | Kielimallin vanheneminen tai uusi malli | toimittajan ilmoitus | malli on asetus; arviointiajo ennen vaihtoa |
 | Toimittajan vaihto (esim. Mistral) | päätös | adapteri valmiina; arviointi; kustannusarvion päivitys |
 | Tampereen linjausten muutos | päätös | linjausversio; vaikutusanalyysi tallennettuihin muunnoksiin |
@@ -845,20 +867,25 @@ Arviointi ajetaan aina, kun tietopaketti, säännöt, kehotteet, malli tai toimi
 
 ## 12 Vaiheistus ja työmääräarvio
 
-Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Kaavoittajien työpanos on lueteltu erikseen. Kalenteriaika riippuu sisältötarkistusten aikataulusta.
+Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Paikkatietoasiantuntijan ja kaavoittajien työpanos on lueteltu erikseen.
+
+**Järjestyksen periaate (ADR-0012, päivitetty vaiheen 1 jälkeen).** Ensin rakennetaan työkalu, jota paikkatietoasiantuntija käyttää QGISissa itsenäisesti ilman Arhoa ja ilman kaavoittajia (vaiheet 2–4). Vasta kun se toimii käytettävästi ja tehokkaasti, mukaan tulevat kaavoittajat (vaihe 5) ja Arho (vaihe 6). Vaiheiden 2–4 hyväksymiskriteerit eivät edellytä Arhoa eivätkä kaavoittajia. Ryhtiin toimittaminen on mahdollista vasta vaiheen 5 jälkeen.
 
 | Vaihe | Sisältö | Tuotos ja hyväksymiskriteeri | Työmäärä |
 |---|---|---|---|
-| **0 Käynnistys ja tekninen piikki** | Säilö, CLAUDE.md ja sanasto, projektirunko ja CI. SDK-asennuksen testaus Tampereen QGIS-työasemalla (välityspalvelin). `QgsAuthManager`-avaimet. Syken validointirajapinnan avain ja testi Ryhdin esimerkki-JSONilla. Tietopakettien rakentaja v1 ja laaturaportti. Ensimmäinen linjauspalaveri. | Runko ja CI toimivat; tietopohja TP-2026.11-1 ja laaturaportti; riippuvuuspäätös kirjattu; mittarien tavoitearvot sovittu | 1–2 vk |
-| **1 Ydin ja sääntöpohjainen muunnos** | Välimalli, normalisointi ja jäsennys (Tampereen koosteen muoto), vakiomääräysluettelon ja linjausten täsmäys, numeroarvot, sääntömoottori v1 (liite B), viejät (Ryhti-fragmentit, Arho-YAML, raportti), komentorivi (`kma convert`, `kma validate`), testiaineisto v1 (30 yksikköä). | Komentorivi muuntaa koosteen kartan sääntöpohjaisesti; YAML latautuu Arhoon; automaatioaste mitattu | 3–4 vk |
-| **2 Kielimalli, perustelut, tulkintakysymykset** | Adapteri, Claude- ja testiadapterit, kehotteet v1, enumeroitu skeema, lainausten tarkistus, varmuus, kysymystyypit K1–K15, päätösloki ja linjaukset, Mistral-adapteri (perustaso), arviointiajuri, testiaineisto 80–120 yksikköön. | Arviointiraportti: mittarit vs. tavoitteet; Mistral-vertailu | 4–6 vk |
-| **3 QGIS-lisäosa ja pilotti** | Telakka ja näkymät, taustatehtävät, asetukset, esikatselu, paikallinen PDF-tekstinpoiminta, Syke-validointi, vienti ja ohjeet Arhoon, käyttöohje, sisäinen jakelu. Pilotti 2–3 kaavoittajan kanssa koko koosteella. | Lisäosa v0.x; pilottipalaute ja korjaukset; koosteen määräykset kirjastona Arhossa | 4–6 vk |
-| **4 Kytkentä ja koko kaavan vienti** | Tasokytkentä, topologiatarkistukset, lähdekaavoittainen jako, ohjattu Arho-tuonti ja koko kaavan Ryhti-JSON, Syke-validointi geometrioineen. | Yksi voimassa oleva yleiskaava koko Ryhti-JSONina, validoituna ja Arhoon tuotuna | 3–5 vk |
-| **5 Arho-integraatio ja uudet kaavat** | Yhdessä Gispon kanssa: "Ehdota rakenne tekstistä" Arhon kaavamääräysryhmälomakkeelle, laadintatilan muotoiluehdotukset, kaavan sisäiset johdonmukaisuustarkistukset, valinnainen taustapalvelu (avainten ja kirjaston keskitetty hallinta), KATJA III -siirto. | Sovitaan erikseen | jatkuva |
+| **0 Käynnistys ja tekninen piikki** ✔ | Säilö, CLAUDE.md ja sanasto, projektirunko ja CI. SDK-asennuksen testaus Tampereen QGIS-työasemalla (välityspalvelin). `QgsAuthManager`-avaimet. Syken validointirajapinnan avain ja testi Ryhdin esimerkki-JSONilla. Tietopakettien rakentaja v1 ja laaturaportti. | Runko ja CI toimivat; tietopohja TP-2026.11-1 ja laaturaportti; riippuvuuspäätös kirjattu | 1–2 vk |
+| **1 Ydin ja sääntöpohjainen muunnos** ✔ | Välimalli, normalisointi ja jäsennys (Tampereen koosteen muoto), vakiomääräysluettelon ja linjausten täsmäys, numeroarvot, sääntömoottori v1 (liite B), viejät (Ryhti-fragmentit, Arho-YAML, raportti), komentorivi (`kma convert`, `kma validate`), testiaineisto v1 (30 yksikköä, vahvistamaton). | Komentorivi muuntaa koosteen kartan sääntöpohjaisesti; fragmentit läpäisevät skeeman ja Syken validoinnin; automaatioaste mitattu ([vaihe1_raportti.md](vaihe1_raportti.md)) | 3–4 vk |
+| **2 Kielimalli, perustelut, tulkintakysymykset** | Adapteri, Claude- ja testiadapterit, kehotteet v1, enumeroitu skeema, lainausten tarkistus, varmuus, kysymystyypit K1–K15, päätösloki ja muunnoskohtaiset valinnat, Mistral-adapteri (perustaso), arviointiajuri, testiaineisto 80–120 yksikköön (kehittäjän ja paikkatietoasiantuntijan annotoima, vahvistamaton). | Arviointiraportti: mittarit vs. tavoitteet vahvistamattomalla aineistolla; Mistral-vertailu | 4–6 vk |
+| **3 Itsenäinen QGIS-lisäosa** | Telakka ja näkymät, taustatehtävät, asetukset, esikatselu, paikallinen PDF-tekstinpoiminta, tulkintakysymysten ratkaisu, Syke-validointi, vienti (muunnosprojekti, raportti, Ryhti-JSON, valinnaisesti Arho-YAML), käyttöohje paikkatietoasiantuntijalle, jakelupaketti. Koekäyttö: paikkatietoasiantuntija muuntaa koko koosteen. | Lisäosa v0.x; paikkatietoasiantuntija muuntaa koko koosteen QGISissa ilman Arhoa ja ilman kehittäjän apua; käsittelyaika mitattu | 4–6 vk |
+| **4 Kytkentä vektoriaineistoon ja koko kaavan vienti** | Tasokytkentä, topologiatarkistukset, lähdekaavoittainen jako, kytketty kaavakohdetaso (GeoPackage), koko kaavan Ryhti-JSON, Syke-validointi geometrioineen (testiympäristö). | Yksi voimassa oleva yleiskaava kytkettynä QGISissa ja koko Ryhti-JSONina validoituna, ilman Arhoa | 3–5 vk |
+| **5 Kaavoittajien validointi** | Linjauspalaverit ja linjausten lukitus (L-01–L-14), testiaineiston vahvistus (`tila: vahvistettu`) ja mittarien uusinta, normalisointien ja tulkintojen vahvistus, tekstin tarkistus alkuperäisiä kaava-asiakirjoja vasten, pilotti 2–3 kaavoittajan kanssa, korjaukset palautteen perusteella. | Lukitut linjaukset; vahvistettu testiaineisto ja mittarit; kaavoittajien hyväksymä muunnos, joka voidaan toimittaa eteenpäin (myös Ryhtiin, jos se päätetään) | 1–3 vk kehitystä |
+| **6 Arho-integraatio ja uudet kaavat** | Arho-kirjaston latautumistesti ja automaattinen latautumistesti Arhon mallilla, ohjattu *Tuo kaavakohteita* ja *Tuo kaavasuunnitelma*, Arhon ohjeet. Yhdessä Gispon kanssa: "Ehdota rakenne tekstistä" Arhon kaavamääräysryhmälomakkeelle. Laadintatila ja muotoiluehdotukset kaavoittajille (UC2), kaavan sisäiset johdonmukaisuustarkistukset, valinnainen taustapalvelu (avainten ja kirjaston keskitetty hallinta), KATJA III -siirto. | Koosteen määräykset kirjastona Arhossa; muu sovitaan erikseen | jatkuva |
 
-**Kaavoittajien työpanos (arvio):** linjauspalaverit 3 × 2 h, testiaineiston annotointi 2–4 päivää, pilotti noin 1–2 viikkoa osa-aikaisesti.
+**Paikkatietoasiantuntijan työpanos (arvio):** testiaineiston annotointi 2–4 päivää (vaihe 2), koekäyttö koko koosteella noin 1 viikko (vaihe 3), kytkennän koekäyttö (vaihe 4).
 
-**Aikataulu**: jos työ alkaa joulukuussa 2026, pilotti on mahdollinen keväällä 2027 ja kytkentä kesällä tai syksyllä 2027. Tämä jättää hyvin aikaa ennen 1.1.2029.
+**Kaavoittajien työpanos (arvio, vaiheesta 5):** linjauspalaverit 3 × 2 h, testiaineiston vahvistus 1–2 päivää, pilotti noin 1–2 viikkoa osa-aikaisesti.
+
+**Aikataulu**: jos vaihe 2 alkaa joulukuussa 2026, itsenäinen lisäosa on koekäytössä keväällä 2027 ja kytkentä kesällä 2027. Kaavoittajien validointi ja Arho-integraatio sijoittuvat syksyyn 2027. Tämä jättää hyvin aikaa ennen 1.1.2029.
 
 ### 12.1 Tekoälyavusteinen toteutustapa
 
@@ -869,7 +896,7 @@ Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Kaavoit
   - kielto tallentaa avaimia
 - Työ tehdään pieninä tehtävinä, joilla on hyväksymiskriteerit (tämän suunnitelman vaiheiden alakohdat). Testit kirjoitetaan ensin ja kultainen aineisto toimii laatuporttina.
 - Kehotteet ja säännöt ovat dataa. Niiden muutokset katselmoidaan kuten koodi, ja arviointiajo liitetään muutokseen.
-- Kehittäjä katselmoi jokaisen tekoälyn tuottaman muutoksen, ja kaavoittajat katselmoivat sisällön (linjaukset, testiaineisto).
+- Kehittäjä katselmoi jokaisen tekoälyn tuottaman muutoksen. Paikkatietoasiantuntija katselmoi sisällön vaiheissa 2–4, ja kaavoittajat vahvistavat sen vaiheessa 5 (linjaukset, testiaineisto).
 
 ---
 
@@ -881,17 +908,20 @@ Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Kaavoit
 | Kielimallin hallusinaatiot | keski | keski | enumeroidut koodit, lainausten tarkistus, sääntömoottori, testiaineisto laatuporttina |
 | KATJA III, koodisto- tai Ryhti-muutokset | suuri | keski | tietopaketit, voimassaoloajat, vaikutusanalyysi, regressio |
 | SDK-riippuvuuksien asennus tai välityspalvelin estää käytön | keski | suuri | vaihe 0:n piikki ensimmäisenä; vaihtoehtoiset toimitustavat; sääntöpohjainen tila ilman SDK:ita |
-| Arhon sisäiset muutokset rikkovat yhteensopivuuden | keski | keski | integraatio ensin tiedostomuotojen kautta; integraatiotestit; yhteydenpito Gispoon |
+| Arhon sisäiset muutokset rikkovat yhteensopivuuden | keski | pieni | Arho ei ole edellytys (ADR-0012); integraatio ensin tiedostomuotojen kautta; integraatiotestit vaiheessa 6; yhteydenpito Gispoon |
+| Kaavoittajien näkemys tulee myöhään, ja tulkintoja joudutaan korjaamaan vaiheessa 5 | keski | keski | valinnat ja perustelut tallessa muunnosprojektissa; raportti kaavoittajan kielellä; uudelleenajo lukituilla linjauksilla; Ryhtiin ei toimiteta ennen vaihetta 5 |
 | Yhden kehittäjän riippuvuus | suuri | keski | kattava dokumentaatio ja testit, yksinkertainen arkkitehtuuri, avoin lähdekoodi |
 | Liitteen 4 taulukon virheet siirtyvät muunnoksiin | keski | keski | laaturaportti, korjaustiedosto, sääntö poistuneille koodeille |
 | Koosteen teksti poikkeaa alkuperäisestä kaavasta | keski | keski | lähdekaavan kirjaus, tarkistus alkuperäistä vasten, normalisointierojen vahvistus |
-| Kaavoittajat eivät koe avustajaa hyödylliseksi | keski | suuri | yhteissuunnittelu, pilotti, selitettävyys, kaavoittajan kieli teknisen sijaan |
+| Kaavoittajat eivät koe avustajaa hyödylliseksi | keski | keski | kaavoittajat mukaan vasta toimivan työkalun kanssa; pilotti, selitettävyys, kaavoittajan kieli teknisen sijaan; työkalu on hyödyllinen paikkatietoasiantuntijalle silloinkin |
 | Kustannukset tai toimittajan hinnoittelu muuttuu | pieni | pieni | sääntöpohjainen ensin, välimuisti, budjettiraja, vaihdettava toimittaja |
 | Kansallinen ohjeistus muuttuu (opas luonnos) | suuri | keski | linjaukset versioituina; säännöt lähdeviitteineen; helppo päivittää |
 
 ---
 
 ## 14 Avoimet kysymykset ja Tampereen linjattavat asiat
+
+Linjauksia L-01–L-07 käytetään vaiheissa 2–4 suositelluin oletuksin, ja paikkatietoasiantuntija voi valita vaihtoehdon muunnoskohtaisesti (ADR-0008, ADR-0010). Tampere lukitsee linjaukset vaiheessa 5 kaavoittajien kanssa. Taulukon suositukset ovat suunnitelman versiosta 0.1; toteutetut oletukset ovat tiedostossa `knowledge/org/tampere/linjaukset.yaml`.
 
 | # | Kysymys | Vaihtoehdot | Alustava suositus |
 |---|---|---|---|
@@ -914,18 +944,14 @@ Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Kaavoit
 
 ## 15 Seuraavat askeleet
 
-Kaksi ensimmäistä viikkoa:
+Vaiheet 0 ja 1 ovat valmiit (tulokset: [vaihe1_raportti.md](vaihe1_raportti.md)). Seuraavaksi, ilman Arhoa ja kaavoittajia:
 
-1. Perusta säilö, `CLAUDE.md`, projektirunko (`core`, `knowledge`, `tests`) ja CI.
-2. Kirjoita tietopaketin rakentaja:
-   - koodisto-JSONit → indeksi (laajennukset, otsikkotason koodit, poistuneet)
-   - LIITE 3 -taulukko → vakiomääräysluettelo ja laaturaportti
-   - Arhon sääntö-CSV → viestit
-   - OpenAPI → JSON Schema
-3. Rekisteröidy Syken kehittäjäportaaliin (testiympäristö), hae API-avain ja validoi Ryhdin esimerkki-JSON julkisella rajapinnalla.
-4. Testaa `anthropic`- ja `mistralai`-SDK:iden asennus Tampereen QGIS-työasemalla välityspalvelimen takana. Kirjaa riippuvuuspäätös.
-5. Valitse koosteesta 30 testiyksikköä ja sovi ensimmäinen linjauspalaveri (L-01–L-07).
-6. Selvitä Syken VOOKA-soveltamisprofiilin vaatimukset määräysten ja digitaalisen alkuperän osalta (L-02, L-12).
+1. Vaihe 2: kielimalliadapteri ja kehotteet v1 vaiheen 1 löydösten päälle. Kielimallin työ rajautuu erityisesti tulkintakysymyksiin K5 ja K8, rakenteen valintaan (K1, K2) ja sanallisen määräyksen lajeihin.
+2. Testiaineiston laajennus 80–120 yksikköön kehittäjän ja paikkatietoasiantuntijan annotoimana, mukaan myös keskustan kartat 1a–2 (alaotsikot ja numeroidut osa-alueet).
+3. Paikkatietoasiantuntija käy läpi vaiheen 1 raportin vahvistettavat normalisoinnit, koska ne koskevat tekstinpoimintaa eivätkä tulkintaa.
+4. Vaiheen 3 voi aloittaa jo vaiheen 2 rinnalla: QGIS-lisäosan telakka sääntöpohjaisella muunnoksella, jotta paikkatietoasiantuntija pääsee koekäyttämään työkalua mahdollisimman aikaisin.
+
+Kaavoittajien tehtävät (testiaineiston vahvistus, linjausten lukitus) ja Arhon latautumistesti odottavat vaiheita 5 ja 6.
 
 ---
 
