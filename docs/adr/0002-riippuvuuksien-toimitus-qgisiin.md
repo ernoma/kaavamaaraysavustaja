@@ -1,6 +1,6 @@
 # ADR-0002 Riippuvuuksien toimitus QGISiin
 
-- Tila: **avoin** (päätös tehdään Tampereen työasematestin jälkeen, vaihe 0)
+- Tila: hyväksytty 22.11.2026: **vaihtoehto C** (ks. Päätös)
 - Lähde: toteutussuunnitelma 6.3 ("Riippuvuuksien toimitus QGISiin"), riski "SDK-riippuvuuksien
   asennus tai välityspalvelin estää käytön"
 
@@ -54,10 +54,18 @@ toimivat silti, koska niiden muita riippuvuuksia ei ole QGISissa. Vaihtoehtoises
 tehdään rajoitetiedostolla (`pip freeze` QGISin ympäristöstä → `-c`), jolloin päällekkäiset
 paketit ovat samoja versioita.
 
-## Alustava suositus
+## Päätös 22.11.2026
 
-C (oma asennusapuri `--target`-kansioon, kansio polun loppuun) ja A kehittäjille; testi
-tukee tätä. Päätös voidaan tehdä, kun tiedetään, onko muilla Tampereen työasemilla
-välityspalvelin. E on varasuunnitelma siltä varalta, että välityspalvelin estää SDK:n HTTP-asiakkaan mutta Qt:n verkkoliikenne toimii. Kaikissa
-vaihtoehdoissa välityspalvelinasetukset luetaan QGISista (`QgsSettings`, `proxy/*`) ja
+- **C:** lisäosan oma asennusapuri asentaa SDK:t `--target`-kansioon
+  `<profiili>/python/kma_deps` valmiista wheeleistä (`--only-binary=:all:`). Lisäosa lisää kansion
+  `sys.path`in **loppuun**. Kehittäjät voivat käyttää myös A:ta tai omaa venviä.
+- Testatulla työasemalla toimiva ratkaisu oletetaan toimivaksi myös muilla Tampereen
+  työasemilla (Tampereen arvio). Välityspalvelimen takana olevaa työasemaa ei testata
+  lähitulevaisuudessa.
+- Päätös avataan uudelleen, jos asennus tai yhteydet eivät toimi jollakin työasemalla.
+
+## Varasuunnitelma
+
+E on varasuunnitelma siltä varalta, että välityspalvelin estää SDK:n HTTP-asiakkaan mutta
+Qt:n verkkoliikenne toimii. Jos välityspalvelin tulee vastaan, sen asetukset luetaan QGISista (`QgsSettings`, `proxy/*`) ja
 annetaan SDK:lle (`anthropic.DefaultHttpxClient(proxy=...)`, ks. `core/llm/claude.py`).

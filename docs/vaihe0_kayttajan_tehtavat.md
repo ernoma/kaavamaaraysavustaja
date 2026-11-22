@@ -7,10 +7,10 @@ tekoälyä jatkamaan.
 
 | # | Tehtävä | Kesto | Tulos kirjataan | Tila 22.11.2026 |
 |---|---|---|---|---|
-| 1 | SDK-asennustesti Tampereen QGIS-työasemalla | 1–2 h | ADR-0002 | tehty (ei välityspalvelinta) |
+| 1 | SDK-asennustesti Tampereen QGIS-työasemalla | 1–2 h | ADR-0002 | tehty; päätös C, välityspalvelinta ei testata |
 | 2 | Syken kehittäjäportaali ja validointirajapinnan testi | 1 h | tämä tiedosto | tehty |
 | 3 | Claude-piikin live-ajo | 15 min | ADR-0005 | tehty |
-| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) | mittarit: alustavat tavoitteet käyttöön; L-01–L-07 avoinna |
+| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) | mittarit: alustavat tavoitteet käyttöön; L-01–L-07 käyttäjän valintoja, lukittavissa (ADR-0008) |
 | 5 | QgsAuthManager-avainten ja lisäosan latauksen testi | 30 min | ADR-0004 | tehty |
 | 6 | VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys | 2–4 h | tämä tiedosto, L-02 ja L-12 | rajattu pois (ADR-0007) |
 | 7 | Liitteen 4 korjausten vahvistus | 30 min | `knowledge/katja/annex4_corrections.yaml` | siirretty myöhemmäksi |
@@ -245,8 +245,12 @@ niitä voidaan säätää myöhemmin tarpeen mukaan.
 | Käsittelyaika merkintää kohden verrattuna käsin tehtyyn | vähintään puolittuu | vähintään puolittuu |
 | Kustannus koko koosteen muunnokselle (lisäehdotus) | ≤ 30 $ | ≤ 30 $ |
 
-Asialistan muut kohdat (L-01–L-07, korjaukset, testiaineisto) ovat yhä avoinna. Ne
-arvioidaan ADR-0007:n näkökulmasta: määräykset muunnetaan uusien yleiskaavojen pohjaksi, ei
+**Päätös 22.11.2026 (ADR-0008):** L-01–L-07 ovat käyttäjän valintoja. Työkalu tarjoaa
+vaihtoehdot ja suositellun oletuksen, ja käyttäjä valitsee kulloinkin, miten toimitaan. Kun
+yleiskaavoitus päättää, että jokin asia tehdään aina samalla tavalla, valinta lukitaan
+linjauskirjastossa, eikä sitä voi enää muuttaa käyttöliittymässä. Palaveria ei siis tarvita
+ennen vaihetta 1. Yllä olevat suositukset ovat oletusten lähtökohta, ja ne tarkistetaan
+ADR-0007:n näkökulmasta: määräykset muunnetaan uusien yleiskaavojen pohjaksi, ei
 VOOKA-toimitukseksi.
 
 Kirjaa päätökset muodossa *L-xx, päätös, perustelu, päivämäärä, hyväksyjä*. Kehittäjä vie ne

@@ -83,8 +83,10 @@ VOOKA-soveltamisprofiilin mukaisena aineistona (ADR-0007), vaikka termi tulee pr
 Uuden kaavan laatiminen; avustaja saa ehdottaa muotoiluja erillisinä ja valinnaisina.
 
 **Linjaus (policy decision)**:
-Tampereen hyväksymä, versioitu tulkintaratkaisu (esim. L-03), jota sovelletaan jatkossa
-automaattisesti. Koodissa `Decision` / `policy`.
+Versioitu tulkintakohta (esim. L-03), jolla on vaihtoehdot ja suositeltu oletus. Käyttäjä
+valitsee vaihtoehdon muunnoskohtaisesti. Kun Tampere päättää linjauksesta, se **lukitaan**
+(`lukittu: true`), jolloin valintaa ei voi muuttaa ja sitä sovelletaan automaattisesti
+(ADR-0008). Koodissa `Decision` / `policy`.
 _Vältä_: sääntö (sääntö on sääntömoottorin tarkistus)
 
 **Tulkintakysymys (interpretation question)**:
