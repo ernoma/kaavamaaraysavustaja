@@ -160,10 +160,12 @@ python -m venv .venv
 | Hybridimuunnos (arvio / ajo) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 --kielimalli claude --arvio` ja `… --budjetti 3 [--projekti aiempi.kma.json]` |
 | Tarkistus (säännöt, skeema, Syke) | `.\.venv\Scripts\kma validate <projekti>.kma.json [--syke]` |
 | Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot] [--hybridi claude --tallennetut]` |
+| Hybridin arviointi live (arvio ensin, tallentaa vastaukset) | `.\.venv\Scripts\python tools\evaluate.py --hybridi claude --live --arvio` |
 | Verkkotestit (avain tarvitaan) | `.\.venv\Scripts\python -m pytest -m live` |
 
 CI (`.github/workflows/ci.yml`) ajaa ruffin, tietopohjan `--check`-tarkistuksen ja pytestin
-ilman QGISia ja ilman verkkoa. `@pytest.mark.live`-testit eivät aja oletuksena. Paikalliset työtiedostot
+ilman QGISia ja ilman verkkoa. `@pytest.mark.live`-testit eivät aja oletuksena. Hybridin laatuportti toistaa tallennetut
+vastaukset (`tests/recorded_llm/`). Paikalliset työtiedostot
 (PDF-poiminnat, muunnostulokset) kuuluvat `work/`-kansioon, joka ei mene säilöön.
 
 Ympäristöhuomio: tämän kehityskoneen Bash-työkalu kaatuu, jos komennossa on ä/ö-merkkejä.

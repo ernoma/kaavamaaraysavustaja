@@ -875,7 +875,7 @@ Arviot ovat kehitysviikkoja yhdelle kehittäjälle tekoälyavusteisesti. Paikkat
 |---|---|---|---|
 | **0 Käynnistys ja tekninen piikki** ✔ | Säilö, CLAUDE.md ja sanasto, projektirunko ja CI. SDK-asennuksen testaus Tampereen QGIS-työasemalla (välityspalvelin). `QgsAuthManager`-avaimet. Syken validointirajapinnan avain ja testi Ryhdin esimerkki-JSONilla. Tietopakettien rakentaja v1 ja laaturaportti. | Runko ja CI toimivat; tietopohja TP-2026.11-1 ja laaturaportti; riippuvuuspäätös kirjattu | 1–2 vk |
 | **1 Ydin ja sääntöpohjainen muunnos** ✔ | Välimalli, normalisointi ja jäsennys (Tampereen koosteen muoto), vakiomääräysluettelon ja linjausten täsmäys, numeroarvot, sääntömoottori v1 (liite B), viejät (Ryhti-fragmentit, Arho-YAML, raportti), komentorivi (`kma convert`, `kma validate`), testiaineisto v1 (30 yksikköä, vahvistamaton). | Komentorivi muuntaa koosteen kartan sääntöpohjaisesti; fragmentit läpäisevät skeeman ja Syken validoinnin; automaatioaste mitattu ([vaihe1_raportti.md](vaihe1_raportti.md)) | 3–4 vk |
-| **2 Kielimalli, perustelut, tulkintakysymykset** | Adapteri, Claude- ja testiadapterit, kehotteet v1, enumeroitu skeema, lainausten tarkistus, varmuus, kysymystyypit K1–K15, päätösloki ja muunnoskohtaiset valinnat, Mistral-adapteri (perustaso), arviointiajuri, testiaineisto 80–120 yksikköön (kehittäjän ja paikkatietoasiantuntijan annotoima, vahvistamaton). | Arviointiraportti: mittarit vs. tavoitteet vahvistamattomalla aineistolla; Mistral-vertailu | 4–6 vk |
+| **2 Kielimalli, perustelut, tulkintakysymykset** ✔ | Adapteri, Claude- ja testiadapterit, kehotteet v1, enumeroitu skeema, lainausten tarkistus, varmuus, kysymystyypit K1–K15, päätösloki ja muunnoskohtaiset valinnat, Mistral-adapteri (perustaso), arviointiajuri, testiaineisto 80–120 yksikköön (kehittäjän ja paikkatietoasiantuntijan annotoima, vahvistamaton). | Arviointiraportti: mittarit vs. tavoitteet vahvistamattomalla aineistolla; Mistral-vertailu ([vaihe2_raportti.md](vaihe2_raportti.md): 79 % sellaisenaan; Mistral odottaa avainta) | 4–6 vk |
 | **3 Itsenäinen QGIS-lisäosa** | Telakka ja näkymät, taustatehtävät, asetukset, esikatselu, paikallinen PDF-tekstinpoiminta, tulkintakysymysten ratkaisu, Syke-validointi, vienti (muunnosprojekti, raportti, Ryhti-JSON, valinnaisesti Arho-YAML), käyttöohje paikkatietoasiantuntijalle, jakelupaketti. Koekäyttö: paikkatietoasiantuntija muuntaa koko koosteen. | Lisäosa v0.x; paikkatietoasiantuntija muuntaa koko koosteen QGISissa ilman Arhoa ja ilman kehittäjän apua; käsittelyaika mitattu | 4–6 vk |
 | **4 Kytkentä vektoriaineistoon ja koko kaavan vienti** | Tasokytkentä, topologiatarkistukset, lähdekaavoittainen jako, kytketty kaavakohdetaso (GeoPackage), koko kaavan Ryhti-JSON, Syke-validointi geometrioineen (testiympäristö). | Yksi voimassa oleva yleiskaava kytkettynä QGISissa ja koko Ryhti-JSONina validoituna, ilman Arhoa | 3–5 vk |
 | **5 Kaavoittajien validointi** | Linjauspalaverit ja linjausten lukitus (L-01–L-14), testiaineiston vahvistus (`tila: vahvistettu`) ja mittarien uusinta, normalisointien ja tulkintojen vahvistus, tekstin tarkistus alkuperäisiä kaava-asiakirjoja vasten, pilotti 2–3 kaavoittajan kanssa, korjaukset palautteen perusteella. | Lukitut linjaukset; vahvistettu testiaineisto ja mittarit; kaavoittajien hyväksymä muunnos, joka voidaan toimittaa eteenpäin (myös Ryhtiin, jos se päätetään) | 1–3 vk kehitystä |
@@ -944,12 +944,11 @@ Linjauksia L-01–L-07 käytetään vaiheissa 2–4 suositelluin oletuksin, ja p
 
 ## 15 Seuraavat askeleet
 
-Vaiheet 0 ja 1 ovat valmiit (tulokset: [vaihe1_raportti.md](vaihe1_raportti.md)). Seuraavaksi, ilman Arhoa ja kaavoittajia:
+Vaiheet 0–2 ovat valmiit (tulokset: [vaihe1_raportti.md](vaihe1_raportti.md), [vaihe2_raportti.md](vaihe2_raportti.md)). Seuraavaksi, ilman Arhoa ja kaavoittajia:
 
-1. Vaihe 2: kielimalliadapteri ja kehotteet v1 vaiheen 1 löydösten päälle. Kielimallin työ rajautuu erityisesti tulkintakysymyksiin K5 ja K8, rakenteen valintaan (K1, K2) ja sanallisen määräyksen lajeihin.
-2. Testiaineiston laajennus 80–120 yksikköön kehittäjän ja paikkatietoasiantuntijan annotoimana, mukaan myös keskustan kartat 1a–2 (alaotsikot ja numeroidut osa-alueet).
-3. Paikkatietoasiantuntija käy läpi vaiheen 1 raportin vahvistettavat normalisoinnit, koska ne koskevat tekstinpoimintaa eivätkä tulkintaa.
-4. Vaiheen 3 voi aloittaa jo vaiheen 2 rinnalla: QGIS-lisäosan telakka sääntöpohjaisella muunnoksella, jotta paikkatietoasiantuntija pääsee koekäyttämään työkalua mahdollisimman aikaisin.
+1. Vaihe 3: itsenäinen QGIS-lisäosa hybridiputken päälle (taustatehtävät rinnakkain, kustannusarvio ja budjetti, tulkintakysymyskortit ja päätösloki, ADR-0013 ja ADR-0014).
+2. Paikkatietoasiantuntija tarkistaa testiaineiston kohdat `tarkistettava: true` ja vaiheen 1 vahvistettavat normalisoinnit.
+3. Mistral-vertailu, kun avain on käytettävissä (vaiheen 2 raportin luku 5).
 
 Kaavoittajien tehtävät (testiaineiston vahvistus, linjausten lukitus) ja Arhon latautumistesti odottavat vaiheita 5 ja 6.
 
