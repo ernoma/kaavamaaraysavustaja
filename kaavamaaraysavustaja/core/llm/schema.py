@@ -106,6 +106,17 @@ def conversion_schema(index: CodelistIndex, plan_level: str, on: date | None = N
                     }
                 ),
             },
+            "ratkaistut_kysymykset": {
+                "type": "array",
+                "items": _object(
+                    {
+                        "tunnus": {"type": "string"},
+                        "valinta": {"type": "string"},
+                        "peruste": {"type": "string"},
+                        "lainaus": {"type": "string"},
+                    }
+                ),
+            },
             "kokonaisvarmuus": {"type": "string", "enum": CONFIDENCE},
         }
     )

@@ -270,7 +270,7 @@ def development_zone(ctx: CheckContext) -> Iterator[Finding]:
     elif not any(r.type.value == "suunnittelumaarays" for r in verbal):
         yield Finding(
             "Opas 3.3.3.1 edellyttää sanallista suunnittelumääräystä; ryhmässä on "
-            f"{verbal[0].type.value} (linjaus L-04).",
+            f"{verbal[0].type.value} (linjaus L-04; vaihtoehto kehittamisvyohyke_suunnittelumaarays noudattaa opasta).",
             case="ei_suunnittelumaaraysta",
         )
 
@@ -340,7 +340,7 @@ def annex_title(ctx: CheckContext) -> Iterator[Finding]:
             yield Finding(
                 f'Koodiyhdistelmä vastaa liitteen 4 määräystä "{same[0]["otsikko"]}" (rivi {same[0]["rivi"]}); '
                 "opas 3.1.1: käytetään liitteen otsikkoa"
-                + (", ellei tietosisältö ole laajempi (Katja 2 §)." if has_verbal else "."),
+                + (", ellei tietosisältö ole laajempi (Katja 2 §; linjaus L-15)." if has_verbal else "."),
                 case="laajempi_tietosisalto" if has_verbal else "",
             )
     else:

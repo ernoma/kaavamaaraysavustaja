@@ -1,0 +1,62 @@
+# Kielimallien hinnasto kustannusarviota ja budjettirajaa varten (käsin ylläpidettävä; ADR-0013).
+#
+# Hinnat ovat dollareita miljoonaa tokenia kohden. Hinnat muuttuvat: tarkista ennen käyttöä
+# toimittajan hinnastosta ja päivitä 'tarkistettu'. Arvio on suuntaa antava; toteutunut
+# kustannus lasketaan vastausten tokenimääristä samalla hinnastolla.
+#
+#   syote                 välimuistittamaton syöte
+#   tuloste               tuloste (sisältää päättelyn)
+#   valimuisti_kirjoitus  välimuistiin kirjoitettu syöte (Claude: noin 1,25 × syöte, 5 min)
+#   valimuisti_luku       välimuistista luettu syöte
+#   merkkia_per_token     karkea suomenkielisen tekstin merkkimäärä tokenia kohden arviota varten
+#                         (kalibroitu vaiheen 0 piikillä: 28 210 tokenia staattista kontekstia)
+
+versio: 1
+paivitetty: 2026-11-22
+
+mallit:
+  claude-opus-5-5:
+    toimittaja: claude
+    syote: 4.00
+    tuloste: 20.00
+    valimuisti_kirjoitus: 5.00
+    valimuisti_luku: 0.20
+    tarkistettu: 2026-11-22
+    lahde: Anthropicin hinnasto (claude-api-taito, välimuistitettu 2026-11-03)
+  claude-sonnet-5-5:
+    toimittaja: claude
+    syote: 2.00
+    tuloste: 10.00
+    valimuisti_kirjoitus: 2.50
+    valimuisti_luku: 0.10
+    tarkistettu: 2026-11-22
+    lahde: Anthropicin hinnasto (claude-api-taito, välimuistitettu 2026-11-03)
+  claude-haiku-5-5:
+    toimittaja: claude
+    syote: 0.10
+    tuloste: 0.50
+    valimuisti_kirjoitus: 0.125
+    valimuisti_luku: 0.01
+    tarkistettu: 2026-11-22
+    lahde: Anthropicin hinnasto (claude-api-taito, välimuistitettu 2026-11-03)
+  mistral-large-latest:
+    toimittaja: mistral
+    syote: 2.00
+    tuloste: 6.00
+    valimuisti_kirjoitus: 2.00
+    valimuisti_luku: 2.00
+    tarkistettu: null
+    lahde: "VAHVISTAMATON: tarkistettava Mistralin hinnastosta ennen live-ajoa; välimuistia ei oleteta"
+  mistral-medium-latest:
+    toimittaja: mistral
+    syote: 0.40
+    tuloste: 2.00
+    valimuisti_kirjoitus: 0.40
+    valimuisti_luku: 0.40
+    tarkistettu: null
+    lahde: "VAHVISTAMATON: tarkistettava Mistralin hinnastosta ennen live-ajoa; välimuistia ei oleteta"
+
+# Arvion oletukset tulosteen pituudelle (tokenia yksikköä kohden), vaiheen 0 piikin mukaan.
+arvio:
+  tulostetokenit_yksikko: 3000
+  merkkia_per_token: 3.0

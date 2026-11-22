@@ -14,8 +14,8 @@ def library():
     return PolicyLibrary.load()
 
 
-def test_library_has_l01_to_l07(library):
-    assert list(library.policies) == [f"L-0{n}" for n in range(1, 8)]
+def test_library_has_l01_to_l07_and_l15(library):
+    assert list(library.policies) == [f"L-0{n}" for n in range(1, 8)] + ["L-15"]
     for policy in library.policies.values():
         assert policy.default in policy.options
         assert policy.basis

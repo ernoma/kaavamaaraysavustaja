@@ -17,10 +17,10 @@
 #   versio        linjauksen versio
 #   tulkintakysymykset  tulkintakysymystyypit (K1–K15), jotka linjaus ratkaisee
 
-versio: 1
+versio: 2
 organisaatio: Tampere
 paivitetty: 2026-11-22
-lahde: "Toteutussuunnitelma luku 14; ADR-0007; ADR-0008"
+lahde: "Toteutussuunnitelma luku 14; ADR-0007; ADR-0008; ADR-0015"
 
 linjaukset:
 
@@ -85,13 +85,21 @@ linjaukset:
         kuvaus: Aina yläkoodi Sanallinen määräys.
       - arvo: alakoodit
         kuvaus: Suunnittelu-, rakentamis- tai suojelumääräys sanaston perusteella, muuten yläkoodi.
+      - arvo: kehittamisvyohyke_suunnittelumaarays
+        kuvaus: >
+          Yläkoodi, paitsi kehittämisvyöhykkeen sanallinen määräys on aina suunnittelumääräys
+          (opas 3.3.3.1, sääntö R-12).
     oletus: sanallinenMaarays
     peruste: >
       Opas 3.2: yleiskaavassa alakoodien käyttö on harkinnanvaraista. YM:n muistio 16.2.2026
       (kohta 34) ehdottaa alakoodien poistoa, joten yläkoodi kestää KATJA III -muutoksen.
+      Opas 3.3.3.1 edellyttää kehittämisvyöhykkeelle suunnittelumääräystä; oletuksella R-12
+      antaa siitä huomion (ei virhettä, koska Ryhti ei tarkista sitä: Syken testi 22.11.2026).
+      Vaihtoehto kehittamisvyohyke_suunnittelumaarays noudattaa opasta ja pitää muut yläkoodina
+      (ADR-0015).
     lukittu: false
     paatos: null
-    versio: 1
+    versio: 2
     tulkintakysymykset: [K11]
 
   - tunnus: L-05
@@ -148,3 +156,28 @@ linjaukset:
     paatos: null
     versio: 1
     tulkintakysymykset: [K4]
+
+  - tunnus: L-15
+    otsikko: Ryhmän otsikko, kun koodiyhdistelmä vastaa liitteen 4 määräystä
+    kysymys: >
+      Käytetäänkö lähteen otsikkoa vai liitteen 4 otsikkoa, kun ryhmän koodiyhdistelmä vastaa
+      liitteen 4 vakiomääräystä mutta lähteen otsikko on toinen (esim. c-1 Täydentyvä keskusta ↔
+      Keskustatoimintojen kehittämisvyöhyke)?
+    vaihtoehdot:
+      - arvo: lahde
+        kuvaus: >
+          Lähteen otsikko säilyy (Katja 2 §: otsikko saa poiketa liitteestä, jos tietosisältö on
+          laajempi); R-15 antaa huomion ja liitteen otsikko näkyy perusteluissa.
+      - arvo: katja
+        kuvaus: >
+          Liitteen 4 otsikko (opas 3.1.1); lähteen otsikko jää perusteluihin ja raporttiin.
+    oletus: lahde
+    peruste: >
+      Lähdeuskollisuus ja jäljitettävyys (P2, ADR-0007): kirjasto on uuden kaavan pohja, ja
+      kaavoittaja tunnistaa merkinnän voimassa olevan kaavan otsikosta. Voimassa olevan kaavan
+      merkinnän sanallinen määräys laajentaa tietosisältöä, joten Katja 2 § sallii poikkeavan
+      otsikon. Opas 3.1.1 on luonnos (16.2.2026). Vaiheen 1 raportin havainto 4; ADR-0015.
+    lukittu: false
+    paatos: null
+    versio: 1
+    tulkintakysymykset: []

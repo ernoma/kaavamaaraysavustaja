@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "tietopohja": "TP-2026.11-2",
+ "tietopohja": "TP-2026.11-3",
  "codelists": {
   "RY_Kaavamaarayksen_Lisatiedonlaji": {
    "uri": "http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayksen_Lisatiedonlaji",

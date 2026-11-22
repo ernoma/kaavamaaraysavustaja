@@ -1,0 +1,168 @@
+# Tulkintakysymysten tyypit K1–K15 (käsin ylläpidettävä; suunnitelman luku 6.10).
+#
+# Kuvaukset annetaan kielimallille staattisessa kontekstissa (vaiheen 0 piikki sekoitti K2:n).
+#   tyyppi          K1 … K15
+#   nimi            lyhyt nimi
+#   kuvaus          milloin kysymys nousee
+#   ei_tata         mikä ei ole tämän tyypin kysymys (sekaannusten välttämiseksi)
+#   esimerkki       Tampereen koosteesta
+#   vaihtoehdot     tyypilliset vaihtoehdot
+#   suositus        suunnitelman alustava suositus
+#   mallin_ratkaistavissa  saako kielimalli ratkaista kysymyksen (true) vai jääkö se aina
+#                   käyttäjälle tai linjaukselle (false)
+
+versio: 1
+
+kysymystyypit:
+
+  - tyyppi: K1
+    nimi: Aluevaraus vai osa-alue
+    kuvaus: >
+      Merkintä voi olla kaavan pohja-aluevaraus (pääkäyttötarkoitus) tai aluevarauksen päälle
+      osoitettava osa-alue (esim. kehittämisvyöhyke ja käyttötarkoituskohdistus).
+    ei_tata: Sekoittunut käyttötarkoitus on K2; puuttuva sopiva koodi on K5.
+    esimerkki: c-1 TÄYDENTYVÄ KESKUSTA; KAUPUNKIVIHREÄN KEHITTÄMISALUE
+    vaihtoehdot: [pääkäyttötarkoitus, osa-alue]
+    suositus: >
+      Ratkaistaan vektoriaineiston päällekkäisyydellä (vaihe 4); muuten osa-alue, jos tunnus on
+      pienaakkosin tai merkintä on kehittämisperiaateotsikon alla.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K2
+    nimi: Sekoittunut käyttötarkoitus
+    kuvaus: >
+      Otsikossa on SEKOITTUNUT ALUE tai teksti osoittaa alueelle kaksi tai useampia
+      pääkäyttötarkoituksia yhtä aikaa.
+    ei_tata: >
+      Ei koske lisätietojen valintaa, sanallisen määräyksen lajeja eikä sitä, onko kohde
+      aluevaraus vai osa-alue (K1).
+    esimerkki: ASUMISEN JA VIRKISTYKSEN SEKOITTUNUT ALUE
+    vaihtoehdot: [määräysyhdistelmä (useita pääkäyttötarkoituksia), yksi pääkäyttötarkoitus ja käyttötarkoituskohdistus]
+    suositus: Määräysyhdistelmä (opas 3.3.2); otsikoksi ei liitteen 4 otsikkoa.
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K3
+    nimi: Yleismääräys koskee vain osaa alueista
+    kuvaus: Yleismääräyksen kappale viittaa vain tiettyihin merkintöihin (esim. "RA ja R -alueilla").
+    ei_tata: Merkinnän oma teksti, joka koskee merkinnän aluetta, ei ole K3.
+    esimerkki: '"Yleiskaavan RA ja R -alueilla yleiskaavaa voidaan käyttää MRL 72 §:n mukaisesti…"'
+    vaihtoehdot: [säilytä yleismääräyksenä, lisää rakenteinen tieto kohteisiin, siirrä kohteisiin]
+    suositus: Linjaus L-05.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K4
+    nimi: Paikkasidonnainen numeroarvo
+    kuvaus: Numeroarvo (k-m², %, m …) koskee vain nimettyä paikkaa tai osaa kohteista.
+    ei_tata: Koko merkintää koskeva numeroarvo on R-18:n huomio, ei K4.
+    esimerkki: '"Vähittäiskaupan kerrosalan enimmäismitoitus Kalevassa on 70 000 k-m²"'
+    vaihtoehdot: [sanallisena, erillinen kaavakohde suureella ja kohdistuksella]
+    suositus: Linjaus L-07.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K5
+    nimi: Ei sopivaa Katja-koodia
+    kuvaus: >
+      Liitteestä 4 tai koodistosta ei löydy merkintää vastaavaa koodia; valitaan lähin
+      perusteltu koodi tai kehittämisvyöhyke ja kohdistus.
+    ei_tata: Kun liitteen 4 rivi vastaa merkintää, K5 ei nouse.
+    esimerkki: VAK-RATAPIHA; KAUPUNKISTRATEGIAN KASVUN JA ELINVOIMAN VYÖHYKE
+    vaihtoehdot: [lähin koodi ja sanallinen määräys, kehittämisvyöhyke ja käyttötarkoituskohdistus]
+    suositus: Lähin perusteltu koodi; tapaus kirjataan Katja-puutelistaan.
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K6
+    nimi: Informatiivinen merkintä vai määräys
+    kuvaus: Merkintä voi olla kaavan rajaus tai lähtötieto eikä kaavamääräys.
+    ei_tata: Merkintä, jolla on määräysteksti, on yleensä määräys.
+    esimerkki: YLEISKAAVA-ALUEEN RAJA; KANSALLISEN KAUPUNKIPUISTON ALUE
+    vaihtoehdot: [ei kaavamääräys, kaavamääräys]
+    suositus: Ei kaavamääräys; vahvistetaan merkinnöittäin (L-08).
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K7
+    nimi: Otsikon määreet lisätiedoiksi
+    kuvaus: >
+      Otsikon tai tekstin määreet (UUSI, KEHITETTÄVÄ, OHJEELLINEN, TUTKITTAVA, TARVE,
+      YHTEYSTARVE) muunnetaan lisätiedoiksi; yhdistelmät ja epäselvät määreet kysytään. Myös
+      epävarma lisätieto, jota liite 4 ei osoita, kysytään tällä tyypillä.
+    ei_tata: Ei koske kaavamääräyslajin valintaa (K5) eikä sekoittunutta aluetta (K2).
+    esimerkki: TUTKITTAVA OHJEELLINEN LÄHIJUNA-ASEMA
+    vaihtoehdot: [uusi, kehitettava, ohjeellinenSijainti, yhteystarve, vaihtoehtoinen, ei lisätietoa]
+    suositus: Sanastoon perustuva ehdotus; yhdistelmät kysytään.
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K8
+    nimi: Geometriatyyppi
+    kuvaus: Ei tiedetä, onko kohde alue, viiva vai piste.
+    ei_tata: Kun liite 4 tai koodin kuvaus kertoo geometrian, K8 ei nouse.
+    esimerkki: VAIHTOPYSÄKKI (piste), RAITIOTIE (viiva)
+    vaihtoehdot: [alue, viiva, piste]
+    suositus: >
+      Vektoriaineistosta; muuten nimestä ja tekstistä (tie, rata, reitti, yhteys → viiva;
+      asema, pysäkki, satama, laitos → piste; alue, vyöhyke → alue).
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K9
+    nimi: Alakohtaiset määräykset
+    kuvaus: >
+      Tekstissä on numeroituja osa-alueita (1., 2. …) tai muotoa "Alue / teksti" olevia
+      alakohtia, jotka kohdistuvat eri alueisiin.
+    ei_tata: Saman alueen useat aiheet ovat K10.
+    esimerkki: Valuma-aluekohtaiset määräykset; KAUPUNKIYMPÄRISTÖN KEHITTÄMISVYÖHYKE 1.–3.
+    vaihtoehdot: [yksi ryhmä, ryhmä alakohtaa kohden (indeksoitu kirjaintunnus)]
+    suositus: Ryhmä alakohtaa kohden, koska alakohdat kohdistuvat eri alueisiin.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K10
+    nimi: Useita aiheita yhdessä tekstissä
+    kuvaus: Sama teksti käsittelee useita aiheita (kauppa, liikenne, kulttuuriympäristö …).
+    ei_tata: Eri alueisiin kohdistuvat alakohdat ovat K9.
+    esimerkki: KESKUSTATOIMINTOJEN ALUE
+    vaihtoehdot: [yksi sanallinen määräys ja useita lajeja, pilkkominen]
+    suositus: Linjaus L-03.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K11
+    nimi: Sanallisen määräyksen tyyppi
+    kuvaus: Yläkoodi sanallinenMaarays vai alakoodi (suunnittelu-, rakentamis- tai suojelumääräys).
+    ei_tata: Sanallisen määräyksen lajit (aiheet) eivät ole K11.
+    esimerkki: '"Alueen suunnittelussa tulee…"'
+    vaihtoehdot: [sanallinenMaarays, suunnittelumaarays, rakentamismaarays, suojelumaarays]
+    suositus: Linjaus L-04.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K12
+    nimi: Poistunut koodi tai vanhentunut viittaus
+    kuvaus: Tekstissä on vanhentunut lakiviittaus (MRL) tai liitteen 4 rivi viittaa poistuneeseen koodiin.
+    ei_tata: Ei koske tekstin sisällön tulkintaa.
+    esimerkki: '"MRL 128 §"; liitteen 4 muuArkeologinenKohde'
+    vaihtoehdot: [korvaava koodi tai ennallaan, viittaus päivitetään]
+    suositus: Korvaava koodi; lakiviittaus säilyy tekstissä (VOOKA).
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K13
+    nimi: Määräys vai suositus
+    kuvaus: Teksti voi olla velvoittava kaavamääräys tai ei-velvoittava kaavasuositus.
+    ei_tata: VOOKA-tilassa lähteen jaottelu ratkaisee; ei kysytä ilman syytä.
+    esimerkki: '"suositellaan…" (uudet kaavat)'
+    vaihtoehdot: [kaavamääräys, kaavasuositus]
+    suositus: Lähteen jaottelu ratkaisee; ehdotus vain laadintatilassa.
+    mallin_ratkaistavissa: true
+
+  - tyyppi: K14
+    nimi: Kirjaintunnus
+    kuvaus: Tunnus puuttuu lähteestä tai poikkeaa liitteestä 4 (c-1 vs. C-1).
+    ei_tata: Otsikon valinta on linjaus L-15, ei K14.
+    esimerkki: C (vain värisymboli), c-1
+    vaihtoehdot: [alkuperäinen, Katjan mukainen]
+    suositus: Linjaus L-06.
+    mallin_ratkaistavissa: false
+
+  - tyyppi: K15
+    nimi: Lähdekaava
+    kuvaus: Koosteen merkintä on kohdistettava johonkin yhdistetyistä kaavoista.
+    ei_tata: Ei koske rakennetta.
+    esimerkki: koosteen merkintä, joka kuuluu johonkin yhdistetyistä kaavoista
+    vaihtoehdot: [valitse kaava(t)]
+    suositus: Linjaus L-01; pakollinen ennen Ryhti-vientiä.
+    mallin_ratkaistavissa: false

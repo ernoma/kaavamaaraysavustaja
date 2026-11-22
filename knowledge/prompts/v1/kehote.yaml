@@ -1,0 +1,28 @@
+# Kielimallin kehotteet v1 (käsin ylläpidettävä; suunnitelman luku 6.8, ADR-0013).
+#
+# Kehote koostuu neljästä osasta:
+#   1. järjestelmäohje        jarjestelmaohje.md (vakaa, välimuistitetaan)
+#   2. staattinen konteksti   konteksti.md + tietopohjasta generoidut luettelot (vakaa ajon ajan,
+#                             välimuistitetaan): koodit, liitteen 4 vakiomääräykset,
+#                             kysymystyypit K1–K15 (kysymystyypit.yaml) ja voimassa olevat linjaukset
+#   3. esimerkit              esimerkit.yaml ja knowledge/org/tampere/hyvaksytyt.yaml; tehtävään
+#                             valitaan sanastohaulla samankaltaisimmat (ei upotuksia)
+#   4. tehtävä                määräysyksikkö, vaiheen 1 löydökset, avoimet tulkintakysymykset ja
+#                             käyttäjän ratkaisut (JSON)
+#
+# Muutos kehotteeseen = uusi versio (prompts/v2/) tai tämän version 'versio'-kentän kasvatus.
+# Kehoteversio tallentuu jokaiseen muunnosprojektiin (provenance) ja tallennettuun vastaukseen.
+# Aja muutoksen jälkeen python tools/build_knowledge.py ja tools/evaluate.py (suunnitelma 10.4).
+
+versio: 1
+tunnus: prompts/v1
+paivitetty: 2026-11-22
+kieli: fi
+jarjestelmaohje: jarjestelmaohje.md
+konteksti: konteksti.md
+kysymystyypit: kysymystyypit.yaml
+esimerkit: esimerkit.yaml
+# Esimerkkejä tehtävää kohden (sanastohaku otsikosta ja tekstistä).
+esimerkkeja_enintaan: 3
+# Lyhin sanan alku, jota sanastohaku vertaa (suomen taivutus: "keskustatoimintojen" ~ "keskusta").
+haun_sanan_alku: 6

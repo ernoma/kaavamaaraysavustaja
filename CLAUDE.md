@@ -99,7 +99,7 @@ Monitulkintainen kohta vaihtoehtoineen (tyypit K1–K15), jonka käyttäjä ratk
 **Tietopaketti, tietopohja (knowledge package, knowledge base)**:
 Versioitu muuttuva tieto `knowledge/`-kansiossa: koodistot, Katja-liite 4, korjaukset, säännöt,
 kehotteet, Ryhti-skeema ja linjaukset. Tietopohja on niiden yhdistelmä, jolla on tunnus
-(esim. TP-2026.11-2) ja manifesti tarkistussummineen.
+(esim. TP-2026.11-3) ja manifesti tarkistussummineen.
 
 **Vakiomääräysluettelo (standard regulation list)**:
 Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
@@ -117,10 +117,13 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
 4. **Tietopohja rakennetaan työkalulla.** `knowledge/` on generoitua paitsi käsin ylläpidettävät
    `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto),
    `rules/sanasto_v1.yaml` (täsmäyksen sanasto), `org/tampere/linjaukset.yaml` (linjaukset,
-   ADR-0008, ADR-0010) ja `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset); myöhemmin
-   kehotteet. Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
-   käsin ylläpidettävän tiedoston muutoksen jälkeen (tarkistussummat). Lähdeaineistoja
-   (`lahtoaineistot/`) ei muokata.
+   ADR-0008, ADR-0010), `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset),
+   `prompts/v1/` (kehotteet: `kehote.yaml`, `jarjestelmaohje.md`, `konteksti.md`,
+   `kysymystyypit.yaml`, `esimerkit.yaml`; ADR-0013) ja `llm/hinnasto.yaml` (kielimallien
+   hinnat). Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
+   käsin ylläpidettävän tiedoston muutoksen jälkeen (tarkistussummat). Kehotteen muutos
+   kasvattaa kehoteversiota, ja tallennetut vastaukset (`tests/recorded_llm/`) äänitetään
+   uudelleen. Lähdeaineistoja (`lahtoaineistot/`) ei muokata.
 5. **Kielimallille ei koskaan lähetetä PDF:iä tai kuvia**, vain käyttäjän hyväksymä
    määräysteksti ja tarvittava konteksti. Mallin koodikentät ovat enumeraatioita.
 6. **VOOKA-tilassa sanallinen teksti on koskematon.**
@@ -154,8 +157,9 @@ python -m venv .venv
 | Syken validointitesti | `.\.venv\Scripts\python tools\syke_validate.py` |
 | PDF:n tekstinpoiminta (paikallinen, `work/`) | `.\.venv\Scripts\python tools\extract_pdf_text.py <pdf> --out work\kooste.txt` |
 | Muunnos (sääntöpohjainen) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 [--linjaus L-03=kappaleittain] [--asetukset valinnat.yaml]` |
+| Hybridimuunnos (arvio / ajo) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 --kielimalli claude --arvio` ja `… --budjetti 3 [--projekti aiempi.kma.json]` |
 | Tarkistus (säännöt, skeema, Syke) | `.\.venv\Scripts\kma validate <projekti>.kma.json [--syke]` |
-| Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot]` |
+| Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot] [--hybridi claude --tallennetut]` |
 | Verkkotestit (avain tarvitaan) | `.\.venv\Scripts\python -m pytest -m live` |
 
 CI (`.github/workflows/ci.yml`) ajaa ruffin, tietopohjan `--check`-tarkistuksen ja pytestin

@@ -14,7 +14,7 @@ DAY = date(2026, 11, 22)
 
 def test_manifest_checksums_match():
     manifest = load_manifest(verify=True)
-    assert manifest["tietopohja"] == "TP-2026.11-2"
+    assert manifest["tietopohja"] == "TP-2026.11-3"
     assert manifest["koodistot"][REGULATION_TYPE]["versio"] == "2025-10-07"
 
 

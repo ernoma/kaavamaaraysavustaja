@@ -4,7 +4,7 @@
 
 - Lähde: `lahtoaineistot/katja/LIITE 3_Esitystavan tekniset yksityiskohdat.xlsx`
 - Lähteen sha256: `9ca90db678275aa7043c77bed933088c2b8f5ce519c385d448518ddaccfa538b`
-- Tietopohja: TP-2026.11-2 (koodistot ks. `knowledge/manifest.yaml`)
+- Tietopohja: TP-2026.11-3 (koodistot ks. `knowledge/manifest.yaml`)
 - Korjaukset: `knowledge/katja/annex4_corrections.yaml` (alkuperäistä taulukkoa ei muokata)
 - Määrityshierarkioiden voimassaolo tarkistettu päivälle 2026-11-22
 

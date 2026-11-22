@@ -153,6 +153,10 @@ saannot:
     vakavuus: virhe
     tapaukset:
       ei_suunnittelumaaraysta: huomio
+    kuvaus: >
+      Alatapaus ei_suunnittelumaaraysta on huomio, koska linjauksen L-04 oletus on yläkoodi
+      sanallinenMaarays eikä Ryhti tarkista alakoodia. L-04:n vaihtoehto
+      kehittamisvyohyke_suunnittelumaarays poistaa huomion (ADR-0015).
     ryhti: []
     kaavatasot: [yleiskaava, maakuntakaava]
     tarkistus: development_zone
@@ -184,7 +188,8 @@ saannot:
       laajempi_tietosisalto: huomio
     kuvaus: >
       Katja 2 §: otsikko saa poiketa liitteestä 4, jos tietosisältö on laajempi. Ryhmä, jossa
-      on sanallinen määräys, saa siksi huomion eikä varoitusta.
+      on sanallinen määräys, saa siksi huomion eikä varoitusta. Otsikon valinnan ratkaisee
+      linjaus L-15 (ADR-0015).
     ryhti: []
     kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
     tarkistus: annex_title

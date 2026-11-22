@@ -38,7 +38,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
-KNOWLEDGE_VERSION = "TP-2026.11-2"
+KNOWLEDGE_VERSION = "TP-2026.11-3"
 VALID_FROM = "2026-11-22"
 RYHTI_RELEASE = "2026-release-11"
 ANNEX4_FILE = "katja/annex4_katja-ii_393-2025.yaml"
@@ -51,8 +51,27 @@ RULES_FILE = "rules/rules_v1.yaml"
 VOCABULARY_FILE = "rules/sanasto_v1.yaml"
 POLICY_FILE = "org/tampere/linjaukset.yaml"
 APPROVED_FILE = "org/tampere/hyvaksytyt.yaml"
+PROMPTS_DIR = "prompts/v1"
+PROMPT_FILES = [
+    f"{PROMPTS_DIR}/kehote.yaml",
+    f"{PROMPTS_DIR}/jarjestelmaohje.md",
+    f"{PROMPTS_DIR}/konteksti.md",
+    f"{PROMPTS_DIR}/kysymystyypit.yaml",
+    f"{PROMPTS_DIR}/esimerkit.yaml",
+]
+PRICING_FILE = "llm/hinnasto.yaml"
 # Hand-maintained knowledge files (CLAUDE.md rule 4): copied as such and checksummed.
-HAND_MAINTAINED = [RULES_FILE, VOCABULARY_FILE, POLICY_FILE, APPROVED_FILE]
+HAND_MAINTAINED = [RULES_FILE, VOCABULARY_FILE, POLICY_FILE, APPROVED_FILE, *PROMPT_FILES, PRICING_FILE]
+PROMPT_PLACEHOLDERS = [
+    "{{KAAVATASO}}",
+    "{{TILA}}",
+    "{{KYSYMYSTYYPIT}}",
+    "{{LINJAUKSET}}",
+    "{{KAAVAMAARAYSLAJIT}}",
+    "{{LISATIEDON_LAJIT}}",
+    "{{SANALLISEN_LAJIT}}",
+    "{{LIITE4}}",
+]
 
 CODELIST_SOURCES = "lahtoaineistot/koodistot/codelist_*.json"
 ANNEX_SOURCE = "lahtoaineistot/katja/LIITE 3*.xlsx"
@@ -623,6 +642,14 @@ def check_hand_maintained(relative: str, data: Any) -> None:
     def fail(message: str) -> None:
         raise SystemExit(f"knowledge/{relative}: {message}")
 
+    if relative.endswith(".md"):
+        if not isinstance(data, str) or not data.strip():
+            fail("tyhjä kehotetiedosto")
+        if relative.endswith("konteksti.md"):
+            missing = [p for p in PROMPT_PLACEHOLDERS if p not in data]
+            if missing:
+                fail(f"paikkamerkit puuttuvat: {', '.join(missing)}")
+        return
     if not isinstance(data, dict) or "versio" not in data:
         fail("YAML-sanakirja, jossa on 'versio'")
     if relative == RULES_FILE:
@@ -640,6 +667,21 @@ def check_hand_maintained(relative: str, data: Any) -> None:
         PolicyLibrary.from_dict(data)
     elif relative == APPROVED_FILE and not isinstance(data.get("ryhmat"), list):
         fail("'ryhmat' on lista")
+    elif relative.endswith("kysymystyypit.yaml"):
+        types = [k.get("tyyppi") for k in data.get("kysymystyypit", [])]
+        if types != [f"K{n}" for n in range(1, 16)]:
+            fail("kysymystyypit K1–K15 järjestyksessä")
+        for item in data["kysymystyypit"]:
+            if not item.get("kuvaus") or not isinstance(item.get("mallin_ratkaistavissa"), bool):
+                fail(f"{item['tyyppi']}: kuvaus tai mallin_ratkaistavissa puuttuu")
+    elif relative.endswith("esimerkit.yaml"):
+        for item in data.get("esimerkit", []):
+            if not {"tunnus", "yksikko", "tulos"} <= set(item):
+                fail(f"{item.get('tunnus')}: tunnus, yksikko ja tulos ovat pakollisia")
+    elif relative == PRICING_FILE:
+        for model, price in (data.get("mallit") or {}).items():
+            if not all(isinstance(price.get(k), (int, float)) for k in ("syote", "tuloste")):
+                fail(f"{model}: syote- ja tulostehinta puuttuu")
 
 
 # --------------------------------------------------------------------------------------
@@ -712,7 +754,8 @@ def build(root: Path = ROOT) -> BuildResult:
     # g) hand-maintained rules, vocabulary, policies and approved conversions
     for relative in HAND_MAINTAINED:
         data = (root / knowledge / relative).read_bytes()
-        check_hand_maintained(relative, yaml.safe_load(data))
+        parsed = data.decode("utf-8") if relative.endswith(".md") else yaml.safe_load(data)
+        check_hand_maintained(relative, parsed)
         files[knowledge + relative] = data
 
     # e) validation messages (copied as such from Arho)
@@ -743,7 +786,8 @@ def build(root: Path = ROOT) -> BuildResult:
         },
         "saannot": RULES_FILE,
         "sanasto": VOCABULARY_FILE,
-        "kehotteet": None,
+        "kehotteet": {"hakemisto": PROMPTS_DIR, "kehote": f"{PROMPTS_DIR}/kehote.yaml"},
+        "hinnasto": PRICING_FILE,
         "linjaukset": POLICY_FILE,
         "hyvaksytyt": APPROVED_FILE,
         "lahteet": dict(sorted(sources.items())),
@@ -757,7 +801,7 @@ def build(root: Path = ROOT) -> BuildResult:
         "# Tietopohjan manifesti (generoitu: python tools/build_knowledge.py).\n"
         "# 'tiedostot' = knowledge/-kansion tiedostot tarkistussummineen (eheystarkistus),\n"
         "# 'lahteet' = lähdeaineistot, joista tietopohja on rakennettu.\n"
-        "# saannot, sanasto, linjaukset ja hyvaksytyt ovat käsin ylläpidettäviä; kehotteet vaiheessa 2.\n"
+        "# saannot, sanasto, linjaukset, hyvaksytyt, kehotteet ja hinnasto ovat käsin ylläpidettäviä.\n"
     )
     files[knowledge + "manifest.yaml"] = yaml_bytes(manifest, manifest_header)
     return BuildResult(files, findings, row_counts)

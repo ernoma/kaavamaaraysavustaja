@@ -17,3 +17,6 @@ Lyhyet päätöskirjaukset: tausta, päätös, seuraukset. Tila: *ehdotettu*, *h
 | [0010](0010-linjauskirjasto-ja-valinnat.md) | Linjauskirjaston muoto ja muunnoksen valinnat | hyväksytty |
 | [0011](0011-viejat-ja-validointi-vaiheessa-1.md) | Viejät ja validointi vaiheessa 1 | hyväksytty |
 | [0012](0012-itsenainen-qgis-tyokalu-ensin.md) | Itsenäinen QGIS-työkalu ensin, Arho ja kaavoittajat myöhemmin | hyväksytty |
+| [0013](0013-hybridiputki-kehotteet-ja-kustannus.md) | Hybridiputki, kehotteet datana, kustannusarvio ja Mistral-adapteri | hyväksytty |
+| [0014](0014-tulkintakysymysten-ratkaisut-ja-paatosloki.md) | Tulkintakysymysten ratkaisut ja päätösloki muunnosprojektissa | hyväksytty |
+| [0015](0015-otsikkolinjaus-l15-ja-l04-r12.md) | Otsikkolinjaus L-15 sekä L-04:n ja R-12:n suhde | hyväksytty |

@@ -25,6 +25,7 @@ IMPLEMENTED: dict[str, set[str]] = {
     "L-03": {"ei_pilkota", "kappaleittain"},
     "L-05": {"sailytys", "sailytys_ja_rakenteinen_lisays"},
     "L-07": {"sanallisena"},
+    "L-15": {"lahde", "katja"},
 }
 
 
@@ -160,7 +161,18 @@ def load_settings(path: Path) -> dict[str, Any]:
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     if not isinstance(data, dict):
         raise PolicyError(f"Asetustiedosto {path} ei ole YAML-sanakirja")
-    known = {"linjaukset", "kaavataso", "tila", "kartta", "nimi"}
+    known = {
+        "linjaukset",
+        "kaavataso",
+        "tila",
+        "kartta",
+        "nimi",
+        "ratkaisut",
+        "kielimalli",
+        "malli",
+        "budjetti",
+        "laatu",
+    }
     unknown = sorted(set(data) - known)
     if unknown:
         raise PolicyError(f"Asetustiedostossa tuntemattomia kenttiä: {', '.join(unknown)}")
@@ -168,4 +180,6 @@ def load_settings(path: Path) -> dict[str, Any]:
     if not isinstance(policies, dict):
         raise PolicyError("Asetustiedoston 'linjaukset' on muotoa {L-03: vaihtoehto}")
     data["linjaukset"] = {str(k).upper(): str(v) for k, v in policies.items()}
+    if data.get("ratkaisut") is not None and not isinstance(data["ratkaisut"], list):
+        raise PolicyError("Asetustiedoston 'ratkaisut' on lista")
     return data
