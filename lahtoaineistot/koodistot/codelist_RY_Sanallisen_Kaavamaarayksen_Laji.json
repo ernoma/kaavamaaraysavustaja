@@ -1,0 +1,1588 @@
+{
+  "id" : "fbb672db-3bd0-437d-bb40-040a5805822b",
+  "codeValue" : "RY_Sanallisen_Kaavamaarayksen_Laji",
+  "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji",
+  "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji",
+  "codesUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/",
+  "extensionsUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/extensions/",
+  "codes" : [ {
+    "id" : "a2526a79-7323-4bdf-be9e-c63c0e619fc4",
+    "codeValue" : "rakentamistapa",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakentamistapa",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa",
+    "status" : "VALID",
+    "order" : 1,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.832Z",
+    "modified" : "2023-12-01T05:55:12.762Z",
+    "statusModified" : "2023-04-12T08:45:12.832Z",
+    "prefLabel" : {
+      "en" : "Construction method",
+      "fi" : "Rakentamistapa",
+      "sv" : "Byggnadssätt"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method.",
+      "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa/members/"
+  }, {
+    "id" : "9c79e0d7-993f-4161-9631-c0189cd43ebb",
+    "codeValue" : "perustaminen",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/perustaminen",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/perustaminen",
+    "status" : "VALID",
+    "order" : 2,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.837Z",
+    "modified" : "2023-12-01T05:55:12.787Z",
+    "statusModified" : "2023-04-12T08:45:12.837Z",
+    "prefLabel" : {
+      "en" : "Foundation",
+      "fi" : "Perustaminen",
+      "sv" : "Grundande"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method, which concern the foundation of the building or the type of foundation.",
+      "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä, jotka koskevat rakennuksen perustamista tai perustamistapaa.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller byggnadssättet och grundande av eller grundläggningssätt för en byggnad."
+    },
+    "broaderCode" : {
+      "id" : "a2526a79-7323-4bdf-be9e-c63c0e619fc4",
+      "codeValue" : "rakentamistapa",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakentamistapa",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa",
+      "status" : "VALID",
+      "order" : 1,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.832Z",
+      "modified" : "2023-12-01T05:55:12.762Z",
+      "statusModified" : "2023-04-12T08:45:12.832Z",
+      "prefLabel" : {
+        "en" : "Construction method",
+        "fi" : "Rakentamistapa",
+        "sv" : "Byggnadssätt"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning the construction method.",
+        "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/perustaminen/members/"
+  }, {
+    "id" : "bd3f0111-3763-4138-8571-3331e21b4c1c",
+    "codeValue" : "julkisivut",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/julkisivut",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/julkisivut",
+    "status" : "VALID",
+    "order" : 3,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.843Z",
+    "modified" : "2023-12-01T05:55:12.797Z",
+    "statusModified" : "2023-04-12T08:45:12.843Z",
+    "prefLabel" : {
+      "en" : "Facades",
+      "fi" : "Julkisivut",
+      "sv" : "Fasad"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method, which apply to the facades of the building.",
+      "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä, jotka koskevat rakennuksen julkisivuja.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller byggnadssättet och byggnadens fasad."
+    },
+    "broaderCode" : {
+      "id" : "a2526a79-7323-4bdf-be9e-c63c0e619fc4",
+      "codeValue" : "rakentamistapa",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakentamistapa",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa",
+      "status" : "VALID",
+      "order" : 1,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.832Z",
+      "modified" : "2023-12-01T05:55:12.762Z",
+      "statusModified" : "2023-04-12T08:45:12.832Z",
+      "prefLabel" : {
+        "en" : "Construction method",
+        "fi" : "Rakentamistapa",
+        "sv" : "Byggnadssätt"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning the construction method.",
+        "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/julkisivut/members/"
+  }, {
+    "id" : "2a372633-940e-4153-9fab-e769a044c897",
+    "codeValue" : "korjausrakentaminen",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/korjausrakentaminen",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/korjausrakentaminen",
+    "status" : "VALID",
+    "order" : 4,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.849Z",
+    "modified" : "2023-12-01T05:55:12.806Z",
+    "statusModified" : "2023-04-12T08:45:12.849Z",
+    "prefLabel" : {
+      "en" : "Renovation construction",
+      "fi" : "Korjausrakentaminen",
+      "sv" : "Ombyggnad"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method, which concern renovation construction and its control.",
+      "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä, jotka liittyvät korjausrakentamiseen ja sen ohjaukseen.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller byggnadssättet och reparationsbyggande och dess styrning."
+    },
+    "broaderCode" : {
+      "id" : "a2526a79-7323-4bdf-be9e-c63c0e619fc4",
+      "codeValue" : "rakentamistapa",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakentamistapa",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa",
+      "status" : "VALID",
+      "order" : 1,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.832Z",
+      "modified" : "2023-12-01T05:55:12.762Z",
+      "statusModified" : "2023-04-12T08:45:12.832Z",
+      "prefLabel" : {
+        "en" : "Construction method",
+        "fi" : "Rakentamistapa",
+        "sv" : "Byggnadssätt"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning the construction method.",
+        "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamistapa/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/korjausrakentaminen/members/"
+  }, {
+    "id" : "b4bcbff8-0f10-4750-a8dc-55e34df564d5",
+    "codeValue" : "maarayksenTyyppi",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/maarayksenTyyppi",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi",
+    "status" : "VALID",
+    "order" : 5,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.854Z",
+    "modified" : "2023-12-01T05:55:12.815Z",
+    "statusModified" : "2023-04-12T08:45:12.854Z",
+    "prefLabel" : {
+      "en" : "Type of regulation",
+      "fi" : "Määräyksen tyyppi",
+      "sv" : "Slag av bestämmelse"
+    },
+    "description" : {
+      "en" : "A structural header level code that is not used as such.",
+      "fi" : "Jäsentävä otsikkotason koodi, jota ei sellaisenaan käytetä.",
+      "sv" : "Strukturerande kod på rubriknivå som inte används som sådan."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi/members/"
+  }, {
+    "id" : "4ca00e7f-69cd-4e2c-b349-63db4b50f11b",
+    "codeValue" : "suojelumaarays",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/suojelumaarays",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/suojelumaarays",
+    "status" : "VALID",
+    "order" : 6,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.860Z",
+    "modified" : "2023-12-01T05:55:12.824Z",
+    "statusModified" : "2023-04-12T08:45:12.860Z",
+    "prefLabel" : {
+      "en" : "Protection regulation",
+      "fi" : "Suojelumääräys",
+      "sv" : "Skyddsbestämmelse"
+    },
+    "description" : {
+      "en" : "The code is used to categorize supplementary protection plan regulations for already protected land use, which are sought to be confirmed by plan.",
+      "fi" : "Koodilla luokitellaan jo suojeltuun maankäyttöön kaavalla vahvistettavaksi haluttuja täydentäviä suojelua koskevia tekstimuotoisia kaavamääräyksiä.",
+      "sv" : "Med koden klassificeras kompletterande planbestämmelser som gäller skydd i textformat, vilka man önskar ska fastställas genom en plan för markanvändning som redan är skyddad."
+    },
+    "broaderCode" : {
+      "id" : "b4bcbff8-0f10-4750-a8dc-55e34df564d5",
+      "codeValue" : "maarayksenTyyppi",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/maarayksenTyyppi",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi",
+      "status" : "VALID",
+      "order" : 5,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.854Z",
+      "modified" : "2023-12-01T05:55:12.815Z",
+      "statusModified" : "2023-04-12T08:45:12.854Z",
+      "prefLabel" : {
+        "en" : "Type of regulation",
+        "fi" : "Määräyksen tyyppi",
+        "sv" : "Slag av bestämmelse"
+      },
+      "description" : {
+        "en" : "A structural header level code that is not used as such.",
+        "fi" : "Jäsentävä otsikkotason koodi, jota ei sellaisenaan käytetä.",
+        "sv" : "Strukturerande kod på rubriknivå som inte används som sådan."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/suojelumaarays/members/"
+  }, {
+    "id" : "00f96094-e7ed-4575-93fe-5dc143e1e996",
+    "codeValue" : "suunnittelumaarays",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/suunnittelumaarays",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/suunnittelumaarays",
+    "status" : "VALID",
+    "order" : 7,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.865Z",
+    "modified" : "2023-12-01T05:55:12.832Z",
+    "statusModified" : "2023-04-12T08:45:12.865Z",
+    "prefLabel" : {
+      "en" : "Planning regulation",
+      "fi" : "Suunnittelumääräys",
+      "sv" : "Planeringsbestämmelse"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning more detailed planning or the need for more detailed planning.",
+      "fi" : "Koodilla luokitellaan tarkempaa suunnittelua tai tarkempaa suunnittelun tarvetta koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller noggrannare planering eller behov av noggrannare planering."
+    },
+    "broaderCode" : {
+      "id" : "b4bcbff8-0f10-4750-a8dc-55e34df564d5",
+      "codeValue" : "maarayksenTyyppi",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/maarayksenTyyppi",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi",
+      "status" : "VALID",
+      "order" : 5,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.854Z",
+      "modified" : "2023-12-01T05:55:12.815Z",
+      "statusModified" : "2023-04-12T08:45:12.854Z",
+      "prefLabel" : {
+        "en" : "Type of regulation",
+        "fi" : "Määräyksen tyyppi",
+        "sv" : "Slag av bestämmelse"
+      },
+      "description" : {
+        "en" : "A structural header level code that is not used as such.",
+        "fi" : "Jäsentävä otsikkotason koodi, jota ei sellaisenaan käytetä.",
+        "sv" : "Strukturerande kod på rubriknivå som inte används som sådan."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/suunnittelumaarays/members/"
+  }, {
+    "id" : "60c6f8c8-11d1-4d0d-8658-d4e048c06a24",
+    "codeValue" : "rakentamismaarays",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakentamismaarays",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamismaarays",
+    "status" : "VALID",
+    "order" : 8,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.871Z",
+    "modified" : "2023-12-01T05:55:12.841Z",
+    "statusModified" : "2023-04-12T08:45:12.871Z",
+    "prefLabel" : {
+      "en" : "Building regulation",
+      "fi" : "Rakentamismääräys",
+      "sv" : "Byggnadsbestämmelse"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method.",
+      "fi" : "Koodilla luokitellaan rakentamisen tapaa koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller byggnadssätt."
+    },
+    "broaderCode" : {
+      "id" : "b4bcbff8-0f10-4750-a8dc-55e34df564d5",
+      "codeValue" : "maarayksenTyyppi",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/maarayksenTyyppi",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi",
+      "status" : "VALID",
+      "order" : 5,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.854Z",
+      "modified" : "2023-12-01T05:55:12.815Z",
+      "statusModified" : "2023-04-12T08:45:12.854Z",
+      "prefLabel" : {
+        "en" : "Type of regulation",
+        "fi" : "Määräyksen tyyppi",
+        "sv" : "Slag av bestämmelse"
+      },
+      "description" : {
+        "en" : "A structural header level code that is not used as such.",
+        "fi" : "Jäsentävä otsikkotason koodi, jota ei sellaisenaan käytetä.",
+        "sv" : "Strukturerande kod på rubriknivå som inte används som sådan."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maarayksenTyyppi/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakentamismaarays/members/"
+  }, {
+    "id" : "5ee848e5-240f-47c8-8e50-3b1a7c523068",
+    "codeValue" : "kehittamisperiaate",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/kehittamisperiaate",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kehittamisperiaate",
+    "status" : "VALID",
+    "order" : 9,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.877Z",
+    "modified" : "2023-12-01T05:55:12.849Z",
+    "statusModified" : "2023-04-12T08:45:12.877Z",
+    "prefLabel" : {
+      "en" : "Development principle",
+      "fi" : "Kehittämisperiaate",
+      "sv" : "Utvecklingsprincip"
+    },
+    "description" : {
+      "en" : "The code is used to categorize the plan regulations describing the development principles. The development principles may concern land use issues that are important for the development of the municipality, for which more detailed area reservation needs or other arrangements related to land use must be examined on an area-by-area basis or in connection with other further implementation planning. Therefore, local master plan regulations related to the development objectives are almost always related to the steering of implementation planning.",
+      "fi" : "Koodilla luokitellaan kehittämisperiaatteita kuvaavat kaavamääräykset. Kehittämisperiaatteet voivat koskea kunnan kehittämisen kannalta tärkeitä alueidenkäyttökysymyksiä, joita koskevat yksityiskohtaisemmat aluevaraustarpeet tai muut alueiden käyttöön liittyvät järjestelyt on tutkittava aluekohtaisesti tai muun toteuttavan jatkosuunnittelun yhteydessä. Kehittämistavoitteisiin liittyvät yleiskaavamääräykset liittyvät siten lähes aina toteuttavan suunnittelun ohjaukseen.",
+      "sv" : "Med koden klassificeras planbestämmelser som beskriver utvecklingsprincipen. Utvecklingsprinciperna kan gälla områdesanvändningsfrågor som är viktiga med avseende på kommunens utveckling, och mer detaljerade behov av områdesreservering eller andra arrangemang rörande områdesanvändning som gäller dessa frågor ska undersökas områdesvis eller i samband med någon annan fortsatt planering som genomförs. Generalplanbestämmelser som rör utvecklingsmål anknyter således nästan alltid till styrningen av den planering som ska genomföras."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kehittamisperiaate/members/"
+  }, {
+    "id" : "15340e17-5768-429e-a3d3-d2f2d659c68c",
+    "codeValue" : "ymparistohairiot",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistohairiot",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot",
+    "status" : "VALID",
+    "order" : 10,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.882Z",
+    "modified" : "2023-12-01T05:55:12.858Z",
+    "statusModified" : "2023-04-12T08:45:12.882Z",
+    "prefLabel" : {
+      "en" : "Environmental disturbances",
+      "fi" : "Ympäristöhäiriöt",
+      "sv" : "Miljöstörningar"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning general environmental disturbances for which a more specific sub-code has not been defined.",
+      "fi" : "Koodilla luokitellaan tekstimuotoiset kaavamääräykset koskien yleisiä ympäristöhäiriöitä, joille ei ole tarkempaa alakoodia määritelty.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller allmänna miljöstörningar för vilka ingen närmare underkod har fastställts."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot/members/"
+  }, {
+    "id" : "5b2c4917-90a6-4e9f-9b25-58f9eb32e139",
+    "codeValue" : "melu",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/melu",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/melu",
+    "status" : "VALID",
+    "order" : 11,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.888Z",
+    "modified" : "2023-12-01T05:55:12.867Z",
+    "statusModified" : "2023-04-12T08:45:12.888Z",
+    "prefLabel" : {
+      "en" : "Noise",
+      "fi" : "Melu",
+      "sv" : "Buller"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning noise or risk of noise, taking these into account and preparing for them.",
+      "fi" : "Koodin avulla luokitellaan melua tai sen riskiä ja näiden huomiointia ja näihin varautumista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller buller eller risk för buller samt beaktande av och förberedelse för dessa."
+    },
+    "broaderCode" : {
+      "id" : "15340e17-5768-429e-a3d3-d2f2d659c68c",
+      "codeValue" : "ymparistohairiot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistohairiot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot",
+      "status" : "VALID",
+      "order" : 10,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.882Z",
+      "modified" : "2023-12-01T05:55:12.858Z",
+      "statusModified" : "2023-04-12T08:45:12.882Z",
+      "prefLabel" : {
+        "en" : "Environmental disturbances",
+        "fi" : "Ympäristöhäiriöt",
+        "sv" : "Miljöstörningar"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning general environmental disturbances for which a more specific sub-code has not been defined.",
+        "fi" : "Koodilla luokitellaan tekstimuotoiset kaavamääräykset koskien yleisiä ympäristöhäiriöitä, joille ei ole tarkempaa alakoodia määritelty.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller allmänna miljöstörningar för vilka ingen närmare underkod har fastställts."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/melu/members/"
+  }, {
+    "id" : "1a637388-49b8-4553-b60e-95c11bd84d5e",
+    "codeValue" : "tarina",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/tarina",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tarina",
+    "status" : "VALID",
+    "order" : 12,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.893Z",
+    "modified" : "2023-12-01T05:55:12.875Z",
+    "statusModified" : "2023-04-12T08:45:12.893Z",
+    "prefLabel" : {
+      "en" : "Vibration",
+      "fi" : "Tärinä",
+      "sv" : "Vibration"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning vibration or risk of vibration, taking these into account and preparing for them.",
+      "fi" : "Koodin avulla luokitellaan tärinää tai sen riskiä ja näiden huomiointia ja näihin varautumista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller vibrationer eller risk för vibrationer samt beaktande av och förberedelse för dessa."
+    },
+    "broaderCode" : {
+      "id" : "15340e17-5768-429e-a3d3-d2f2d659c68c",
+      "codeValue" : "ymparistohairiot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistohairiot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot",
+      "status" : "VALID",
+      "order" : 10,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.882Z",
+      "modified" : "2023-12-01T05:55:12.858Z",
+      "statusModified" : "2023-04-12T08:45:12.882Z",
+      "prefLabel" : {
+        "en" : "Environmental disturbances",
+        "fi" : "Ympäristöhäiriöt",
+        "sv" : "Miljöstörningar"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning general environmental disturbances for which a more specific sub-code has not been defined.",
+        "fi" : "Koodilla luokitellaan tekstimuotoiset kaavamääräykset koskien yleisiä ympäristöhäiriöitä, joille ei ole tarkempaa alakoodia määritelty.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller allmänna miljöstörningar för vilka ingen närmare underkod har fastställts."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tarina/members/"
+  }, {
+    "id" : "8e4628f5-37c2-40fd-91a9-c45295e68d17",
+    "codeValue" : "tulva",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/tulva",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tulva",
+    "status" : "VALID",
+    "order" : 13,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.899Z",
+    "modified" : "2023-12-01T05:55:12.883Z",
+    "statusModified" : "2023-04-12T08:45:12.899Z",
+    "prefLabel" : {
+      "en" : "Flooding",
+      "fi" : "Tulva",
+      "sv" : "Översvämning"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning risk of flooding, taking it into account and preparing for it.",
+      "fi" : "Koodin avulla luokitellaan tulvavaaraa, sen huomiointia ja siihen varautumista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller risk för översvämning samt beaktande av och förberedelse för översvämning."
+    },
+    "broaderCode" : {
+      "id" : "15340e17-5768-429e-a3d3-d2f2d659c68c",
+      "codeValue" : "ymparistohairiot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistohairiot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot",
+      "status" : "VALID",
+      "order" : 10,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.882Z",
+      "modified" : "2023-12-01T05:55:12.858Z",
+      "statusModified" : "2023-04-12T08:45:12.882Z",
+      "prefLabel" : {
+        "en" : "Environmental disturbances",
+        "fi" : "Ympäristöhäiriöt",
+        "sv" : "Miljöstörningar"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning general environmental disturbances for which a more specific sub-code has not been defined.",
+        "fi" : "Koodilla luokitellaan tekstimuotoiset kaavamääräykset koskien yleisiä ympäristöhäiriöitä, joille ei ole tarkempaa alakoodia määritelty.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller allmänna miljöstörningar för vilka ingen närmare underkod har fastställts."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistohairiot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tulva/members/"
+  }, {
+    "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+    "codeValue" : "liikenne",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+    "status" : "VALID",
+    "order" : 14,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.904Z",
+    "modified" : "2023-12-01T05:55:12.891Z",
+    "statusModified" : "2023-04-12T08:45:12.904Z",
+    "prefLabel" : {
+      "en" : "Transportation",
+      "fi" : "Liikenne",
+      "sv" : "Trafik"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+      "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+  }, {
+    "id" : "a28cab3c-2a07-4609-b13c-61e3fdbf39fa",
+    "codeValue" : "pysakointi",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/pysakointi",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/pysakointi",
+    "status" : "VALID",
+    "order" : 15,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.910Z",
+    "modified" : "2023-12-01T05:55:12.900Z",
+    "statusModified" : "2023-04-12T08:45:12.910Z",
+    "prefLabel" : {
+      "en" : "Parking",
+      "fi" : "Pysäköinti",
+      "sv" : "Parkering"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning parking.",
+      "fi" : "Koodin avulla luokitellaan pysäköintiä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller parkering."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/pysakointi/members/"
+  }, {
+    "id" : "cee8fbdc-d49e-413c-97d5-931b75d99559",
+    "codeValue" : "henkiloautoilu",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/henkiloautoilu",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/henkiloautoilu",
+    "status" : "VALID",
+    "order" : 16,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.916Z",
+    "modified" : "2023-12-01T05:55:12.908Z",
+    "statusModified" : "2023-04-12T08:45:12.916Z",
+    "prefLabel" : {
+      "en" : "Passenger cars",
+      "fi" : "Henkilöautoilu",
+      "sv" : "Personbilstrafik"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning passenger cars.",
+      "fi" : "Koodin avulla luokitellaan henkilöautoilua koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller personbilstrafik."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/henkiloautoilu/members/"
+  }, {
+    "id" : "96d4b422-4649-43a1-bb1e-5130f56098dc",
+    "codeValue" : "joukkoliikenne",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/joukkoliikenne",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/joukkoliikenne",
+    "status" : "VALID",
+    "order" : 17,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.922Z",
+    "modified" : "2023-12-01T05:55:12.916Z",
+    "statusModified" : "2023-04-12T08:45:12.922Z",
+    "prefLabel" : {
+      "en" : "Public transport",
+      "fi" : "Joukkoliikenne",
+      "sv" : "Kollektivtrafik"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning public transport.",
+      "fi" : "Koodin avulla luokitellaan joukkoliikennettä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller kollektivtrafik."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/joukkoliikenne/members/"
+  }, {
+    "id" : "94481544-5660-4b2f-9b55-3e2b9639b617",
+    "codeValue" : "jalankulku",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/jalankulku",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/jalankulku",
+    "status" : "VALID",
+    "order" : 18,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.927Z",
+    "modified" : "2023-12-01T05:55:12.924Z",
+    "statusModified" : "2023-04-12T08:45:12.927Z",
+    "prefLabel" : {
+      "en" : "Walking",
+      "fi" : "Jalankulku",
+      "sv" : "Gångtrafik"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning walking.",
+      "fi" : "Koodin avulla luokitellaan jalankulkua koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller gångtrafik."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/jalankulku/members/"
+  }, {
+    "id" : "a90696f8-62f2-4002-9e82-85aeecfe7a51",
+    "codeValue" : "pyoraily",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/pyoraily",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/pyoraily",
+    "status" : "VALID",
+    "order" : 19,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.933Z",
+    "modified" : "2023-12-01T05:55:12.933Z",
+    "statusModified" : "2023-04-12T08:45:12.933Z",
+    "prefLabel" : {
+      "en" : "Cycling",
+      "fi" : "Pyöräily",
+      "sv" : "Cykling"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning cycling.",
+      "fi" : "Koodin avulla luokitellaan pyöräilyä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller cykeltrafik."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/pyoraily/members/"
+  }, {
+    "id" : "c84d212b-6b6d-4c01-af25-adfe3e0db550",
+    "codeValue" : "kevytLiikenne",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/kevytLiikenne",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kevytLiikenne",
+    "status" : "VALID",
+    "order" : 20,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.939Z",
+    "modified" : "2023-12-01T05:55:12.941Z",
+    "statusModified" : "2023-04-12T08:45:12.939Z",
+    "prefLabel" : {
+      "en" : "Walking and cycling",
+      "fi" : "Kevyt liikenne",
+      "sv" : "Lätt trafik"
+    },
+    "description" : {
+      "en" : "The code can be used to categorize textual plan regulations for walking and cycling as well as other traffic similar from the land use perspective (such as electric scooters).",
+      "fi" : "Koodilla voidaan luokitella sekä jalankulkua, pyöräilyä että muuta näihin maankäytön näkökulmasta rinnastuvaa liikennettä (esim. sähköpotkulaudat) koskevia tekstimuotoisia kaavamääräyksiä.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller såväl gångtrafik, cykeltrafik som annan trafik som är jämförbar till dessa ur synvinkeln markanvändning (till exempel elsparkcyklar)."
+    },
+    "broaderCode" : {
+      "id" : "8d0a078c-f266-4019-b0df-b073681f4277",
+      "codeValue" : "liikenne",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/liikenne",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne",
+      "status" : "VALID",
+      "order" : 14,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.904Z",
+      "modified" : "2023-12-01T05:55:12.891Z",
+      "statusModified" : "2023-04-12T08:45:12.904Z",
+      "prefLabel" : {
+        "en" : "Transportation",
+        "fi" : "Liikenne",
+        "sv" : "Trafik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning traffic.",
+        "fi" : "Koodin avulla luokitellaan liikennettä koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller trafik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/liikenne/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kevytLiikenne/members/"
+  }, {
+    "id" : "52b833b9-b079-47a3-9036-c76181d24c7c",
+    "codeValue" : "yhdyskuntatekniikka",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntatekniikka",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka",
+    "status" : "VALID",
+    "order" : 21,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.945Z",
+    "modified" : "2023-12-01T05:55:12.949Z",
+    "statusModified" : "2023-04-12T08:45:12.945Z",
+    "prefLabel" : {
+      "en" : "Civil engineering",
+      "fi" : "Yhdyskuntatekniikka",
+      "sv" : "Samhällsteknik"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning civil engineering.",
+      "fi" : "Koodin avulla luokitellaan yhdyskuntatekniikkaa koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller samhällsteknik."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka/members/"
+  }, {
+    "id" : "cc7f287a-ae68-4103-aa17-dba7377ac1ef",
+    "codeValue" : "hulevedet",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/hulevedet",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/hulevedet",
+    "status" : "VALID",
+    "order" : 22,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.951Z",
+    "modified" : "2023-12-01T05:55:12.958Z",
+    "statusModified" : "2023-04-12T08:45:12.951Z",
+    "prefLabel" : {
+      "en" : "Stormwater",
+      "fi" : "Hulevedet",
+      "sv" : "Dagvatten"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the management or treatment of stormwater.",
+      "fi" : "Koodin avulla luokitellaan hulevesien ohjaamista tai käsittelyä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller styrning eller hantering av dagvatten."
+    },
+    "broaderCode" : {
+      "id" : "52b833b9-b079-47a3-9036-c76181d24c7c",
+      "codeValue" : "yhdyskuntatekniikka",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntatekniikka",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka",
+      "status" : "VALID",
+      "order" : 21,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.945Z",
+      "modified" : "2023-12-01T05:55:12.949Z",
+      "statusModified" : "2023-04-12T08:45:12.945Z",
+      "prefLabel" : {
+        "en" : "Civil engineering",
+        "fi" : "Yhdyskuntatekniikka",
+        "sv" : "Samhällsteknik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning civil engineering.",
+        "fi" : "Koodin avulla luokitellaan yhdyskuntatekniikkaa koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller samhällsteknik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/hulevedet/members/"
+  }, {
+    "id" : "69f06d93-44dc-4010-af3a-a253318fe449",
+    "codeValue" : "jatehuolto",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/jatehuolto",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/jatehuolto",
+    "status" : "VALID",
+    "order" : 23,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.957Z",
+    "modified" : "2023-12-01T05:55:12.967Z",
+    "statusModified" : "2023-04-12T08:45:12.957Z",
+    "prefLabel" : {
+      "en" : "Waste management",
+      "fi" : "Jätehuolto",
+      "sv" : "Avfallshantering"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning waste management.",
+      "fi" : "Koodin avulla luokitellaan jätehuoltoa koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller avfallshantering."
+    },
+    "broaderCode" : {
+      "id" : "52b833b9-b079-47a3-9036-c76181d24c7c",
+      "codeValue" : "yhdyskuntatekniikka",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntatekniikka",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka",
+      "status" : "VALID",
+      "order" : 21,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.945Z",
+      "modified" : "2023-12-01T05:55:12.949Z",
+      "statusModified" : "2023-04-12T08:45:12.945Z",
+      "prefLabel" : {
+        "en" : "Civil engineering",
+        "fi" : "Yhdyskuntatekniikka",
+        "sv" : "Samhällsteknik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning civil engineering.",
+        "fi" : "Koodin avulla luokitellaan yhdyskuntatekniikkaa koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller samhällsteknik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/jatehuolto/members/"
+  }, {
+    "id" : "313f12f7-0d83-42a3-940d-834a6a841d13",
+    "codeValue" : "vesihuolto",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/vesihuolto",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/vesihuolto",
+    "status" : "VALID",
+    "order" : 24,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.963Z",
+    "modified" : "2023-12-01T05:55:12.975Z",
+    "statusModified" : "2023-04-12T08:45:12.963Z",
+    "prefLabel" : {
+      "en" : "Water supply",
+      "fi" : "Vesihuolto",
+      "sv" : "Vattenförsörjning"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning water supply.",
+      "fi" : "Koodin avulla luokitellaan vesihuoltoa koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller vattenförsörjning."
+    },
+    "broaderCode" : {
+      "id" : "52b833b9-b079-47a3-9036-c76181d24c7c",
+      "codeValue" : "yhdyskuntatekniikka",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntatekniikka",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka",
+      "status" : "VALID",
+      "order" : 21,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.945Z",
+      "modified" : "2023-12-01T05:55:12.949Z",
+      "statusModified" : "2023-04-12T08:45:12.945Z",
+      "prefLabel" : {
+        "en" : "Civil engineering",
+        "fi" : "Yhdyskuntatekniikka",
+        "sv" : "Samhällsteknik"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning civil engineering.",
+        "fi" : "Koodin avulla luokitellaan yhdyskuntatekniikkaa koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller samhällsteknik."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntatekniikka/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/vesihuolto/members/"
+  }, {
+    "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+    "codeValue" : "ymparistoarvot",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+    "status" : "VALID",
+    "order" : 25,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:12.969Z",
+    "modified" : "2023-12-01T05:55:12.983Z",
+    "statusModified" : "2023-04-12T08:45:12.969Z",
+    "prefLabel" : {
+      "en" : "Environmental values",
+      "fi" : "Ympäristöarvot",
+      "sv" : "Miljövärden"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+      "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+  }, {
+    "id" : "a7b79347-3a0e-42a1-9ea8-6db61ccd6156",
+    "codeValue" : "kulttuuriymparisto",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/kulttuuriymparisto",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kulttuuriymparisto",
+    "status" : "VALID",
+    "order" : 26,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.975Z",
+    "modified" : "2023-12-01T05:55:12.992Z",
+    "statusModified" : "2023-04-12T08:45:12.975Z",
+    "prefLabel" : {
+      "en" : "Cultural environment",
+      "fi" : "Kulttuuriympäristö",
+      "sv" : "Kulturmiljö"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the cultural environment.",
+      "fi" : "Koodin avulla luokitellaan kulttuuriympäristöä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller kulturmiljö."
+    },
+    "broaderCode" : {
+      "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+      "codeValue" : "ymparistoarvot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+      "status" : "VALID",
+      "order" : 25,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.969Z",
+      "modified" : "2023-12-01T05:55:12.983Z",
+      "statusModified" : "2023-04-12T08:45:12.969Z",
+      "prefLabel" : {
+        "en" : "Environmental values",
+        "fi" : "Ympäristöarvot",
+        "sv" : "Miljövärden"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+        "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kulttuuriymparisto/members/"
+  }, {
+    "id" : "e0aa83c8-a6ee-432b-9057-54d237bea7c2",
+    "codeValue" : "maisema",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/maisema",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maisema",
+    "status" : "VALID",
+    "order" : 27,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.981Z",
+    "modified" : "2023-12-01T05:55:13.000Z",
+    "statusModified" : "2023-04-12T08:45:12.981Z",
+    "prefLabel" : {
+      "en" : "Landscape",
+      "fi" : "Maisema",
+      "sv" : "Landskap"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning landscape values, landscape management and taking these into account.",
+      "fi" : "Koodin avulla luokitellaan maisema-arvoja, maisemien hoitoa ja näiden huomioimista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller landskapsvärden, landskapsskötsel och beaktande av dessa."
+    },
+    "broaderCode" : {
+      "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+      "codeValue" : "ymparistoarvot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+      "status" : "VALID",
+      "order" : 25,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.969Z",
+      "modified" : "2023-12-01T05:55:12.983Z",
+      "statusModified" : "2023-04-12T08:45:12.969Z",
+      "prefLabel" : {
+        "en" : "Environmental values",
+        "fi" : "Ympäristöarvot",
+        "sv" : "Miljövärden"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+        "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/maisema/members/"
+  }, {
+    "id" : "5132cda3-1d1c-4cbb-bac8-e6dcd331d140",
+    "codeValue" : "luontoarvot",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/luontoarvot",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/luontoarvot",
+    "status" : "VALID",
+    "order" : 28,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.987Z",
+    "modified" : "2023-12-01T05:55:13.008Z",
+    "statusModified" : "2023-04-12T08:45:12.987Z",
+    "prefLabel" : {
+      "en" : "Natural values",
+      "fi" : "Luontoarvot",
+      "sv" : "Naturvärden"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning natural values, their management and taking these into account.",
+      "fi" : "Koodin avulla luokitellaan luontoarvoja, luontoarvojen hoitoa ja näiden huomioimista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller naturvärden, skötsel av naturvärden och beaktande av dessa."
+    },
+    "broaderCode" : {
+      "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+      "codeValue" : "ymparistoarvot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+      "status" : "VALID",
+      "order" : 25,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.969Z",
+      "modified" : "2023-12-01T05:55:12.983Z",
+      "statusModified" : "2023-04-12T08:45:12.969Z",
+      "prefLabel" : {
+        "en" : "Environmental values",
+        "fi" : "Ympäristöarvot",
+        "sv" : "Miljövärden"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+        "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/luontoarvot/members/"
+  }, {
+    "id" : "ab15b8af-3cfb-4957-8223-ebe07f716fa3",
+    "codeValue" : "biodiversiteetti",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/biodiversiteetti",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/biodiversiteetti",
+    "status" : "VALID",
+    "order" : 29,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.993Z",
+    "modified" : "2023-12-01T05:55:13.017Z",
+    "statusModified" : "2023-04-12T08:45:12.993Z",
+    "prefLabel" : {
+      "en" : "Biodiversity",
+      "fi" : "Biodiversiteetti",
+      "sv" : "Biodiversitet"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning biodiversity, its management and taking these into account.",
+      "fi" : "Koodin avulla luokitellaan biodiversitettiä, biodiversiteetin hoitoa ja näiden huomioimista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller biodiversitet, skötsel av biodiversitet och beaktande av dessa."
+    },
+    "broaderCode" : {
+      "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+      "codeValue" : "ymparistoarvot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+      "status" : "VALID",
+      "order" : 25,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.969Z",
+      "modified" : "2023-12-01T05:55:12.983Z",
+      "statusModified" : "2023-04-12T08:45:12.969Z",
+      "prefLabel" : {
+        "en" : "Environmental values",
+        "fi" : "Ympäristöarvot",
+        "sv" : "Miljövärden"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+        "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/biodiversiteetti/members/"
+  }, {
+    "id" : "09c5a902-c58a-4da8-beee-329ae0d40de1",
+    "codeValue" : "ennallistaminen",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ennallistaminen",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ennallistaminen",
+    "status" : "VALID",
+    "order" : 30,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:12.998Z",
+    "modified" : "2023-12-01T05:55:13.025Z",
+    "statusModified" : "2023-04-12T08:45:12.998Z",
+    "prefLabel" : {
+      "en" : "Restoration",
+      "fi" : "Ennallistaminen",
+      "sv" : "Restaurering"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the restoration of nature.",
+      "fi" : "Koodin avulla luokitellaan luontoarvojen ennallistamista koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller återställande av naturvärden."
+    },
+    "broaderCode" : {
+      "id" : "bd514264-5760-43a2-887f-39b9663a5248",
+      "codeValue" : "ymparistoarvot",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ymparistoarvot",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot",
+      "status" : "VALID",
+      "order" : 25,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:12.969Z",
+      "modified" : "2023-12-01T05:55:12.983Z",
+      "statusModified" : "2023-04-12T08:45:12.969Z",
+      "prefLabel" : {
+        "en" : "Environmental values",
+        "fi" : "Ympäristöarvot",
+        "sv" : "Miljövärden"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning environmental values.",
+        "fi" : "Koodin avulla luokitellaan ympäristöarvoja koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller miljövärden."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ymparistoarvot/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ennallistaminen/members/"
+  }, {
+    "id" : "994ef770-35b7-4336-887f-12438f021bbf",
+    "codeValue" : "yhdyskuntarakenteenOhjaus",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntarakenteenOhjaus",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus",
+    "status" : "VALID",
+    "order" : 31,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.004Z",
+    "modified" : "2023-12-01T05:55:13.034Z",
+    "statusModified" : "2023-04-12T08:45:13.004Z",
+    "prefLabel" : {
+      "en" : "Control of community structure",
+      "fi" : "Yhdyskuntarakenteen ohjaus",
+      "sv" : "Styrning av samhällsstrukturen"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the control of community structure.",
+      "fi" : "Koodin avulla luokitellaan yhdyskuntarakenteen ohjausta koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller styrning av samhällsstrukturen."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus/members/"
+  }, {
+    "id" : "dfc202c2-4476-45a2-ae35-22f1b305304f",
+    "codeValue" : "kaupanOhjaus",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/kaupanOhjaus",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kaupanOhjaus",
+    "status" : "VALID",
+    "order" : 32,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:13.010Z",
+    "modified" : "2023-12-01T05:55:13.043Z",
+    "statusModified" : "2023-04-12T08:45:13.010Z",
+    "prefLabel" : {
+      "en" : "Control of trade",
+      "fi" : "Kaupan ohjaus",
+      "sv" : "Styrning av handel"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the control of retail trade. See especially chapter 9a of the Land Use and Building Act.",
+      "fi" : "Koodin avulla luokitellaan vähittäiskaupan ohjaamista koskevat tekstimuotoiset kaavamääräykset. Ks. etenkin MRL 9 a luku.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller styrning av detaljhandel. Se framför allt MBL kapitel 9 a."
+    },
+    "broaderCode" : {
+      "id" : "994ef770-35b7-4336-887f-12438f021bbf",
+      "codeValue" : "yhdyskuntarakenteenOhjaus",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntarakenteenOhjaus",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus",
+      "status" : "VALID",
+      "order" : 31,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:13.004Z",
+      "modified" : "2023-12-01T05:55:13.034Z",
+      "statusModified" : "2023-04-12T08:45:13.004Z",
+      "prefLabel" : {
+        "en" : "Control of community structure",
+        "fi" : "Yhdyskuntarakenteen ohjaus",
+        "sv" : "Styrning av samhällsstrukturen"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning the control of community structure.",
+        "fi" : "Koodin avulla luokitellaan yhdyskuntarakenteen ohjausta koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller styrning av samhällsstrukturen."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/kaupanOhjaus/members/"
+  }, {
+    "id" : "ca751461-f897-4afa-9666-927825b2bd76",
+    "codeValue" : "taydennysrakentaminen",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/taydennysrakentaminen",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/taydennysrakentaminen",
+    "status" : "VALID",
+    "order" : 33,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:13.016Z",
+    "modified" : "2023-12-01T05:55:13.052Z",
+    "statusModified" : "2023-04-12T08:45:13.016Z",
+    "prefLabel" : {
+      "en" : "Complementary building",
+      "fi" : "Täydennysrakentaminen",
+      "sv" : "Kompletteringsbyggande"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the construction method, which are connected to complementary building and its control.",
+      "fi" : "Koodilla luokitellaan rakentamistapaa koskevia tekstimuotoisia kaavamääräyksiä, jotka liittyvät täydennysrakentamiseen ja sen ohjaukseen.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller byggnadssättet och anknyter till kompletteringsbyggande och dess styrning."
+    },
+    "broaderCode" : {
+      "id" : "994ef770-35b7-4336-887f-12438f021bbf",
+      "codeValue" : "yhdyskuntarakenteenOhjaus",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/yhdyskuntarakenteenOhjaus",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus",
+      "status" : "VALID",
+      "order" : 31,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:13.004Z",
+      "modified" : "2023-12-01T05:55:13.034Z",
+      "statusModified" : "2023-04-12T08:45:13.004Z",
+      "prefLabel" : {
+        "en" : "Control of community structure",
+        "fi" : "Yhdyskuntarakenteen ohjaus",
+        "sv" : "Styrning av samhällsstrukturen"
+      },
+      "description" : {
+        "en" : "The code is used to categorize textual plan regulations concerning the control of community structure.",
+        "fi" : "Koodin avulla luokitellaan yhdyskuntarakenteen ohjausta koskevat tekstimuotoiset kaavamääräykset.",
+        "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller styrning av samhällsstrukturen."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/yhdyskuntarakenteenOhjaus/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/taydennysrakentaminen/members/"
+  }, {
+    "id" : "4391b686-2f0b-4933-90ef-1e4ed6ad2871",
+    "codeValue" : "virkistys",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/virkistys",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/virkistys",
+    "status" : "VALID",
+    "order" : 34,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.021Z",
+    "modified" : "2023-12-01T05:55:13.061Z",
+    "statusModified" : "2023-04-12T08:45:13.021Z",
+    "prefLabel" : {
+      "en" : "Recreation",
+      "fi" : "Virkistys",
+      "sv" : "Rekreation"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning recreation.",
+      "fi" : "Koodin avulla luokitellaan virkitystä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller rekreation."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/virkistys/members/"
+  }, {
+    "id" : "c6a5a8b7-db20-4b09-becd-0c6580cb130e",
+    "codeValue" : "esteettomyys",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/esteettomyys",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/esteettomyys",
+    "status" : "VALID",
+    "order" : 35,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.027Z",
+    "modified" : "2023-12-01T05:55:13.070Z",
+    "statusModified" : "2023-04-12T08:45:13.027Z",
+    "prefLabel" : {
+      "en" : "Accessibility",
+      "fi" : "Esteettömyys",
+      "sv" : "Tillgänglighet"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning accessibility.",
+      "fi" : "Koodin avulla annoitoidaan esteettömyyttä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller tillgänglighet."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/esteettomyys/members/"
+  }, {
+    "id" : "0d4fccd8-150f-4934-b26a-d4e2c4dd9271",
+    "codeValue" : "ilmastonmuutos",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/ilmastonmuutos",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ilmastonmuutos",
+    "status" : "VALID",
+    "order" : 36,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.033Z",
+    "modified" : "2023-12-01T05:55:13.078Z",
+    "statusModified" : "2023-04-12T08:45:13.033Z",
+    "prefLabel" : {
+      "en" : "Climate change",
+      "fi" : "Ilmastonmuutos",
+      "sv" : "Klimatförändringen"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning climate change mitigation and adaptation.",
+      "fi" : "Koodia käytetään annotoimaan sekä ilmastonmuutoksen hillintää että sopeutumista koskevia tekstimuotoisia kaavamääräyksiä.",
+      "sv" : "Koden används för att klassificeras planbestämmelser i textformat som gäller både dämpning av och anpassning till klimatförändringen."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/ilmastonmuutos/members/"
+  }, {
+    "id" : "55f7f6d7-6cff-49d6-b41c-536fadd39b3d",
+    "codeValue" : "rakennusoikeus",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakennusoikeus",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakennusoikeus",
+    "status" : "VALID",
+    "order" : 37,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.039Z",
+    "modified" : "2023-12-01T05:55:13.086Z",
+    "statusModified" : "2023-04-12T08:45:13.039Z",
+    "prefLabel" : {
+      "en" : "Permitted building volume",
+      "fi" : "Rakennusoikeus",
+      "sv" : "Byggrätt"
+    },
+    "description" : {
+      "en" : "The code is only used to categorize textual plan regulations relating to permitted building volume, which indicate things that cannot be described by the values of the plan regulation or additional information codes of the plan regulation.",
+      "fi" : "Koodilla luokitellaan vain sellaisia rakennusoikeuteen liittyviä tekstimuotoisia kaavamääräyksiä, joilla ilmaistaan asioita, mitä kaavamääräys tai -kaavamääräyksen lisätieto -koodistojen arvoilla ei voi kuvata.",
+      "sv" : "Med koden klassificeras endast sådana planbestämmelser i textformat som gäller byggrätten, med vilka man uttrycker sådant som inte kan beskrivas med värdena enligt kodsystemen för planbestämmelser eller tilläggsuppgifter till planbestämmelser."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakennusoikeus/members/"
+  }, {
+    "id" : "aa169c16-3f6b-4e5b-9c65-ce89e0731134",
+    "codeValue" : "lisarakennusoikeus",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/lisarakennusoikeus",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/lisarakennusoikeus",
+    "status" : "VALID",
+    "order" : 38,
+    "hierarchyLevel" : 2,
+    "created" : "2023-04-12T08:45:13.044Z",
+    "modified" : "2023-12-01T05:55:13.095Z",
+    "statusModified" : "2023-04-12T08:45:13.044Z",
+    "prefLabel" : {
+      "en" : "Extended permitted building volume",
+      "fi" : "Lisärakennusoikeus",
+      "sv" : "Tillbyggnadsrätt"
+    },
+    "description" : {
+      "en" : "The code is only used to categorize textual plan regulations relating to extended permitted building volume, which express things that cannot be described by the values of the code sets for plan regulation or additional information codes of the plan regulation.",
+      "fi" : "Koodilla luokitellaan vain sellaisia lisärakennusoikeuteen liittyviä tekstimuotoisia kaavamääräyksiä, joilla ilmaistaan asioita, mitä kaavamääräys tai -kaavamääräyksen lisätieto -koodistojen arvoilla ei voi kuvata.",
+      "sv" : "Med koden klassificeras endast sådana planbestämmelser i textformat som gäller tillbyggnadsrätten, med vilka man uttrycker sådant som inte kan beskrivas med värdena enligt kodsystemen för planbestämmelser eller tilläggsuppgifter till planbestämmelser."
+    },
+    "broaderCode" : {
+      "id" : "55f7f6d7-6cff-49d6-b41c-536fadd39b3d",
+      "codeValue" : "rakennusoikeus",
+      "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/rakennusoikeus",
+      "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakennusoikeus",
+      "status" : "VALID",
+      "order" : 37,
+      "hierarchyLevel" : 1,
+      "created" : "2023-04-12T08:45:13.039Z",
+      "modified" : "2023-12-01T05:55:13.086Z",
+      "statusModified" : "2023-04-12T08:45:13.039Z",
+      "prefLabel" : {
+        "en" : "Permitted building volume",
+        "fi" : "Rakennusoikeus",
+        "sv" : "Byggrätt"
+      },
+      "description" : {
+        "en" : "The code is only used to categorize textual plan regulations relating to permitted building volume, which indicate things that cannot be described by the values of the plan regulation or additional information codes of the plan regulation.",
+        "fi" : "Koodilla luokitellaan vain sellaisia rakennusoikeuteen liittyviä tekstimuotoisia kaavamääräyksiä, joilla ilmaistaan asioita, mitä kaavamääräys tai -kaavamääräyksen lisätieto -koodistojen arvoilla ei voi kuvata.",
+        "sv" : "Med koden klassificeras endast sådana planbestämmelser i textformat som gäller byggrätten, med vilka man uttrycker sådant som inte kan beskrivas med värdena enligt kodsystemen för planbestämmelser eller tilläggsuppgifter till planbestämmelser."
+      },
+      "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/rakennusoikeus/members/"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/lisarakennusoikeus/members/"
+  }, {
+    "id" : "b54ca6ad-bd69-48b0-9bfd-22c33a4f3249",
+    "codeValue" : "tontinKaytto",
+    "uri" : "http://uri.suomi.fi/codelist/rytj/RY_Sanallisen_Kaavamaarayksen_Laji/code/tontinKaytto",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tontinKaytto",
+    "status" : "VALID",
+    "order" : 39,
+    "hierarchyLevel" : 1,
+    "created" : "2023-04-12T08:45:13.050Z",
+    "modified" : "2023-12-01T05:55:13.103Z",
+    "statusModified" : "2023-04-12T08:45:13.050Z",
+    "prefLabel" : {
+      "en" : "Use of the plot",
+      "fi" : "Tontin käyttö",
+      "sv" : "Tomtanvändning"
+    },
+    "description" : {
+      "en" : "The code is used to categorize textual plan regulations concerning the use of the plot.",
+      "fi" : "Koodin avulla luokitellaan tontin käyttöä koskevat tekstimuotoiset kaavamääräykset.",
+      "sv" : "Med koden klassificeras planbestämmelser i textformat som gäller tomtanvändning."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/RY_Sanallisen_Kaavamaarayksen_Laji/codes/tontinKaytto/members/"
+  } ],
+  "prefLabel" : {
+    "en" : "Type of verbal plan regulation ",
+    "fi" : "Sanallisen kaavamääräyksen laji",
+    "sv" : "Slag av verbal planbestämmelse"
+  },
+  "definition" : {
+    "fi" : ""
+  },
+  "description" : {
+    "fi" : "Koodiston avulla määritellään kaavamääräyslajia \"sanallinen määräys\" kuvaava sanallisen määräyksen laji. Valtakunnallisen kaavatietomallin mukaan jokaiselle sanalliselle kaavamääräykselle tulee antaa vähintään yksi Sanallisen kaavamääräyksen laji -koodiston koodiarvo. Sanallisen kaavamääräyksen laji -koodiston koodiarvoilla voidaan luokitella sanalliset määräykset niiden tyypin mukaan tai niiden sisällön mukaan.",
+    "sv" : "Med hjälp av kodlistan definieras vilken slags verbal planbestämmelse det handlar om. Enligt den nationella plandatamodellen ska varje verbal planbestämmelse ges åtminstone ett kodvärde i kodlistan Slag av verbal planbestämmelse. Med kodvärdena i kodlistan Slag av verbal planbestämmelse kan man klassificera de verbala bestämmelserna enligt deras typ eller innehåll."
+  },
+  "changeNote" : {
+    "fi" : "24.6.2024\nLisätty kuvaus ruotsiksi.\n\n29.2.2024: Koodisto hyväksytty ympäristöministeriössä rakennetun ympäristön tiedon yhteentoimivuuden hallintamallin mukaisesti ja siirretty Voimassa oleva -tilaan."
+  },
+  "created" : "2023-04-12T08:45:12.803Z",
+  "modified" : "2024-06-25T06:19:45.376Z",
+  "contentModified" : "2023-12-01T05:55:13.248Z",
+  "statusModified" : "2024-02-29T11:19:52.255Z",
+  "status" : "VALID",
+  "version" : "1",
+  "infoDomains" : [ {
+    "id" : "b3e304bd-c4d7-4cbb-a8a8-3ed17265053b",
+    "codeValue" : "P2",
+    "uri" : "http://uri.suomi.fi/codelist/jupo/serviceclassification/code/P2",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P2",
+    "status" : "VALID",
+    "order" : 7,
+    "hierarchyLevel" : 1,
+    "created" : "2018-01-01T00:00:00.000Z",
+    "modified" : "2018-01-01T00:00:00.000Z",
+    "prefLabel" : {
+      "en" : "Built environment",
+      "fi" : "Rakennettu ympäristö",
+      "sv" : "Bebyggd miljö"
+    },
+    "description" : {
+      "fi" : "Tässä palveluluokassa käsitellään julkiseen ja asumiskäyttöön tarkoitettuja rakennuksia sekä yleensä kiinteistöihin ja niiden käyttöön liittyvää kunnallista infrastruktuuria ja sen palveluja."
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P2/members/"
+  } ],
+  "languageCodes" : [ {
+    "id" : "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
+    "codeValue" : "fi",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/fi",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi",
+    "status" : "VALID",
+    "order" : 1034,
+    "hierarchyLevel" : 1,
+    "created" : "2018-10-05T12:36:02.639Z",
+    "modified" : "2019-09-03T05:07:06.108Z",
+    "prefLabel" : {
+      "en" : "Finnish",
+      "fi" : "suomi",
+      "sv" : "finska"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/members/"
+  }, {
+    "id" : "1cc15c8d-256e-4235-b1cc-071e5b750a08",
+    "codeValue" : "en",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
+    "status" : "VALID",
+    "order" : 883,
+    "hierarchyLevel" : 1,
+    "created" : "2018-10-05T12:35:59.315Z",
+    "modified" : "2019-09-03T05:06:59.187Z",
+    "prefLabel" : {
+      "en" : "English",
+      "fi" : "englanti",
+      "sv" : "engelska"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/"
+  }, {
+    "id" : "931ea36d-b2e9-409b-bf86-87ff85708c75",
+    "codeValue" : "sv",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/sv",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv",
+    "status" : "VALID",
+    "order" : 1433,
+    "hierarchyLevel" : 1,
+    "created" : "2018-10-05T12:36:13.394Z",
+    "modified" : "2019-09-03T05:07:23.042Z",
+    "prefLabel" : {
+      "en" : "Swedish",
+      "fi" : "ruotsi",
+      "sv" : "svenska"
+    },
+    "membersUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/"
+  } ],
+  "organizations" : [ {
+    "id" : "85cd3d52-5b61-49be-ab18-c316bb5eb77f",
+    "url" : "http://www.ym.fi/",
+    "prefLabel" : {
+      "en" : "Ministry of the Environment",
+      "fi" : "Ympäristöministeriö",
+      "sv" : "Miljöministeriet"
+    },
+    "description" : {
+      "en" : "",
+      "fi" : "",
+      "sv" : ""
+    },
+    "removed" : false
+  } ],
+  "cumulative" : false,
+  "feedbackChannel" : {
+    "fi" : "yhteentoimivuus.ym@gov.fi"
+  },
+  "codeRegistry" : {
+    "id" : "62560f3a-08ca-413b-9fa5-ec1a2569f40b",
+    "codeValue" : "rytj",
+    "uri" : "http://uri.suomi.fi/codelist/rytj",
+    "url" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj",
+    "prefLabel" : {
+      "fi" : "Rakennetun ympäristön tietojärjestelmän koodistot"
+    },
+    "created" : "2020-08-24T10:15:06.993Z",
+    "modified" : "2020-08-24T10:26:44.895Z",
+    "codeSchemesUrl" : "https://koodistot.suomi.fi/codelist-api/api/v1/coderegistries/rytj/codeschemes/"
+  },
+  "totalNrOfSearchHitsCodes" : 0,
+  "totalNrOfSearchHitsExtensions" : 0
+}

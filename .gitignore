@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Editorit ja käyttöjärjestelmä
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Salaisuudet ja paikalliset asetukset
+.env
+*.key
+.claude/settings.local.json
+
+# Paikalliset muunnosprojektit ja tallennetut kielimallivastaukset kehityksen aikana
+*.kma.json
+!tests/**/*.kma.json
