@@ -302,6 +302,7 @@ class _Parser:
         self.geometry: str | None = None
         self.has_pages = any(line.startswith("@sivu") for line in self.raw_lines)
         self.in_legend = not self.has_pages
+        self.explicit_map = False
         self.header_lines: list[str] | None = None
 
     # -- classification -----------------------------------------------------------------
@@ -396,9 +397,11 @@ class _Parser:
         key, value = match.group(1).lower(), match.group(2)
         if key == "sivu":
             self.page = int(value) if value.isdigit() else None
-            self.in_legend = False
+            # Pages of a PDF extraction start with the page header; after @kartta the text is legend.
+            self.in_legend = self.explicit_map
             self.header_lines = None
         elif key == "kartta":
+            self.explicit_map = True
             self.map_id, self.map_title = value.split(" ", 1)[0], value
             self.maps.setdefault(value, self.map_id)
             self.section = None

@@ -69,7 +69,9 @@ def test_schema_rejects_wrong_data_type(kb, project):
 def test_synthetic_plan(project):
     proposals = [u.proposal for u in ryhti_json.exported_units(project)]
     plan = ryhti_json.synthetic_plan(proposals)
-    assert len(plan["planObjects"]) == len(plan["planRegulationGroups"]) == 3
+    assert (
+        len(plan["planObjects"]) == len(plan["planRegulationGroups"]) == 3
+    )  # C is the reservation, no carrier
     assert len(plan["generalRegulationGroups"]) == 1
     kinds = {o["geometry"]["geometry"]["type"] for o in plan["planObjects"]}
     assert kinds == {"Polygon", "LineString"}  # Rautatie is a line in annex 4

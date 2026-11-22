@@ -545,7 +545,7 @@ def letter_code_for(
 ) -> str | None:
     source = unit.letter_code
     katja = structure.letter_code if structure.annex_row else None
-    if not katja and not structure.annex_row and structure.method == "koodisto":
+    if not katja and not structure.annex_row and structure.method in ("koodisto", "saanto"):
         row = letter_code_by_signature(ctx, structure.regulations)
         if row:
             katja = row["kirjaintunnus"]

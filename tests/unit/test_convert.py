@@ -135,7 +135,7 @@ def test_policy_choices_are_stored(kb, policies):
     assert project.policy("L-06") == "katja"
     assert {c.id: c.source for c in project.policy_choices}["L-06"] == "kayttaja"
     c1 = by_heading(project)["TÄYDENTYVÄ KESKUSTA"].proposal
-    assert c1.letter_code == "c-1"  # not an annex row: source code kept
+    assert c1.letter_code == "cka"  # annex 4: keskustatoimintojen kehittämisvyöhyke (same code combination)
     assert project.meta.knowledge_version == kb.version
     assert project.meta.codelist_versions["RY_Kaavamaarayslaji"] == kb.index.version("RY_Kaavamaarayslaji")
 

@@ -1,0 +1,275 @@
+# Testiaineiston v1 odotetut tulokset: tests/golden/kartta1_otos.txt (30 yksikköä).
+#
+# TILA: VAHVISTAMATON. Kehittäjän luonnos 22.11.2026. Kaavoittajat eivät ole vielä
+# annotoineet aineistoa (suunnitelman luku 10.2), joten odotukset ovat kehittäjän tulkintoja
+# suunnitelman lukujen 6.10 ja 8 suositusten mukaan. Ne koskevat linjausten oletuksia
+# (knowledge/org/tampere/linjaukset.yaml v1, ADR-0010).
+#
+# Kentät:
+#   otsikko, tunnus   yksikön tunniste lähteessä (tunnus null = vain symboli)
+#   ryhmatyyppi       kaavakohde | yleismaarays | ei_maarays
+#   rakenne           muut kuin sanalliset määräykset: "laji(lisätieto,lisätieto=arvo)", lisätiedot
+#                     aakkosjärjestyksessä
+#   hyvaksyttavat     muut hyväksyttävät rakenteet (oikeita vastauksia voi olla useita)
+#   kirjaintunnus     odotettu tunnus (L-06 alkuperaiset; puuttuva liitteestä 4); null = ei tunnusta
+#                     tai ei odotusta
+#   sanallinen        onko ryhmässä sanallinen määräys (lähteen teksti)
+#   kysymykset        tulkintakysymykset, jotka on tunnistettava (avoimena tai linjauksella ratkaistuna)
+#   huomautus         kehittäjän perustelu
+
+tila: vahvistamaton
+laatija: kehittäjä (luonnos)
+paivays: 2026-11-22
+lahde: tests/golden/kartta1_otos.txt
+linjaukset: oletukset
+
+yksikot:
+  - otsikko: Yleiskaavan ohjausvaikutus, tuulivoimarakentaminen ja kaupan ohjaus
+    tunnus: null
+    ryhmatyyppi: yleismaarays
+    rakenne: []
+    sanallinen: true
+    kysymykset: [K3, K12]
+    huomautus: Suunnitelma 8.3. RA ja R -alueet (K3), MRL 72 § (K12, teksti säilyy).
+
+  - otsikko: Siniviherrakenne
+    tunnus: null
+    ryhmatyyppi: yleismaarays
+    rakenne: []
+    sanallinen: true
+    kysymykset: []
+
+  - otsikko: KESKUSTATOIMINTOJEN ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["keskustatoimintojenAlue(paakayttotarkoitus)"]
+    kirjaintunnus: C
+    sanallinen: true
+    kysymykset: [K10, K11, K14]
+    huomautus: Suunnitelma 8.1.
+
+  - otsikko: TÄYDENTYVÄ KESKUSTA
+    tunnus: c-1
+    ryhmatyyppi: kaavakohde
+    rakenne: ["kehittamisvyohyke(kayttotarkoituskohdistus=keskustatoimintojenAlue,osaAlue)"]
+    hyvaksyttavat:
+      - ["keskustatoimintojenAlue(eheytettavaTaiTiivistettava,paakayttotarkoitus)"]
+    kirjaintunnus: c-1
+    sanallinen: true
+    kysymykset: [K1, K4, K14]
+    huomautus: Suunnitelma 8.2 ja 7.2 (suositus osa-alue).
+
+  - otsikko: KESKUSTATOIMINTOJEN JA VIRKISTYKSEN SEKOITTUNUT ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["keskustatoimintojenAlue(paakayttotarkoitus)", "virkistysalue(paakayttotarkoitus)"]
+    sanallinen: true
+    kysymykset: [K2]
+    huomautus: Opas 3.3.2, määräysyhdistelmä (K2). Kirjaintunnus puuttuu lähteestä eikä ole liitteessä 4.
+
+  - otsikko: ASUMISEN ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asumisenAlue(paakayttotarkoitus)"]
+    kirjaintunnus: A
+    sanallinen: true
+    kysymykset: [K14]
+
+  - otsikko: ASUMISEN JA VIRKISTYKSEN SEKOITTUNUT ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asumisenAlue(paakayttotarkoitus)", "virkistysalue(paakayttotarkoitus)"]
+    sanallinen: true
+    kysymykset: [K2]
+
+  - otsikko: ALUE, JOLLE SAA SIJOITTAA SEUDULLISTA PALJON TILAA VAATIVAA KAUPPAA
+    tunnus: km
+    ryhmatyyppi: kaavakohde
+    rakenne: ["kehittamisvyohyke(kayttotarkoituskohdistus=vahittaiskaupanSuuryksikko,osaAlue)"]
+    hyvaksyttavat:
+      - ["vahittaiskaupanSuuryksikko(paakayttotarkoitus)"]
+    kirjaintunnus: km
+    sanallinen: true
+    kysymykset: [K1, K4]
+    huomautus: Pienaakkostunnus (K1). Lahdesjärvi, Lielahti ja Hankkio ovat paikkasidonnaisia arvoja (K4).
+
+  - otsikko: TYÖPAIKKOJEN JA ELINKEINOJEN ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["tyopaikkojenAlue(paakayttotarkoitus)"]
+    hyvaksyttavat:
+      - ["teollisuusalue(paakayttotarkoitus)", "varastoalue(paakayttotarkoitus)"]
+    sanallinen: true
+    kysymykset: [K5]
+
+  - otsikko: LOMA-ASUNTOALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["vapaaAjanAsumisenAlue(paakayttotarkoitus)"]
+    kirjaintunnus: RA
+    sanallinen: true
+    kysymykset: [K14]
+    huomautus: Loma-asunto = vapaa-ajan asuminen (liitteen 4 RA). Teksti viittaa 170 k-m², ei paikkasidonnainen.
+
+  - otsikko: YHTEISÖJEN LOMA-ASUNTOALUE
+    tunnus: R(200)
+    ryhmatyyppi: kaavakohde
+    rakenne: ["vapaaAjanAsumisenJaMatkailunAlue(paakayttotarkoitus)"]
+    kirjaintunnus: R(200)
+    sanallinen: true
+    kysymykset: [K5]
+    huomautus: Suluissa oleva luku on kohdekohtainen kerrosala (suure); lähin vakiomääräys R.
+
+  - otsikko: PUOLUSTUSVOIMIEN ALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["puolustusvoimienAlue(paakayttotarkoitus)"]
+    kirjaintunnus: EP
+    sanallinen: false
+    kysymykset: [K14]
+
+  - otsikko: LUONNONSUOJELUALUE TAI -KOHDE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["luonnonsuojelualue(paakayttotarkoitus)"]
+    hyvaksyttavat:
+      - ["luonnonsuojelualue(osaAlue)"]
+    kirjaintunnus: SL
+    sanallinen: true
+    kysymykset: []
+
+  - otsikko: VESIALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["vesialue(paakayttotarkoitus)"]
+    kirjaintunnus: W
+    sanallinen: false
+    kysymykset: [K14]
+
+  - otsikko: VAK -RATAPIHA
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["raideliikenteenAlue(paakayttotarkoitus)"]
+    hyvaksyttavat:
+      - ["vaaraAlue(osaAlue)"]
+    sanallinen: true
+    kysymykset: [K5]
+    huomautus: Suunnitelman K5-esimerkki.
+
+  - otsikko: SELVITYSALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["selvitysalue(osaAlue)"]
+    sanallinen: false
+    kysymykset: []
+
+  - otsikko: UUSI JÄTEVEDENPUHDISTAMO
+    tunnus: E-jv
+    ryhmatyyppi: kaavakohde
+    rakenne: ["yhdyskuntateknisenHuollonAlue(paakayttotarkoitus,uusi)"]
+    kirjaintunnus: E-jv
+    sanallinen: false
+    kysymykset: [K5]
+
+  - otsikko: KAUPUNKISTRATEGIAN KASVUN JA ELINVOIMAN VYÖHYKE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["kehittamisvyohyke(osaAlue)"]
+    sanallinen: true
+    kysymykset: [K5]
+    huomautus: Suunnitelman K5-esimerkki.
+
+  - otsikko: KAUPUNKIVIHREÄN KEHITTÄMISALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["kehittamisalue(osaAlue)"]
+    hyvaksyttavat:
+      - ["kehittamisvyohyke(osaAlue)"]
+    sanallinen: true
+    kysymykset: [K1]
+    huomautus: Suunnitelman K1-esimerkki.
+
+  - otsikko: OHJEELLINEN UUSI LEIRINTÄALUE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["leirintaAlue(ohjeellinenSijainti,paakayttotarkoitus,uusi)"]
+    kirjaintunnus: RL
+    sanallinen: true
+    kysymykset: [K7, K14]
+
+  - otsikko: VALTAKUNNALLINEN PÄÄVÄYLÄ
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["valtatie(valtakunnallinen)"]
+    hyvaksyttavat:
+      - ["tie(valtakunnallinen)"]
+    sanallinen: false
+    kysymykset: [K5]
+
+  - otsikko: KEHITETTÄVÄ PÄÄKOKOOJAKATU
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["paakatu(kehitettava)"]
+    hyvaksyttavat:
+      - ["kokoojakatu(kehitettava)"]
+    sanallinen: true
+    kysymykset: [K5]
+
+  - otsikko: LIIKENTEEN YHTEYSTARVE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["liikennealue(yhteystarve)"]
+    sanallinen: false
+    kysymykset: []
+
+  - otsikko: RAUTATIE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["raideliikenteenAlue()"]
+    sanallinen: false
+    kysymykset: []
+
+  - otsikko: KEHITETTÄVÄ RAUTATIE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["raideliikenteenAlue(kehitettava)"]
+    sanallinen: true
+    kysymykset: []
+
+  - otsikko: UUSI ERITASOLIITTYMÄ
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["eritasoliittyma(uusi)"]
+    sanallinen: false
+    kysymykset: []
+
+  - otsikko: OHJEELLINEN RAITIOTIE
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["raitiotie(ohjeellinenSijainti)"]
+    kirjaintunnus: rt
+    sanallinen: false
+    kysymykset: [K14]
+
+  - otsikko: VAIHTOPYSÄKKI
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["pysakki()"]
+    sanallinen: true
+    kysymykset: [K8]
+    huomautus: Suunnitelman K8-esimerkki (piste tai alue).
+
+  - otsikko: TUTKITTAVA OHJEELLINEN LÄHIJUNA-ASEMA
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["raideliikenteenAsemaTaiSeisake(ohjeellinenSijainti,vaihtoehtoinen)"]
+    sanallinen: true
+    kysymykset: [K7]
+    huomautus: Suunnitelman K7-esimerkki (TUTKITTAVA OHJEELLINEN).
+
+  - otsikko: YLEISKAAVA-ALUEEN RAJA
+    tunnus: null
+    ryhmatyyppi: ei_maarays
+    rakenne: []
+    sanallinen: false
+    kysymykset: [K6]

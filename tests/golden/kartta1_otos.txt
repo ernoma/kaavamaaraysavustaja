@@ -1,0 +1,224 @@
+# Kaavamääräysavustajan testiaineisto v1: 30 yksikköä Tampereen koosteesta
+# 'Kantakaupungissa voimassa olevat yleiskaavamerkinnät' (1.9.2025), Kartta 1 - Yhdyskuntarakenne,
+# sivut 3–4. Rivit ovat PDF-poiminnan (tools/extract_pdf_text.py, pypdf) mukaisia, myös tavutus
+# ja rivien lopun välilyönnit. Väliotsikot ja sivun otsikot on korvattu ohjeriveillä (ADR-0009).
+# Määräystekstit ovat viranomaispäätöksiä; ote on lyhyt testiaineisto, ei koko koostetta.
+@kartta Kartta 1 - Yhdyskuntarakenne
+@lahdekaavat Kantakaupungin vaiheyleiskaava - valtuustokausi 2021–2025 ja Keskustan strategisen osayleiskaavan vaiheittainen muutos|8.7.2025; Kantakaupungin vaiheyleiskaava - valtuustokausi 2017–2021|9.6.2023; Kantakaupungin yleiskaava 2040|20.1.2020
+@sivu 3
+YLEISMÄÄRÄYS
+Yleiskaavan ohjausvaikutus, tuulivoimarakentaminen 
+ja kaupan ohjaus
+Yleiskaavan käyttötarkoitusalueilla voidaan sallia käyt -
+tötarkoituksesta poikkeavaa rakentamista, mikäli siitä 
+ei aiheudu haittaa alueen pääasialliselle käyttötarkoi -
+tukselle. Asemakaavoitusta ja muuta alueidenkäytön 
+suunnittelua ohjataan yleiskaavan kartoilla 1-5.
+Yleiskaavan RA ja R -alueilla yleiskaavaa voidaan käyt -
+tää MRL 72 §:n mukaisesti rakentamisen ohjaamiseen. 
+Muilla alueilla rakentaminen edellyttää pääsääntöisesti 
+asemakaavaa.
+Rakennettaessa yli 50 metriä korkeita tuulivoimaloita 
+tulee pyytää erillinen lausunto Puolustusvoimilta.
+Seudullisen vähittäiskaupan suuryksiköiden alarajat 
+ovat paljon tilaa vaativan kaupan osalta 15 000 k-m², 
+keskustahakuisen vähittäiskaupan osalta 10 000 k-m² 
+ja päivittäistavarakaupan osalta 5 000 k-m².
+Keskustatoimintojen alueiden ja km-alueiden ulkopuo-
+lelle ei saa sijoittaa yli 4 000 k-m² suuruisia vähittäis -
+kaupan suuryksiköitä ja myymäläkeskittymiä.
+YLEISMÄÄRÄYS
+Siniviherrakenne
+Yhtenäinen siniviherrakenne on turvattava ja lisättävä 
+siniviherrakenteen luonnon monimuotoisuutta. 
+Asemakaavoitettujen puistojen ja virkistysalueiden 
+määrän säilyminen ja hyvä saavutettavuus tulee tur-
+vata. Suunnittelussa tulee varmistaa alueiden kytkey -
+tyminen keskuspuistoverkostoon sekä säilyminen lähi-
+virkistykseen soveltuvina, ääniympäristöltään miellyt-
+tävinä ja luonnon monimuotoisuutta tukevina ja lisää -
+vinä alueina.
+Asemakaavoitettujen puistojen ja virkistysalueiden 
+laatua tulee kehittää. Nykyisillä toimitila-alueilla, jotka 
+muuttuvat asumisen ja keskustatoimintojen alueiksi, 
+viheralueiden määrää tulee lisätä. 
+Olemassa olevat katu-, kortteli- ja puistopuut on lähtö-
+kohtaisesti säilytettävä ja puiden määrää on pyrittävä 
+lisäämään.
+@osio MAANKÄYTTÖ
+KESKUSTATOIMINTOJEN ALUE
+Alue varataan julkisille ja yksityisille palveluille, työpaik-
+katoiminnoille ja keskustaympäristöön soveltuvalle
+asumiselle sekä monipuolisesti virkistyksen, vapaa-
+ajan ja kaupunkikulttuurin toiminnoille. Alueen täyden-
+nysrakentamisen tulee edistää toimintojen monipuo-
+lisuutta sekä kestävän ja omaleimaisen kaupunkiym -
+päristön muodostumista. Rakennusten julkiseen kau -
+ 
+punkitilaan avautuvat maantasokerrosten tilat on osoi-
+tettava pääsääntöisesti liike- ja toimitiloiksi. Suuryksik-
+köjen tulee tukeutua joukkoliikenteen runkolinjastoon 
+ja niiden maantasokerrosten tulee avautua katutilaan. 
+Ydinkeskustan osalta ei seudullista vähittäiskauppaa 
+ole mitoitettu. Tonteilla maantasoa ei pääsääntöisesti 
+voida osoittaa pysäköintiin ja liikennealueiksi. Keskus -
+ta-alueiden liikenneympäristöjä tulee kehittää kävelyn 
+ja pyöräilyn sekä joukkoliikenteen toimintaedellytysten 
+ehdoilla. Alueilta tulee varata riittävästi tilaa julkiselle 
+kaupunkitilalle sekä parannettava alueen yhteyksiä 
+ulkopuolisille virkistysalueille. Alueen suunnittelussa 
+tulee kiinnittää huomiota kulttuuriympäristön arvoihin.
+c-1 TÄYDENTYVÄ KESKUSTA
+Aluetta kehitetään täydennettävänä keskustatoiminto -
+jen alueena. Täydentämisen tulee edistää toimintojen 
+monipuolisuutta ja keskustojen elinvoimaisuutta. Kauka-
+järven keskusta-alueelle ei saa sijoittaa seudullisia vähit -
+täiskaupan suuryksiköitä. Vähittäiskaupan kerrosalan 
+enimmäismitoitus Kalevassa on  70 000 k-m².
+KESKUSTATOIMINTOJEN JA VIRKISTYKSEN 
+ SEKOITTUNUT ALUE
+Aluetta kehitetään hyvään joukkoliikenteen palveluta -
+soon tukeutuvana monipuolisena asumisen, työpaik -
+kojen, palvelujen ja virkistyksen vyöhykkeenä. Ranta -
+täyttöjen materiaalin tulee olla ympäristökelpoisuu -
+deltaan alueelle ja maankäyttöön soveltuvaa. Raken -
+taminen ei saa vaarantaa Epilänharju-Villilä pohjave -
+sialueella pohjaveden laatua, aiheuttaa pohjaveden 
+tilaan heikentäviä muutoksia eikä heikentää vedenot -
+tamoiden toimintaedellytyksiä.  
+ASUMISEN ALUE
+Alue varataan pääosin asumiselle sekä sitä palveleville 
+toiminnoille, mm. virkistys- ja suojaviheralueille, lähi -
+palveluille sekä nykyiselle ja uudelle ympäristöhäiriötä 
+aiheuttamattomalle elinkeinotoiminnalle. Alueelle 
+sijoittuvien yksityisten rakentamishankkeiden yhtey -
+dessä varaudutaan tarvittaessa julkisten palvelujen 
+tarvitsemiin tilavarauksiin. Alueen suunnittelussa tulee 
+kiinnittää huomiota kulttuuriympäristön arvoihin.
+ASUMISEN JA VIRKISTYKSEN SEKOITTUNUT 
+ALUE
+Aluetta kehitetään nykyisen virkistyskäytön ja/tai 
+alueen ekologisten yhteyksien lähtökohdista. Alueelle 
+on mahdollista osoittaa täydentävää asuntorakenta -
+mista nykyisten toimintojen väistyttyä ja varmistamalla 
+alueen soveltuminen rakentamiseen.
+ km ALUE, JOLLE SAA SIJOITTAA SEUDULLISTA 
+PALJON TILAA VAATIVAA KAUPPAA
+Alueelle voidaan sijoittaa seudullisesti merkittävää pal-
+jon tilaa vaativan vähittäiskaupan kerrosalaa enimmäis-
+määrältään seuraavasti: Lahdesjärvi 150 000 k-m², Lie-
+lahti 100 000 k-m², Hankkio 40 000 k-m². Alueelta tulee 
+olla sujuvat ajoneuvoyhteydet seudullisille pääväylille.
+TYÖPAIKKOJEN JA ELINKEINOJEN ALUE
+Alue varataan teollisuus- ja tuotantotoiminnoille sekä 
+logistisille toiminnoille ja palveluille. Alueita kehitetään 
+tehokkaina ja hyvin saavutettavina tuotantotoimin -
+nan alueina. Alueille ei tule sijoittaa sellaisia toimintoja, 
+jotka häiriintyvät raskaasta liikenteestä, melusta, täri-
+nästä ja päästöistä. Soveltuvilla osilla sallitaan lumen -
+vastaanotto- ja maanvastaanottotoiminta. Alueiden 
+yhteyksiä seudullisille ja valtakunnallisille pääväylille 
+parannetaan kehittämällä logistiikan ja tavaraliiken -
+teen sujuvuutta.
+LOMA-ASUNTOALUE
+Alue varataan olemassa olevalle loma-asutukselle. 
+Lomarakennuspaikalle saa sijoittaa loma-asunto -
+käyttöön tarkoitettua rakentamista olemassa olevan 
+rakennetun rakennuspaikan pinta-alasta 10 prosent -
+tia kuitenkin enintään 170 k-m2. Alueella olevat raken-
+nukset voidaan säilyttää. Rakennusten perusparanta -
+minen, korjaaminen ja vähäinen laajentaminen sekä 
+tuhoutuneen rakennuksen uudelleen rakentaminen 
+ovat sallittuja. Alueilla ei saa muodostaa uusia raken -
+nuspaikkoja. 
+R(200) YHTEISÖJEN LOMA-ASUNTOALUE
+Rakennuspaikalle saa sijoittaa yhteisöjen käyttöön 
+tarkoitettua lomarakentamista. Suluissa oleva luku 
+ilmoittaa alueen rakennusoikeuden kerrosalaneliö -
+metreissä. Alueella olevat rakennukset voidaan säilyt -
+tää. Rakennusten perusparantaminen, korjaaminen ja 
+vähäinen laajentaminen sekä tuhoutuneen rakennuk -
+sen uudelleen rakentaminen ovat sallittuja. Alueilla ei 
+saa muodostaa uusia rakennuspaikkoja.
+PUOLUSTUSVOIMIEN ALUE
+LUONNONSUOJELUALUE TAI -KOHDE
+Alueella sijaitsee luonnonsuojelulain tarkoitta-
+mia suojeluarvoja. Alueen suunnittelussa on varmis -
+tettava, että suojeluarvot eivät vaarannu tai heikenny. 
+Luonnonsuojelualueen tarkempi rajaus ja suojelun 
+perusteet määritellään luonnonsuojelulain mukaisella 
+rajaus- tai perustamispäätöksellä.
+VESIALUE
+VAK -RATAPIHA
+Järjestelyratapihan alueella tehtävistä vaarallisten 
+aineiden kuljetusten järjestelytoiminnoista aiheutuu 
+suur onnettomuusriski lähialueelle. Yksityiskohtai -
+nen riskiselvitys tai riskinhallintatoimenpiteet tulee 
+arvioida ratapihan ja sen lähialueen yksityiskoh -
+taisen suunnittelun yhteydessä. Alueen maankäy -
+tön muutos on mahdollinen sen jälkeen kun suur -
+onnettomuusriskin aiheuttavat toiminnot poistuvat 
+alueelta.
+SELVITYSALUE
+E-jv UUSI JÄTEVEDENPUHDISTAMO
+@sivu 4
+@osio STRATEGISET KEHITTÄMISPERIAATEMERKINNÄT
+KAUPUNKISTRATEGIAN KASVUN JA 
+ ELINVOIMAN VYÖHYKE
+Vyöhyke koostuu kantakaupungin tehokkaimmin 
+rakennetusta asioinnin ja työssäkäynnin sekä kaupun-
+kiasumisen alueista yhdistäen Tampereen ydinkeskus-
+tan ja aluekeskukset toimivaksi osaksi kaupunkiseu -
+dun yhdyskuntarakennetta. Hiilineutraalisuutta ja kes-
+tävää liikkumista koskevien tavoitteiden saavuttami -
+seksi vyöhykkeelle tulee ohjelmoida merkittävä osuus 
+kaupungin kasvua toteuttavasta asunto- ja toimitilara -
+kentamisesta sekä kestävien kulkumuotojen kehittä -
+mistoimenpiteistä.
+Joukkoliikennepysäkkien lähikortteleita kehitetään vai -
+kutusalueensa lähipalvelujen kävellen saavutettavina 
+keskittyminä. Vyöhykkeelle sijoittuvan täydentävän 
+asuntotuotannon tulee olla monipuolista ja suunnitte-
+lussa varmistaa asukkaiden riittävät lähivirkistysalueet 
+ja virkistyspalvelut. Rakentaminen sovitetaan ympäris-
+töönsä siten, että luonnonympäristön, viherympäris-
+tön ja kulttuuriympäristön arvot säilyvät.
+KAUPUNKIVIHREÄN KEHITTÄMISALUE
+Puuston latvuspeitteisyyden ja kerroksellisen kasvil -
+lisuuden määrää on lisättävä ja viherpeitteisen vettä 
+läpäisevän maanpinnan määrää on pyrittävä lisää-
+mään nykytilanteeseen verrattuna rakennetuilla ton -
+teilla ja yleisillä alueilla. Olemassa olevilla kansiraken -
+teilla viherpeitteisyys voi toteutua kannelle istutetta -
+vana kasvillisuutena. Tampereen yliopistollisen keskus-
+sairaalan alueella ratkaisut tulee toteuttaa pääkäyttö -
+tarkoituksen edellyttämillä reunaehdoilla.
+ OHJEELLINEN UUSI LEIRINTÄALUE
+Leirintäalueen sijoittumisen edellytykset ja yhteenso -
+vittaminen luontoarvojen, arkeologiseen kulttuuripe -
+rintöön liittyvien arvojen ja muiden tarpeiden kanssa 
+tulee tutkia tarkemman suunnittelun yhteydessä. Alue 
+on tarkoitettu asemakaavoitettavaksi. 
+@osio LIIKENNEJÄRJESTELMÄ
+ VALTAKUNNALLINEN PÄÄVÄYLÄ
+KEHITETTÄVÄ PÄÄKOKOOJAKATU
+Väylää kehitetään osana eheytyvää kaupunkiraken -
+netta.
+LIIKENTEEN YHTEYSTARVE
+RAUTATIE
+  KEHITETTÄVÄ RAUTATIE
+Rautatiealueeseen rajautuvissa maankäyttöhank -
+keissa tulee huomioida tunnistettujen lisäraidetarpei-
+den aiheuttamat tilavaraukset.
+UUSI ERITASOLIITTYMÄ
+ OHJEELLINEN RAITIOTIE
+VAIHTOPYSÄKKI 
+Tärkeä joukkoliikenteen vaihtopysäkki, jonka suunnit -
+telussa varataan riittävät tilavaraukset pyöräpysäköin -
+nille ja sujuville vaihdoille. 
+TUTKITTAVA OHJEELLINEN LÄHIJUNA-ASEMA 
+Lähijunaliikenteen asema, jonka ratatekninen, liiken -
+teellinen ja taloudellinen toteuttamiskelpoisuus tulee 
+tutkia osana seudullista lähijunajärjestelmää.
+    YLEISKAAVA-ALUEEN RAJA
+KARTTA 2 - VIHERYMPÄRISTÖ JA VAPAA-AJAN PALVELUT

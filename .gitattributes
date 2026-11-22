@@ -9,3 +9,7 @@ tests/data/** -text
 *.yml text eol=lf
 *.toml text eol=lf
 *.txt text eol=lf
+
+# Testiaineiston rivit ovat PDF-poiminnan mukaisia (rivien lopun välilyönnit ja rivinvaihdot merkitsevät)
+tests/golden/*.txt -text
+
