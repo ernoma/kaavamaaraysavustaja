@@ -9,7 +9,9 @@ import pytest
 
 PACKAGE = Path(__file__).resolve().parents[2] / "kaavamaaraysavustaja"
 QGIS_FREE = ["core", "knowledge", "exporters", "validation"]
-FORBIDDEN_ANYWHERE = {"qgis", "PyQt5", "PyQt6", "sip", "openpyxl"}
+# PDF libraries are development tools only (tools/extract_pdf_text.py, ADR-0009).
+PDF_LIBRARIES = {"pypdf", "PyPDF2", "fitz", "pymupdf", "pdfminer", "pdfplumber"}
+FORBIDDEN_ANYWHERE = {"qgis", "PyQt5", "PyQt6", "sip", "openpyxl"} | PDF_LIBRARIES
 LAZY_ONLY = {"anthropic", "mistralai"}
 
 

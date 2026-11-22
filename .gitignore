@@ -25,3 +25,7 @@ Thumbs.db
 *.kma.json
 !tests/**/*.kma.json
 lahtoaineistot/*.pdf
+
+# Paikallinen työkansio (PDF:stä poimitut tekstit, muunnostulokset)
+work/
+

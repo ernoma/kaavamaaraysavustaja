@@ -13,3 +13,4 @@ Lyhyet päätöskirjaukset: tausta, päätös, seuraukset. Tila: *ehdotettu*, *h
 | [0006](0006-liitteen-4-korjaukset-erillisessa-tiedostossa.md) | Liitteen 4 korjaukset erillisessä tiedostossa | hyväksytty |
 | [0007](0007-voimassa-olevat-maaraykset-uusien-kaavojen-pohjaksi.md) | Voimassa olevat määräykset uusien kaavojen pohjaksi, ei VOOKA-toimitusta Ryhtiin | hyväksytty |
 | [0008](0008-linjaukset-kayttajan-valintoina-lukittavissa.md) | Linjaukset käyttäjän valintoina, jotka voidaan lukita | hyväksytty |
+| [0009](0009-syotteen-muoto-ja-normalisointi.md) | Syötteen muoto: tekstitiedosto, ohjerivit ja normalisoinnin erolista | hyväksytty |

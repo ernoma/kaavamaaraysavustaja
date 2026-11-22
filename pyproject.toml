@@ -15,8 +15,8 @@ dependencies = ["PyYAML>=6"]
 [project.optional-dependencies]
 # Kielimalliadapterit: valinnaisia, ydin toimii ilman niitä (sääntöpohjainen tila).
 llm = ["anthropic>=2.12", "mistralai>=1.0"]
-# Kehitys: testit, lint ja tietopaketin rakentaja (openpyxl vain tools/-skripteille).
-dev = ["pytest>=8", "ruff>=0.6", "openpyxl>=3.1", "jsonschema>=4.18"]
+# Kehitys: testit, lint, tietopaketin rakentaja ja PDF-poiminta (openpyxl ja pypdf vain tools/-skripteille).
+dev = ["pytest>=8", "ruff>=0.6", "openpyxl>=3.1", "jsonschema>=4.18", "pypdf>=5"]
 
 [tool.setuptools.packages.find]
 include = ["kaavamaaraysavustaja*"]
@@ -43,6 +43,10 @@ ignore = ["E501"]  # rivipituuden hoitaa ruff format
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 # Arkkitehtuurisääntö A1 tarkistetaan myös testillä tests/unit/test_architecture.py.
 "openpyxl".msg = "openpyxl on vain kehitysriippuvuus (tools/)."
+"pypdf".msg = "PDF-kirjastot ovat vain kehitystyökaluja (tools/extract_pdf_text.py, ADR-0009)."
+"fitz".msg = "PDF-kirjastot ovat vain kehitystyökaluja (ADR-0009); PyMuPDF (AGPL) ei ole GPL-2.0-yhteensopiva."
+"pymupdf".msg = "PDF-kirjastot ovat vain kehitystyökaluja (ADR-0009); PyMuPDF (AGPL) ei ole GPL-2.0-yhteensopiva."
+"pdfminer".msg = "PDF-kirjastot ovat vain kehitystyökaluja (ADR-0009)."
 
 [tool.ruff.lint.per-file-ignores]
 "tools/**" = ["TID251"]

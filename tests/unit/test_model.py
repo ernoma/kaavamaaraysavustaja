@@ -34,7 +34,9 @@ def sample_project() -> ConversionProject:
                 key="r-1",
                 type=CodeRef(URI + "RY_Kaavamaarayslaji/code/kehittamisvyohyke", "2025-10-07"),
                 additional_infos=[
-                    AdditionalInfo(CodeRef(URI + "RY_Kaavamaarayksen_Lisatiedonlaji/code/osaAlue", "2026-01-12")),
+                    AdditionalInfo(
+                        CodeRef(URI + "RY_Kaavamaarayksen_Lisatiedonlaji/code/osaAlue", "2026-01-12")
+                    ),
                     AdditionalInfo(
                         CodeRef(URI + "RY_Kaavamaarayksen_Lisatiedonlaji/code/kayttotarkoituskohdistus"),
                         Value("Code", code=CodeRef(URI + "RY_Kaavamaarayslaji/code/keskustatoimintojenAlue")),

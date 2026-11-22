@@ -27,7 +27,16 @@ UNIT_KINDS = ("merkinta", "yleismaarays")
 GROUP_KINDS = ("kaavakohde", "yleismaarays", "ei_maarays")
 GEOMETRIES = ("alue", "viiva", "piste")
 CONFIDENCE = ("korkea", "keskitaso", "matala")
-METHODS = ("vakioluettelo", "linjaus", "hyvaksytty", "sanasto", "koodisto", "saanto", "kielimalli", "kayttaja")
+METHODS = (
+    "vakioluettelo",
+    "linjaus",
+    "hyvaksytty",
+    "sanasto",
+    "koodisto",
+    "saanto",
+    "kielimalli",
+    "kayttaja",
+)
 STATUSES = ("ehdotus", "muokattu", "hyvaksytty", "hylatty")
 SEVERITIES = ("virhe", "varoitus", "huomio")
 
@@ -177,6 +186,7 @@ class NormalizationChange:
     line: int | None = None  # 1-based line in the input file
     note: str = ""
     needs_confirmation: bool = False
+    part: str = "teksti"  # teksti | otsikko | tunnus
 
 
 @dataclass
@@ -299,7 +309,9 @@ class ConversionProject:
     def from_dict(cls, data: dict[str, Any]) -> ConversionProject:
         version = data.get("format_version", FORMAT_VERSION)
         if version > FORMAT_VERSION:
-            raise ValueError(f"Muunnosprojektin muoto {version} on uudempi kuin tämä versio tukee ({FORMAT_VERSION})")
+            raise ValueError(
+                f"Muunnosprojektin muoto {version} on uudempi kuin tämä versio tukee ({FORMAT_VERSION})"
+            )
         return _from_plain(cls, data)
 
     def to_json(self) -> str:
