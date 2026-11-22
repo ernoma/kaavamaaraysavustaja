@@ -145,9 +145,15 @@ python -m venv .venv
 | Tietopohja ajan tasalla? (CI) | `.\.venv\Scripts\python tools\build_knowledge.py --check` |
 | Claude-piikki (kuiva / live) | `.\.venv\Scripts\python tools\spike_claude.py [--live]` |
 | Syken validointitesti | `.\.venv\Scripts\python tools\syke_validate.py` |
+| PDF:n tekstinpoiminta (paikallinen, `work/`) | `.\.venv\Scripts\python tools\extract_pdf_text.py <pdf> --out work\kooste.txt` |
+| Muunnos (sääntöpohjainen) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 [--linjaus L-03=kappaleittain] [--asetukset valinnat.yaml]` |
+| Tarkistus (säännöt, skeema, Syke) | `.\.venv\Scripts\kma validate <projekti>.kma.json [--syke]` |
+| Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot]` |
+| Verkkotestit (avain tarvitaan) | `.\.venv\Scripts\python -m pytest -m live` |
 
 CI (`.github/workflows/ci.yml`) ajaa ruffin, tietopohjan `--check`-tarkistuksen ja pytestin
-ilman QGISia ja ilman verkkoa.
+ilman QGISia ja ilman verkkoa. `@pytest.mark.live`-testit eivät aja oletuksena. Paikalliset työtiedostot
+(PDF-poiminnat, muunnostulokset) kuuluvat `work/`-kansioon, joka ei mene säilöön.
 
 Ympäristöhuomio: tämän kehityskoneen Bash-työkalu kaatuu, jos komennossa on ä/ö-merkkejä.
 Kirjoita Python-skriptit tiedostoihin, käytä glob-kuvioita (esim. `"LIITE 3*.xlsx"`) tai

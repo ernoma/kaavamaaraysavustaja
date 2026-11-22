@@ -207,6 +207,11 @@ def same_main_use_or_sub_area(ctx: CheckContext) -> Iterator[Finding]:
                 "Geometriatyyppi puuttuu: pääkäyttötarkoitus ja osa-alue edellyttävät aluemaista kohdetta.",
                 case="geometria_tuntematon",
             )
+        elif regs:
+            yield Finding(
+                "Geometriatyyppi puuttuu: jos kohde on aluemainen, ryhmään tarvitaan pääkäyttötarkoitus tai osa-alue.",
+                case="geometria_tuntematon",
+            )
         return
     if "alue" in geometry:
         if not regs:
