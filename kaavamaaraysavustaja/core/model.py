@@ -229,6 +229,8 @@ class SourceUnit:
     source_plans: list[SourcePlan] = field(default_factory=list)
     geometry_hint: str | None = None
     duplicates_of: str | None = None
+    parent_id: str | None = None  # numbered sub-area (K9): the marking it belongs to
+    sub_index: str | None = None  # its number in the source ("1", "2" …)
     proposal: GroupProposal | None = None
 
 

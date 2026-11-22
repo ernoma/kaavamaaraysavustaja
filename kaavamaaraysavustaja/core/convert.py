@@ -44,7 +44,23 @@ from kaavamaaraysavustaja.knowledge.codelists import (
 
 KEY_NAMESPACE = uuid.UUID("7d0d6a2e-5a55-4a5e-9d6e-6b6d61000001")
 VERBAL_TYPES = {"sanallinenMaarays", "suunnittelumaarays", "rakentamismaarays", "suojelumaarays"}
-SMALL_WORDS = {"JA", "TAI", "ON", "SEN", "EI", "SAA", "YLI", "OLE", "NE", "SE", "KUN", "JOS", "VOI"}
+SMALL_WORDS = {
+    "JA",
+    "TAI",
+    "ON",
+    "SEN",
+    "EI",
+    "SAA",
+    "YLI",
+    "OLE",
+    "NE",
+    "SE",
+    "KUN",
+    "JOS",
+    "VOI",
+    "OSA",
+    "UUSI",
+}
 
 
 @dataclass
@@ -56,6 +72,7 @@ class Context:
     project_name: str
     keys: dict[str, int] = field(default_factory=dict)
     answers: dict[tuple[str, str], str] = field(default_factory=dict)  # (unit id, K-type) -> user option
+    proposals: dict[str, GroupProposal] = field(default_factory=dict)  # unit id -> proposal (sub-areas)
 
     def answer(self, unit: SourceUnit, kind: str) -> str | None:
         return self.answers.get((unit.id, kind))
@@ -670,6 +687,10 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
         if codes:
             structure = structure_from_code(ctx, unit, codes[0])
             nearest = codes[0].how == "nimi_sisaltyy"
+    if unit.parent_id and (structure is None or nearest):
+        inherited = structure_from_parent(ctx, unit)
+        if inherited:
+            structure, nearest = inherited, False
     if structure is None or nearest:
         entry = None if nearest else match.find_keyword(ctx.kb, heading)
         if nearest:
@@ -776,6 +797,70 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
         ctx, unit, proposal, structure.confidence, questions, rationale, start_index=len(proposal.regulations)
     )
     return proposal
+
+
+def structure_from_parent(ctx: Context, unit: SourceUnit) -> Structure | None:
+    """K9: a numbered sub-area (``1. SÄRKÄNNIEMEN … ALUE``) has the structure of its parent marking."""
+    parent = ctx.proposals.get(unit.parent_id or "")
+    if parent is None:
+        return None
+    regulations = []
+    for n, reg in enumerate(r for r in parent.regulations if r.type.value not in VERBAL_TYPES):
+        infos = [
+            (
+                ADDITIONAL_INFO_TYPE,
+                info.type.value,
+                (REGULATION_TYPE, info.value.code.value) if info.value and info.value.code else None,
+            )
+            for info in reg.additional_infos
+        ]
+        regulations.append(regulation_from_codes(ctx, unit, n, reg.type.value, infos))
+    if not regulations:
+        return None
+    rationale = [
+        Rationale(
+            f"Alakohta {unit.sub_index} merkinnästä {parent.title.get('fin')}: rakenne kuten yläkohdalla "
+            "(suunnitelma 6.10 K9: ryhmä alakohtaa kohden).",
+            "saanto",
+            "keskitaso",
+            reference=f"yksikkö {unit.parent_id}",
+        )
+    ]
+    return Structure(regulations, rationale, list(parent.geometry_types), None, None, "keskitaso", "saanto")
+
+
+def add_sub_area_questions(ctx: Context, units: list[SourceUnit]) -> None:
+    """K9 on the parent of numbered sub-areas: one group per sub-area or one group."""
+    children: dict[str, list[SourceUnit]] = {}
+    for unit in units:
+        if unit.parent_id:
+            children.setdefault(unit.parent_id, []).append(unit)
+    for parent_id, subs in children.items():
+        parent = next((u for u in units if u.id == parent_id), None)
+        if (
+            parent is None
+            or parent.proposal is None
+            or any(q.kind == "K9" for q in parent.proposal.questions)
+        ):
+            continue
+        parent.proposal.questions.append(
+            question(
+                ctx,
+                parent,
+                "K9",
+                f"Alakohtaiset määräykset ({len(subs)} numeroitua osa-aluetta) – {parent.heading}",
+                [
+                    (
+                        "ryhma_alakohtaa_kohden",
+                        "Ryhmä alakohtaa kohden (nykyinen jako)",
+                        "Kohdistuvat eri alueisiin; yläkohdan teksti koskee kaikkia.",
+                    ),
+                    ("yksi_ryhma", "Yksi ryhmä", "Alakohtien tekstit yhdistetään yläkohdan ryhmään."),
+                ],
+                "ryhma_alakohtaa_kohden",
+                "Alakohdat: " + "; ".join(f"{u.sub_index}. {u.heading}" for u in subs),
+            )
+        )
 
 
 def apply_title_policy(
@@ -1007,9 +1092,9 @@ def fold(text: str) -> str:
 
 
 def propose(ctx: Context, unit: SourceUnit) -> GroupProposal:
-    if unit.kind == "yleismaarays":
-        return propose_general(ctx, unit)
-    return propose_marking(ctx, unit)
+    proposal = propose_general(ctx, unit) if unit.kind == "yleismaarays" else propose_marking(ctx, unit)
+    ctx.proposals[unit.id] = proposal
+    return proposal
 
 
 # --------------------------------------------------------------------------------------
@@ -1082,6 +1167,7 @@ def convert_units(
     engine = RuleEngine(kb)
     for unit in units:
         unit.proposal = propose(ctx, unit)
+    add_sub_area_questions(ctx, units)
     apply_targeted_additions(ctx, units)
     source_plans = []
     for unit in units:

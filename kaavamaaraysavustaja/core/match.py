@@ -395,8 +395,12 @@ def find_law_references(kb: KnowledgeBase, text: str) -> list[LawReference]:
 
 def find_sub_areas(text: str) -> list[str]:
     """Sub-area specific parts (K9): "Härmälänojan valuma-alue / teksti" or numbered "1. …"."""
-    slash = re.findall(r"(?:^|[.:]\s+)([A-ZÄÖÅ][\wäöå-]+(?:\s[\wäöå-]+){0,3})\s/\s", text)
-    return slash
+    slash = re.findall(r"(?:^|[.:]\s+)([A-ZÄÖÅ][\wäöå-]+(?:\s[\wäöå-]+){0,3})\s+/\s", text)
+    if slash:
+        return slash
+    # Numbered items in the text: "5. Amuri. Alueen …", "6. Tammela. …"
+    numbered = re.findall(r"(?:^|[.\n]\s*)(\d{1,2}\.\s[A-ZÄÖÅ][\wäöå -]{1,40}?)\.\s", text)
+    return numbered if len(numbered) > 1 else []
 
 
 def obligation_words(kb: KnowledgeBase, text: str) -> list[str]:

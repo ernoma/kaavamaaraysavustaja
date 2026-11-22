@@ -46,6 +46,17 @@ SECTION_HEADINGS = {
     "VIHERYMPÄRISTÖ",
     "KULTTUURIPERINTÖ",
 }
+# Second-level headings (alaotsikot) under a section heading, e.g. YHDYSKUNTATEKNINEN HUOLTO /
+# ENERGIAHUOLTO. They are added to the section path instead of becoming markings.
+SUBSECTION_HEADINGS = {
+    "ENERGIAHUOLTO",
+    "SÄHKÖNJAKELU",
+    "VESIHUOLTO",
+    "JÄTEHUOLTO",
+    "YLEISTEN ALUEIDEN HUOLTO",
+}
+NUMBERED_HEADING = re.compile(r"^(\d{1,2})\.\s+(?=\S)")
+FORCED_CODE = re.compile(r"^[A-ZÄÖÅ][A-Za-zÄÖÅäöå0-9()\-]{0,5}$")
 
 
 # --------------------------------------------------------------------------------------
@@ -178,12 +189,31 @@ def _suspicious(text: str, lineno: int | None, changes: list[NormalizationChange
     return text
 
 
+def is_subtitle(prev: str | None, line: str, nxt: str | None) -> bool:
+    """A short mixed-case subtitle inside a text block (``Kulttuuriympäristö``, ``Maalämpö``).
+
+    The previous text ends a sentence, the line has no trailing space (a wrapped line has one)
+    and no final punctuation, and the next line starts a new sentence.
+    """
+    text = line.strip()
+    if not text or line != line.rstrip() or text[-1] in ".,:;-–" or not text[0].isupper():
+        return False
+    if len(text) > 45 or len(text.split()) > 5 or is_upper_heading(text):
+        return False
+    if prev is not None and not prev.rstrip().endswith((".", ":")):
+        return False
+    return bool(nxt and nxt.strip()[:1].isupper())
+
+
 def normalize_lines(lines: list[tuple[int | None, str]]) -> Normalized:
-    """Normalize a block of input lines. Empty lines are paragraph breaks (kept as ``\\n\\n``)."""
+    """Normalize a block of input lines. Empty lines are paragraph breaks (kept as ``\\n\\n``).
+
+    A subtitle inside the block (:func:`is_subtitle`) is kept as a paragraph of its own.
+    """
     changes: list[NormalizationChange] = []
     paragraphs: list[str] = []
     current: str | None = None
-    for lineno, raw in lines:
+    for n, (lineno, raw) in enumerate(lines):
         if raw.strip() == "" and raw == "":
             if current is not None:
                 paragraphs.append(current)
@@ -191,6 +221,13 @@ def normalize_lines(lines: list[tuple[int | None, str]]) -> Normalized:
             continue
         if raw.strip() == "":
             continue  # whitespace-only line: a column break in the PDF
+        nxt = next((t for _, t in lines[n + 1 :] if t.strip()), None)
+        if n > 0 and is_subtitle(current, raw, nxt):
+            if current is not None:
+                paragraphs.append(current)
+            paragraphs.append(_clean_line(raw, lineno, changes).strip())
+            current = None
+            continue
         line = _clean_line(raw, lineno, changes)
         current = line.lstrip() if current is None else _join(current, line, lineno, changes)
     if current is not None:
@@ -299,7 +336,9 @@ class _Parser:
         self.map_title: str | None = None
         self.source_plans: list[SourcePlan] = []
         self.section: str | None = None
+        self.subsection: str | None = None
         self.geometry: str | None = None
+        self.parent: SourceUnit | None = None  # marking whose numbered sub-areas follow
         self.has_pages = any(line.startswith("@sivu") for line in self.raw_lines)
         self.in_legend = not self.has_pages
         self.explicit_map = False
@@ -359,6 +398,9 @@ class _Parser:
                     self.map_id, self.map_title = map_id, title
                     self.maps.setdefault(title, map_id)
                     self.section = None
+                    self.subsection = None
+                if self.has_pages:
+                    self.in_legend = True
                 i += 1
                 continue
             if self.header_lines is not None and line.kind in ("text", "heading") and not self.in_legend:
@@ -405,6 +447,7 @@ class _Parser:
             self.map_id, self.map_title = value.split(" ", 1)[0], value
             self.maps.setdefault(value, self.map_id)
             self.section = None
+            self.subsection = None
             self.in_legend = True
         elif key == "lahdekaavat":
             self.source_plans = [
@@ -412,6 +455,7 @@ class _Parser:
             ]
         elif key == "osio":
             self.section = value or None
+            self.subsection = None
         elif key == "geometria":
             self.geometry = value or None
         elif key == "merkinta":
@@ -461,6 +505,15 @@ class _Parser:
                 return i
         forced = lines[i].kind == "heading!"
         code, rest = split_code(lines[i].text)
+        if forced and not code:
+            first, _, tail = lines[i].text.strip().partition(" ")
+            if (
+                tail
+                and FORCED_CODE.match(first)
+                and (len(first) <= 3 or "-" in first)
+                and is_upper_heading(tail)
+            ):
+                code, rest = first, tail
         if code and not code_raw:
             code_raw = code
         heading_parts.append((lines[i].no, rest if code else lines[i].text))
@@ -485,9 +538,25 @@ class _Parser:
             block, j = self._text_block(lines, i)
             if not block:
                 self.section = heading_norm.text
+                self.subsection = None
+                return j
+        if heading_norm.text in SUBSECTION_HEADINGS and code_raw is None:
+            block, j = self._text_block(lines, i)
+            if not block:
+                self.subsection = heading_norm.text
                 return j
         block, i = self._text_block(lines, i)
-        self.add_unit("merkinta", heading_raw, heading_norm, code_raw, block, start)
+        numbered = NUMBERED_HEADING.match(heading_norm.text)
+        sub_index = None
+        if numbered and self.parent is not None:
+            sub_index = numbered.group(1)
+            heading_norm = Normalized(heading_norm.text[numbered.end() :], heading_norm.changes)
+        unit = self.add_unit("merkinta", heading_raw, heading_norm, code_raw, block, start)
+        if sub_index:
+            unit.parent_id, unit.sub_index = self.parent.id, sub_index
+            unit.section_path = [*unit.section_path, self.parent.heading or ""]
+        else:
+            self.parent = unit
         return i
 
     def general(self, lines: list[_Line], i: int, start: int, title: str | None = None) -> int:
@@ -497,6 +566,8 @@ class _Parser:
             # Title = leading lines without a period, the last one followed by a capital letter.
             for k in range(min(3, len(block))):
                 text = block[k][1].rstrip()
+                if text.endswith(" -") and k + 1 < len(block) and block[k + 1][1][:1].islower():
+                    continue  # the title continues on the next line
                 if not text or text.endswith((".", "-", ":")):
                     break
                 nxt = block[k + 1][1].lstrip() if k + 1 < len(block) else ""
@@ -511,7 +582,7 @@ class _Parser:
         self.add_unit("yleismaarays", heading_raw, heading, None, block, start)
         return i
 
-    def add_unit(self, kind, heading_raw, heading_norm, code_raw, block, start) -> None:
+    def add_unit(self, kind, heading_raw, heading_norm, code_raw, block, start) -> SourceUnit:
         normalized = normalize_lines(block)
         changes = list(normalized.changes)
         if heading_norm:
@@ -542,7 +613,7 @@ class _Parser:
             heading=heading_norm.text if heading_norm else None,
             letter_code_raw=code_raw,
             letter_code=code,
-            section_path=[self.section] if self.section else [],
+            section_path=[x for x in (self.section, self.subsection) if x],
             map=self.map_title,
             page=self.page,
             line=start,
@@ -560,6 +631,9 @@ class _Parser:
                 unit.duplicates_of = earlier.id
                 break
         self.units.append(unit)
+        if kind != "merkinta":
+            self.parent = None
+        return unit
 
 
 def parse(text: str) -> ParseResult:
