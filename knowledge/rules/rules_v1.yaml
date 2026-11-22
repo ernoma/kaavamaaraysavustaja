@@ -25,6 +25,7 @@ saannot:
     vakavuus: virhe
     tapaukset:
       laajennuksen_ulkopuolella: varoitus
+      koodisto_ei_tietopohjassa: huomio
     kuvaus: >
       Kaavamääräyslaji, lisätiedon laji ja sanallisen määräyksen laji ovat koodistossa ja
       voimassa. Kaavamääräyslaji ja lisätiedon laji kuuluvat kaavatason määrityshierarkiaan.
@@ -177,8 +178,13 @@ saannot:
 
   - tunnus: R-15
     otsikko: Liitteen 4 yhdistelmälle liitteen otsikko; omalle yhdistelmälle ei liitteen 4 otsikkoa
-    lahde: "Opas 3.1.1"
+    lahde: "Opas 3.1.1; Katja 2 §"
     vakavuus: varoitus
+    tapaukset:
+      laajempi_tietosisalto: huomio
+    kuvaus: >
+      Katja 2 §: otsikko saa poiketa liitteestä 4, jos tietosisältö on laajempi. Ryhmä, jossa
+      on sanallinen määräys, saa siksi huomion eikä varoitusta.
     ryhti: []
     kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
     tarkistus: annex_title
@@ -218,6 +224,8 @@ saannot:
     ryhti: []
     kaavatasot: [yleiskaava, asemakaava, maakuntakaava]
     tilat: [vooka]
+    tapaukset:
+      vahvistettavat_muutokset: huomio
     tarkistus: source_text_intact
     voimassa: { alkaen: 2024-06-11 }
 

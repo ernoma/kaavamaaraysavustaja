@@ -25,3 +25,17 @@ def build_result():
     from tools.build_knowledge import build
 
     return build(ROOT)
+
+
+@pytest.fixture(scope="session")
+def kb():
+    from kaavamaaraysavustaja.knowledge.base import KnowledgeBase
+
+    return KnowledgeBase.load()
+
+
+@pytest.fixture(scope="session")
+def policies():
+    from kaavamaaraysavustaja.core.policy import PolicyLibrary
+
+    return PolicyLibrary.load()

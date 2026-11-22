@@ -60,7 +60,7 @@ tiedostot:
   katja/annex4_katja-ii_393-2025.yaml: 3c8ca4c800fc011087dba4f22702217a3bbed167747f7608b58304ae06698419
   org/tampere/hyvaksytyt.yaml: 36b363fee5d8c40e8cc3dcc9a6b68d703f53a30f37c092549a6ac605ae338905
   org/tampere/linjaukset.yaml: 9e08c935797a9a5d7ce153a61fd6b80d18a8a4345d933df23c51ec17235a5479
-  rules/rules_v1.yaml: fb698ba9cbfd9f605f66e531f1eb78c6c9b6295bfc6b3842c4a7712509353a8d
-  rules/sanasto_v1.yaml: 6a70a03ed4d478650868032ec31bdd418ba2d3ca9448189a91cc192cad7f10e9
+  rules/rules_v1.yaml: 5877939f1bf83f520e329ba6bdfa20e6f58c70aee28b2278009b3427ab9e91f6
+  rules/sanasto_v1.yaml: 0ff886f5e523676732e247cb3665c73905cf92d099dfbfce5eff4ed8da61ccf9
   ryhti/schema_2026-release-11.json: f248f923465916b08190b53b57512ecdc5d3dfe6d69cc230d86c0b0694c3589d
   ryhti/validation_messages.csv: 65a2c282ab237ef1183505776e6229a547882f297d15b0d10506d8cf8abec237
