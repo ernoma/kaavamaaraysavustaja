@@ -20,6 +20,7 @@ from kaavamaaraysavustaja.core.model import (
     AdditionalInfo,
     CodeRef,
     ConversionProject,
+    Decision,
     GroupProposal,
     InterpretationQuestion,
     Meta,
@@ -54,6 +55,10 @@ class Context:
     choices: dict[str, PolicyChoice]
     project_name: str
     keys: dict[str, int] = field(default_factory=dict)
+    answers: dict[tuple[str, str], str] = field(default_factory=dict)  # (unit id, K-type) -> user option
+
+    def answer(self, unit: SourceUnit, kind: str) -> str | None:
+        return self.answers.get((unit.id, kind))
 
     def policy(self, policy_id: str) -> str:
         return self.choices[policy_id].option
@@ -419,6 +424,42 @@ def lowercase_index_structure(
     target = code_from_annex(row["kaavamaarayslajit"][0], REGULATION_TYPE)
     if not target:
         return None
+    k1_options = [
+        (
+            "osa_alue",
+            f"Osa-alue: kehittämisvyöhyke, joka kohdistuu käyttötarkoitukseen {target[1]}",
+            "Kartalla osa-alueen rajaus aluevarauksen päällä.",
+        ),
+        (
+            "aluevaraus",
+            f"Aluevaraus: {target[1]} + pääkäyttötarkoitus, tunnus {base.upper()}{code[len(base) :]}",
+            "Kohde on kaavan pohja-aluevaraus; ei sovi, jos samalla alueella on erillinen aluevaraus.",
+        ),
+    ]
+    k1_basis = "Pienaakkosin kirjoitettu tunnus on liitteessä 4 osa-alueille tyypillinen. Varmistus vektoriaineistosta (vaihe 4)."
+    if ctx.answer(unit, "K1") == "aluevaraus":
+        regulation = regulation_from_codes(
+            ctx, unit, 0, target[1], [(ADDITIONAL_INFO_TYPE, "paakayttotarkoitus", None)]
+        )
+        rationale = [
+            Rationale(
+                f"Käyttäjän ratkaisu K1: aluevaraus {target[1]} + pääkäyttötarkoitus "
+                f"(liitteen 4 rivi {row['rivi']} {row['kirjaintunnus']} {row['otsikko']}).",
+                "kayttaja",
+                "korkea",
+                reference=f"Katja liite 4 / rivi {row['rivi']}",
+            )
+        ]
+        q = question(
+            ctx,
+            unit,
+            "K1",
+            f"Aluevaraus vai osa-alue? – {code} {unit.heading}",
+            k1_options,
+            "osa_alue",
+            k1_basis,
+        )
+        return Structure([regulation], rationale, ["alue"], None, None, "keskitaso", "kayttaja"), q
     regulation = regulation_from_codes(
         ctx,
         unit,
@@ -441,24 +482,7 @@ def lowercase_index_structure(
         )
     ]
     q = question(
-        ctx,
-        unit,
-        "K1",
-        f"Aluevaraus vai osa-alue? – {code} {unit.heading}",
-        [
-            (
-                "osa_alue",
-                f"Osa-alue: kehittämisvyöhyke, joka kohdistuu käyttötarkoitukseen {target[1]}",
-                "Kartalla osa-alueen rajaus aluevarauksen päällä.",
-            ),
-            (
-                "aluevaraus",
-                f"Aluevaraus: {target[1]} + pääkäyttötarkoitus, tunnus {base.upper()}{code[len(base) :]}",
-                "Kohde on kaavan pohja-aluevaraus; ei sovi, jos samalla alueella on erillinen aluevaraus.",
-            ),
-        ],
-        "osa_alue",
-        "Pienaakkosin kirjoitettu tunnus on liitteessä 4 osa-alueille tyypillinen. Varmistus vektoriaineistosta (vaihe 4).",
+        ctx, unit, "K1", f"Aluevaraus vai osa-alue? – {code} {unit.heading}", k1_options, "osa_alue", k1_basis
     )
     return Structure([regulation], rationale, ["alue"], None, None, "matala", "saanto"), q
 
@@ -468,7 +492,7 @@ def lowercase_index_structure(
 
 
 def verbal_regulations(
-    ctx: Context, unit: SourceUnit, start_index: int
+    ctx: Context, unit: SourceUnit, start_index: int, development_zone: bool = False
 ) -> tuple[list[Regulation], list[Rationale]]:
     text = unit.normalized_text
     if not text:
@@ -484,6 +508,8 @@ def verbal_regulations(
         start = text.index(paragraph, offset)
         offset = start + len(paragraph)
         type_code, keyword = match.verbal_regulation_type(ctx.kb, paragraph, ctx.policy("L-04"))
+        if ctx.policy("L-04") == "kehittamisvyohyke_suunnittelumaarays" and development_zone:
+            type_code, keyword = "suunnittelumaarays", None
         hits = match.find_verbal_types(ctx.kb, paragraph)
         reg = Regulation(
             key=ctx.key(unit.id, f"s{n}"),
@@ -597,7 +623,11 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
     category = " / ".join(x for x in [unit.map, *(s.capitalize() for s in unit.section_path)] if x) or None
     proposal.category = category
 
-    if match.is_informative(ctx.kb, heading) and not unit.normalized_text:
+    if (
+        match.is_informative(ctx.kb, heading)
+        and not unit.normalized_text
+        and ctx.answer(unit, "K6") != "maarays"
+    ):
         proposal.kind = "ei_maarays"
         proposal.title = {"fin": sentence_case(heading)}
         questions.append(
@@ -688,6 +718,7 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
             Rationale(f'Otsikoksi liitteen 4 otsikko "{structure.title}".', "vakioluettelo", "korkea")
         )
     proposal.letter_code = letter_code_for(ctx, unit, structure, questions, rationale)
+    apply_title_policy(ctx, unit, proposal, rationale)
 
     _, modifiers = match.split_modifiers(ctx.kb, heading)
     if len(modifiers) > 1 or any(m.needs_confirmation for m in modifiers):
@@ -745,6 +776,62 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
         ctx, unit, proposal, structure.confidence, questions, rationale, start_index=len(proposal.regulations)
     )
     return proposal
+
+
+def apply_title_policy(
+    ctx: Context, unit: SourceUnit, proposal: GroupProposal, rationale: list[Rationale]
+) -> None:
+    """L-15: the source heading (Katja 2 §) or the annex 4 title of the same code combination (opas 3.1.1)."""
+    if "L-15" not in ctx.choices or not unit.heading:
+        return
+    row = annex_row_by_signature(ctx, proposal.regulations)
+    if row is None or fold(row["otsikko"]) == fold(proposal.title.get("fin", "")):
+        return
+    if ctx.policy("L-15") == "katja":
+        proposal.title = {"fin": row["otsikko"]}
+        rationale.append(
+            Rationale(
+                f'Otsikoksi liitteen 4 otsikko "{row["otsikko"]}" (rivi {row["rivi"]}), koska koodiyhdistelmä vastaa '
+                f"liitteen riviä; lähteen otsikko {unit.heading}. {ctx.describe('L-15')}.",
+                "linjaus",
+                "korkea",
+                reference=f"Opas 3.1.1; Katja liite 4 / rivi {row['rivi']}",
+            )
+        )
+    else:
+        rationale.append(
+            Rationale(
+                f'Koodiyhdistelmä vastaa liitteen 4 otsikkoa "{row["otsikko"]}" (rivi {row["rivi"]}); lähteen otsikko '
+                f"säilyy, koska tietosisältö on laajempi (Katja 2 §). {ctx.describe('L-15')}.",
+                "linjaus",
+                "korkea",
+                reference="Katja 2 §; opas 3.1.1",
+            )
+        )
+
+
+def annex_row_by_signature(ctx: Context, regulations: list[Regulation]) -> dict[str, Any] | None:
+    from kaavamaaraysavustaja.core.rules.checks import signature_of_row
+
+    items = set()
+    for reg in regulations:
+        if reg.type.value in VERBAL_TYPES:
+            continue
+        items.add(("laji", reg.type.value))
+        for info in reg.additional_infos:
+            items.add(
+                (
+                    "lisatieto",
+                    info.type.value,
+                    info.value.code.value if info.value and info.value.code else None,
+                )
+            )
+    if not items:
+        return None
+    for row in ctx.kb.annex.get(ctx.plan_level, []):
+        if row.get("otsikko") and signature_of_row(row) == frozenset(items):
+            return row
+    return None
 
 
 def structure_from_approved(ctx: Context, unit: SourceUnit, entry: dict[str, Any]) -> Structure:
@@ -815,7 +902,8 @@ def finish(
     rationale: list[Rationale],
     start_index: int,
 ) -> None:
-    verbal, verbal_rationale = verbal_regulations(ctx, unit, start_index)
+    zone = any(r.type.value == "kehittamisvyohyke" for r in proposal.regulations)
+    verbal, verbal_rationale = verbal_regulations(ctx, unit, start_index, development_zone=zone)
     proposal.regulations += verbal
     rationale += verbal_rationale
     text = unit.normalized_text
@@ -983,17 +1071,18 @@ def convert_units(
     name: str = "muunnos",
     source: SourceDocument | None = None,
     map_title: str | None = None,
+    decisions: list[Decision] | None = None,
 ) -> ConversionProject:
+    from kaavamaaraysavustaja.core import decisions as decision_log
     from kaavamaaraysavustaja.core.rules import RuleEngine
 
+    decisions = list(decisions or [])
     ctx = Context(kb, plan_level, mode, {c.id: c for c in choices}, name)
+    ctx.answers = decision_log.apply_input_hints(kb, decisions, units)
     engine = RuleEngine(kb)
     for unit in units:
         unit.proposal = propose(ctx, unit)
     apply_targeted_additions(ctx, units)
-    for unit in units:
-        engine.apply(unit, plan_level=plan_level, mode=mode)
-        unit.proposal.confidence, unit.proposal.confidence_basis = overall_confidence(unit.proposal)
     source_plans = []
     for unit in units:
         for plan in unit.source_plans:
@@ -1018,13 +1107,25 @@ def convert_units(
         knowledge_version=kb.version,
         details={"yksikoita": len(units), "kielimalli": None},
     )
-    return ConversionProject(
+    project = ConversionProject(
         meta=meta,
         sources=[source] if source else [],
         units=units,
         policy_choices=choices,
         provenance=[provenance],
     )
+    warnings = decision_log.apply_answers(kb, project, decisions)
+    decision_log.record(project, decisions)
+    for unit in units:
+        engine.apply(unit, plan_level=plan_level, mode=mode)
+        unit.proposal.confidence, unit.proposal.confidence_basis = overall_confidence(unit.proposal)
+    if decisions:
+        provenance.details["ratkaisuja"] = len(decisions)
+        provenance.details["ratkaisujen_varoitukset"] = warnings + [
+            f"ratkaisulle {d.question_id} ({d.heading or d.unit_id}) ei löytynyt yksikköä"
+            for d in decision_log.unmatched(decisions, units)
+        ]
+    return project
 
 
 def _policy_file_version(kb: KnowledgeBase) -> Any:

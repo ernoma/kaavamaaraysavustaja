@@ -24,6 +24,7 @@ def is_automatable(proposal: GroupProposal | None) -> bool:
     return bool(
         proposal
         and proposal.kind != "ei_maarays"
+        and proposal.confidence != "matala"
         and not proposal.open_questions()
         and not proposal.results("virhe")
         and not proposal.results("varoitus")

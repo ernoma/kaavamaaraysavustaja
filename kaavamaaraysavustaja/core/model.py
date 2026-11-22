@@ -168,6 +168,9 @@ class GroupProposal:
     confidence: str = "matala"
     confidence_basis: str = ""
     status: str = "ehdotus"
+    # Language model checks (hybrid conversion): {"malli", "yhtapitava", "hylattyja_lainauksia",
+    # "kokonaisvarmuus"}; None for rule-based proposals.
+    model_check: dict[str, Any] | None = None
 
     def open_questions(self) -> list[InterpretationQuestion]:
         return [q for q in self.questions if q.is_open]
@@ -243,13 +246,23 @@ class PolicyChoice:
 
 @dataclass
 class Decision:
+    """The user's answer to an interpretation question (plan 6.10, ADR-0014).
+
+    ``scope`` ``merkinta`` = this unit only, ``projekti`` = all similar units of the project.
+    ``kind``, ``heading`` and ``letter_code`` identify the unit when the project is re-run
+    and the unit ids change.
+    """
+
     question_id: str
     unit_id: str
     option: str
-    scope: str = "merkinta"  # merkinta | projekti | linjaus
+    scope: str = "merkinta"  # merkinta | projekti
     by: str | None = None
     at: str | None = None
     basis: str = ""
+    kind: str = ""  # K1 … K15
+    heading: str | None = None
+    letter_code: str | None = None
 
 
 @dataclass
