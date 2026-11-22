@@ -35,8 +35,22 @@ PACKAGES = [
 ENDPOINTS = {
     "Claude": "https://api.anthropic.com/v1/models",
     "Mistral": "https://api.mistral.ai/v1/models",
-    "Syke": "https://api.ymparisto.fi/ryhti/plan-public/api/Plan/Validate",
+    # Without the required query parameters the API gateway answers 404, not 401.
+    "Syke (testi)": "https://api-test.ymparisto.fi/ryhti/plan-public/api/Plan/Validate"
+    "?planType=21&administrativeAreaIdentifiers=837",
 }
+
+
+def _version(name: str, module) -> str:
+    version = getattr(module, "__version__", None)
+    if version:
+        return version
+    try:
+        from importlib.metadata import version as dist_version
+
+        return dist_version(name.replace("_", "-"))
+    except Exception:  # noqa: BLE001
+        return "?"
 
 
 def report() -> None:
@@ -66,14 +80,18 @@ def report() -> None:
     for name in PACKAGES:
         try:
             module = importlib.import_module(name)
-            print(f"  {name}: {getattr(module, '__version__', '?')} ({getattr(module, '__file__', '')})")
+            location = getattr(module, "__file__", None) or list(getattr(module, "__path__", []))
+            print(f"  {name}: {_version(name, module)} ({location})")
         except Exception as exc:  # noqa: BLE001 - report every failure
             print(f"  {name}: EI ({type(exc).__name__}: {exc})")
 
-    print("\nYhteydet (ilman avainta; 401/404/405 = palvelu tavoitettavissa):")
+    print("\nYhteydet (ilman avainta; 401 = palvelu tavoitettavissa):")
     for label, url in ENDPOINTS.items():
+        method = "POST" if label.startswith("Syke") else "GET"
+        data = b"{}" if method == "POST" else None
+        request = urllib.request.Request(url, data=data, method=method)
         try:
-            with urllib.request.urlopen(url, timeout=20) as response:
+            with urllib.request.urlopen(request, timeout=20) as response:
                 print(f"  {label}: HTTP {response.status}")
         except urllib.error.HTTPError as error:
             print(f"  {label}: HTTP {error.code}")

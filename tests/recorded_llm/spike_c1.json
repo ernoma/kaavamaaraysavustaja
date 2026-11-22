@@ -1,0 +1,145 @@
+{
+ "tietopohja": "TP-2026.11-1",
+ "malli": "claude-opus-5-5",
+ "laatu": "medium",
+ "syote": {
+  "otsikko": "TÄYDENTYVÄ KESKUSTA",
+  "kirjaintunnus": "c-1",
+  "polku": "Kartta 1 > Maankäyttö",
+  "geometriavihje": "alue",
+  "teksti": "Aluetta kehitetään täydennettävänä keskustatoimintojen alueena. Täydentämisen tulee edistää toimintojen monipuolisuutta ja keskustojen elinvoimaisuutta. Kaukajärven keskusta-alueelle ei saa sijoittaa seudullisia vähittäiskaupan suuryksiköitä. Vähittäiskaupan kerrosalan enimmäismitoitus Kalevassa on 70 000 k-m²."
+ },
+ "vastaus": {
+  "ryhmat": [
+   {
+    "otsikko": "TÄYDENTYVÄ KESKUSTA",
+    "kirjaintunnus": "c-1",
+    "ryhmatyyppi": "kaavakohde",
+    "geometria": [
+     "alue"
+    ],
+    "maaraykset": [
+     {
+      "laji": "keskustatoimintojenAlue",
+      "arvo": null,
+      "lisatiedot": [
+       {
+        "laji": "paakayttotarkoitus",
+        "arvo": null
+       },
+       {
+        "laji": "eheytettavaTaiTiivistettava",
+        "arvo": null
+       }
+      ],
+      "sanallisen_lajit": [],
+      "tekstiviitteet": []
+     },
+     {
+      "laji": "sanallinenMaarays",
+      "arvo": "Aluetta kehitetään täydennettävänä keskustatoimintojen alueena. Täydentämisen tulee edistää toimintojen monipuolisuutta ja keskustojen elinvoimaisuutta. Kaukajärven keskusta-alueelle ei saa sijoittaa seudullisia vähittäiskaupan suuryksiköitä. Vähittäiskaupan kerrosalan enimmäismitoitus Kalevassa on 70 000 k-m².",
+      "lisatiedot": [],
+      "sanallisen_lajit": [
+       "kehittamisperiaate",
+       "taydennysrakentaminen",
+       "kaupanOhjaus"
+      ],
+      "tekstiviitteet": []
+     }
+    ],
+    "suositukset": [
+     "Tarkista kaavakartalta, onko c-1 itsenäinen käyttötarkoitusalue vai päällekkäinen osa-aluemerkintä, ja vaihda lisätieto tarvittaessa osaAlue-lisätiedoksi.",
+     "Kalevan 70 000 k-m² enimmäismitoitus ja Kaukajärven suuryksikkökielto koskevat vain osaa alueista; harkitse niiden kohdistamista erillisiin kohteisiin, jos kaavakartalla on erillinen rajaus."
+    ]
+   }
+  ],
+  "perustelut": [
+   {
+    "vaite": "Kaavamääräyslajiksi valitaan keskustatoimintojen alue.",
+    "lainaus": "Aluetta kehitetään täydennettävänä keskustatoimintojen alueena.",
+    "tietopohjaviite": "Katja liite 4: C Keskustatoimintojen alue: keskustatoimintojenAlue [paakayttotarkoitus]",
+    "varmuus": "korkea"
+   },
+   {
+    "vaite": "Lisätiedoksi eheytettävä tai tiivistettävä, koska alue osoitetaan täydennettävänä.",
+    "lainaus": "täydennettävänä keskustatoimintojen alueena",
+    "tietopohjaviite": "Lisätiedon laji eheytettavaTaiTiivistettava",
+    "varmuus": "keskitaso"
+   },
+   {
+    "vaite": "Koko sanallinen teksti säilytetään muuttamattomana sanallisena määräyksenä (VOOKA).",
+    "lainaus": "Täydentämisen tulee edistää toimintojen monipuolisuutta ja keskustojen elinvoimaisuutta.",
+    "tietopohjaviite": "VOOKA-tila: sanallista tekstiä ei muuteta",
+    "varmuus": "korkea"
+   },
+   {
+    "vaite": "Sanallisen määräyksen lajiksi kaupan ohjaus vähittäiskauppaa koskevien rajoitusten vuoksi.",
+    "lainaus": "ei saa sijoittaa seudullisia vähittäiskaupan suuryksiköitä",
+    "tietopohjaviite": "Sanallisen määräyksen laji kaupanOhjaus",
+    "varmuus": "korkea"
+   },
+   {
+    "vaite": "Sanallisen määräyksen lajeiksi täydennysrakentaminen ja kehittämisperiaate.",
+    "lainaus": "Aluetta kehitetään täydennettävänä",
+    "tietopohjaviite": "Sanallisen määräyksen lajit taydennysrakentaminen, kehittamisperiaate",
+    "varmuus": "keskitaso"
+   }
+  ],
+  "vaihtoehdot": [
+   {
+    "kuvaus": "Kalevan vähittäiskaupan enimmäismitoitus erillisenä sallittuKerrosala-määräyksenä arvolla 70000 k-m².",
+    "miksi_ei_ensisijainen": "Mitoitus koskee vain Kalevaa eikä koko c-1-aluetta, joten se ei sovellu koko kohteen numeeriseksi määräykseksi; säilytetään sanallisena."
+   },
+   {
+    "kuvaus": "Lisätietona kehitettava eheytettavaTaiTiivistettava-lisätiedon sijaan.",
+    "miksi_ei_ensisijainen": "Teksti painottaa täydentämistä, joka vastaa paremmin tiivistämistä."
+   }
+  ],
+  "tulkintakysymykset": [
+   {
+    "tyyppi": "K1",
+    "kysymys": "Onko c-1 (pienaakkosin) pääkäyttötarkoitusalue vai muun aluevarauksen päälle osoitettu osa-alue?",
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Pääkäyttötarkoitus",
+      "seuraus": "keskustatoimintojenAlue lisätiedolla paakayttotarkoitus."
+     },
+     {
+      "kuvaus": "Osa-alue",
+      "seuraus": "keskustatoimintojenAlue lisätiedolla osaAlue; pääkäyttötarkoitus tulee alla olevasta aluevarauksesta."
+     }
+    ],
+    "suositus": "Pääkäyttötarkoitus, ellei kaavakartta osoita päällekkäisyyttä.",
+    "peruste": "Teksti kuvaa alueen käyttötarkoitusta keskustatoimintojen alueena, mutta pienaakkosinen tunnus voi viitata osa-aluemerkintään."
+   },
+   {
+    "tyyppi": "K2",
+    "kysymys": "Kuvaako 'täydennettävä' lisätietoa eheytettavaTaiTiivistettava vai kehitettava?",
+    "vaihtoehdot": [
+     {
+      "kuvaus": "eheytettavaTaiTiivistettava",
+      "seuraus": "Korostaa täydennysrakentamista."
+     },
+     {
+      "kuvaus": "kehitettava",
+      "seuraus": "Korostaa yleistä kehittämistä."
+     },
+     {
+      "kuvaus": "Ei lisätietoa",
+      "seuraus": "Ominaisuus jää vain sanalliseen määräykseen."
+     }
+    ],
+    "suositus": "eheytettavaTaiTiivistettava",
+    "peruste": "Täydentäminen merkitsee olemassa olevan rakenteen tiivistämistä."
+   }
+  ],
+  "kokonaisvarmuus": "keskitaso"
+ },
+ "kaytto": {
+  "input_tokens": 265,
+  "output_tokens": 2843,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 28210
+ },
+ "kesto_s": 26.2
+}

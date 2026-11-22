@@ -1,6 +1,7 @@
 # ADR-0004 API-avaimet QgsAuthManagerissa
 
-- Tila: hyväksytty 22.11.2026; toteutus (`plugin/auth.py`) on luonnos, jota ei ole testattu QGISissa
+- Tila: hyväksytty 22.11.2026; `plugin/auth.py` testattu QGIS 3.44.7:ssä ilman käyttöliittymää
+  (ks. Testitulos); käyttöliittymän pääsalasanaikkuna testaamatta
 - Lähde: toteutussuunnitelma A7, 6.13
 
 ## Päätös
@@ -21,3 +22,19 @@
 - Kielimalliadapteri saa avaimen parametrina (`ClaudeProvider(api_key=...)`); ydin ei tunne
   QgsAuthManageria.
 - Testausohje: `docs/vaihe0_kayttajan_tehtavat.md`, tehtävä 5.
+
+## Testitulos 22.11.2026
+
+QGIS 3.44.7-Solothurn (OSGeo4W, Python 3.12.12), `QgsApplication` ilman käyttöliittymää,
+kertakäyttöinen profiili ja tunnistetietokanta (`QGIS_AUTH_DB_DIR_PATH`), testipääsalasana ja
+testiavain:
+
+- `storeAuthenticationConfig(config)` palauttaa **tuplen** `(True, QgsAuthMethodConfig)`, ja
+  tunniste on myös alkuperäisessä oliossa. `loadAuthenticationConfig(id, config, True)`
+  palauttaa tuplen `(bool, QgsAuthMethodConfig)`. `auth.py` käsittelee molemmat muodot.
+- Tallennus, luku, päivitys (sama tunniste säilyy), määrityksen nimi
+  "Kaavamääräysavustaja – Claude API", poisto ja luku poiston jälkeen (`None`) toimivat.
+- Testiavain ei näkynyt yhdessäkään profiilin `.ini`-, `.txt`- tai `.log`-tiedostossa.
+- Ilman käyttöliittymää ajetun `QgsApplication`in `QgsSettings` kirjoittaa
+  `%APPDATA%\python\profiles\…`-kansioon, ei QGIS-profiiliin (organisaation nimeä ei ole
+  asetettu). Tällä on merkitystä vain testiskripteissä.

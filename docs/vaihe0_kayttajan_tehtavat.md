@@ -5,15 +5,15 @@ päätöksiä, joten niitä ei voi tehdä säilössä automaattisesti. Valmiit s
 tehty. Kirjaa tulokset kunkin tehtävän *Tulokset*-kohtaan tai ADR:ään ja pyydä sitten
 tekoälyä jatkamaan.
 
-| # | Tehtävä | Kesto | Tulos kirjataan |
-|---|---|---|---|
-| 1 | SDK-asennustesti Tampereen QGIS-työasemalla | 1–2 h | ADR-0002 |
-| 2 | Syken kehittäjäportaali ja validointirajapinnan testi | 1 h | tämä tiedosto |
-| 3 | Claude-piikin live-ajo | 15 min | ADR-0005 |
-| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) |
-| 5 | QgsAuthManager-avainten ja lisäosan latauksen testi | 30 min | ADR-0004 |
-| 6 | VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys | 2–4 h | tämä tiedosto, L-02 ja L-12 |
-| 7 | Liitteen 4 korjausten vahvistus | 30 min | `knowledge/katja/annex4_corrections.yaml` |
+| # | Tehtävä | Kesto | Tulos kirjataan | Tila 22.11.2026 |
+|---|---|---|---|---|
+| 1 | SDK-asennustesti Tampereen QGIS-työasemalla | 1–2 h | ADR-0002 | tehty (ei välityspalvelinta) |
+| 2 | Syken kehittäjäportaali ja validointirajapinnan testi | 1 h | tämä tiedosto | avain haettu; ajo odottaa avaimen tallennusta |
+| 3 | Claude-piikin live-ajo | 15 min | ADR-0005 | tehty |
+| 4 | Ensimmäinen linjauspalaveri (L-01–L-07, mittarit) | 2 h + valmistelu | `docs/linjaukset.md` (vaihe 1) | |
+| 5 | QgsAuthManager-avainten ja lisäosan latauksen testi | 30 min | ADR-0004 | osittain: avaimet testattu ilman käyttöliittymää |
+| 6 | VOOKA-soveltamisprofiilin ja digitalOrigin-koodien selvitys | 2–4 h | tämä tiedosto, L-02 ja L-12 | |
+| 7 | Liitteen 4 korjausten vahvistus | 30 min | `knowledge/katja/annex4_corrections.yaml` | |
 
 Muista: säilö on julkinen. API-avaimia, välityspalvelimen tunnuksia tai Tampereen sisäisiä
 osoitteita ei kirjoiteta tähän tiedostoon eikä mihinkään säilön tiedostoon.
@@ -74,18 +74,22 @@ kuhunkin palveluun ja odottaa vastausta 401/404 (= palvelu tavoitettavissa).
 
 **Kirjaa (ADR-0002, kohta "Ratkaisua varten tarvittava tieto"):**
 
-| Kohta | Tulos |
+| Kohta | Tulos (22.11.2026, tekoälyn ajama) |
 |---|---|
-| QGIS-versio ja Python-versio | |
-| Onnistuiko `pip install --user` (B)? Virheilmoitus, jos ei | |
-| Onnistuiko `--target` (C)? | |
-| Asentuivatko käännetyt paketit (`pydantic_core`, `jiter`) ilman kääntäjää? | |
-| Ristiriidat QGISin mukana tulevien pakettien kanssa (pip-varoitukset) | |
-| Yhteydet komentoriviltä: Claude / Mistral / Syke (HTTP-koodi tai virhe) | |
-| Yhteydet QGIS-konsolista ilman `HTTPS_PROXY`-muuttujaa | |
-| `anthropic-SDK: yhteys toimii` -rivi QGIS-konsolissa? | |
-| Tarvittiinko varmenteiden asetuksia (`SSL_CERT_FILE`, organisaation juurivarmenne)? | |
-| Suositus: A, C vai E (Qt-verkko ilman SDK:ta) | |
+| QGIS-versio ja Python-versio | QGIS 3.44.7-Solothurn, Python 3.12.12 (OSGeo4W), pip 24.0 |
+| Onnistuiko `pip install --user` (B)? Virheilmoitus, jos ei | `--dry-run` onnistui; ei asennettu, koska käyttäjäkansiossa on jo muiden työkalujen paketteja |
+| Onnistuiko `--target` (C)? | kyllä: `anthropic` 2.12.0, `mistralai` 3.8.0 → `%APPDATA%\QGIS\QGIS3\profiles\default\python\kma_deps` |
+| Asentuivatko käännetyt paketit (`pydantic_core`, `jiter`) ilman kääntäjää? | kyllä, valmiit wheelit (`--only-binary=:all:`) |
+| Ristiriidat QGISin mukana tulevien pakettien kanssa (pip-varoitukset) | ei pip-varoituksia; päällekkäisiä `python-dateutil` ja `idna` → kansio `sys.path`in loppuun (ADR-0002) |
+| Yhteydet komentoriviltä: Claude / Mistral / Syke (HTTP-koodi tai virhe) | 401 / 401 / 401 (testiympäristö) |
+| Yhteydet QGIS-konsolista ilman `HTTPS_PROXY`-muuttujaa | testattu QGIS-prosessissa ilman käyttöliittymää (`python-qgis`): toimii |
+| `anthropic-SDK: yhteys toimii` -rivi QGIS-konsolissa? | kyllä (QGIS-prosessi ilman käyttöliittymää) |
+| Tarvittiinko varmenteiden asetuksia (`SSL_CERT_FILE`, organisaation juurivarmenne)? | ei (OSGeo4W asettaa `SSL_CERT_FILE`:n itse) |
+| Suositus: A, C vai E (Qt-verkko ilman SDK:ta) | C; välityspalvelimen takana olevaa työasemaa ei testattu |
+
+Jäljellä (valinnainen, 5 min): sama tarkistus QGISin *Python-konsolissa* käyttöliittymän kanssa
+yllä olevalla E-kohdan komennolla; vaihda `sys.path.insert(0, …)` muotoon `sys.path.append(…)`
+ja polku säilön polkuun `F:\tyo\Arho_ja_tekoaly\kaavamaaraysavustaja\tools\check_sdk_env.py`.
 
 ---
 
@@ -99,18 +103,28 @@ kuhunkin palveluun ja odottaa vastausta 401/404 (= palvelu tavoitettavissa).
    (`lahtoaineistot/ryhti-openapi/ryhti-plan-public-validate-api.json`) osoittaa tuotantoon
    `https://api.ymparisto.fi/ryhti/plan-public`. Jos testiavaimella on eri osoite, anna se
    skriptille `--url`-valitsimella.
-4. Aja PowerShellissä säilön juuresta (avain vain tähän istuntoon):
+4. Testiympäristön osoite on `https://api-test.ymparisto.fi/ryhti/plan-public` (tarkistettu
+   22.11.2026: vastaa ilman avainta 401). Skripti käyttää sitä oletuksena; tuotantoon `--env prod`.
+5. **Tallenna avain** Windowsin käyttäjäkohtaiseen ympäristömuuttujaan `RYHTI_API_KEY` (samoin kuin
+   `ANTHROPIC_API_KEY` on tallennettu). Aja PowerShellissä; avain kysytään piilotettuna eikä se
+   jää komentohistoriaan:
 
 ```powershell
-$env:RYHTI_API_KEY = Read-Host "Ryhti API -avain"
+[Environment]::SetEnvironmentVariable("RYHTI_API_KEY", [Net.NetworkCredential]::new("", (Read-Host "Ryhti API -avain" -AsSecureString)).Password, "User")
+```
+
+   Muuttuja näkyy uusissa ohjelmissa; `syke_validate.py` lukee sen myös suoraan rekisteristä,
+   joten jo avoinna oleva päätteen tai Clauden istunto riittää. QGIS-lisäosassa avain tallennetaan
+   myöhemmin QgsAuthManageriin (ADR-0004); ympäristömuuttuja on kehityskäyttöä varten.
+   Poisto tarvittaessa: `[Environment]::SetEnvironmentVariable("RYHTI_API_KEY", $null, "User")`.
+6. Aja säilön juuresta (tai pyydä tekoälyä ajamaan):
+
+```powershell
+.\.venv\Scripts\python tools\syke_validate.py --dry-run
 ```
 
 ```powershell
-python tools\syke_validate.py --dry-run
-```
-
-```powershell
-python tools\syke_validate.py --out syke_vastaus.json
+.\.venv\Scripts\python tools\syke_validate.py --out syke_vastaus.json
 ```
 
 Skripti lähettää synteettisen yleiskaavan (yksi C-aluevaraus Tampereen alueella, kunta 837,
@@ -126,8 +140,8 @@ Kaavalaji- ja elinkaarikoodit (`--plan-type 21`, `kaavaelinkaari/code/03`,
 
 | Kohta | Tulos |
 |---|---|
-| Portaali ja tuote, jonka tilasit | |
-| Testiympäristön osoite | |
+| Portaali ja tuote, jonka tilasit | testiportaali (api-test-developer.ymparisto.fi), tilausavain haettu |
+| Testiympäristön osoite | `https://api-test.ymparisto.fi/ryhti/plan-public` + `/api/Plan/Validate` |
 | HTTP-koodi | |
 | Laukeavat säännöt (sääntötunnisteet) | |
 | Huomioita (esim. puuttuvat pakolliset kentät) | |
@@ -136,12 +150,14 @@ Kaavalaji- ja elinkaarikoodit (`--plan-type 21`, `kaavaelinkaari/code/03`,
 
 ## 3 Claude-piikin live-ajo
 
-Kehitysympäristössä ei ollut Anthropicin tunnistetietoja, joten piikki on ajettu vain
-testiadapterilla. Live-ajo (kustannus noin 0,05–0,15 $):
+**Tehty 22.11.2026** Tampereen työasemalla (avain käyttäjän ympäristömuuttujasta
+`ANTHROPIC_API_KEY`). Kaksi ajoa: skeema hyväksyttiin, vastausaika 26 s / 21 s, toisella ajolla
+28 210 tokenia luettiin välimuistista, kaikki lainaukset löytyivät lähteestä, sanallinen teksti
+säilyi merkki merkiltä ja tulkintakysymys K1 nousi. Tulokset ja sisältöhavainnot: ADR-0005.
+Vastaus: `tests/recorded_llm/spike_c1.json`.
 
-```powershell
-$env:ANTHROPIC_API_KEY = Read-Host "Anthropic API -avain"
-```
+Uusintaa varten (avain on jo tallennettu käyttäjän ympäristömuuttujaan; uusi PowerShell-ikkuna
+näkee sen):
 
 ```powershell
 .\.venv\Scripts\python tools\spike_claude.py --live --out tests\recorded_llm\spike_c1.json
@@ -206,9 +222,15 @@ vaiheessa 1 tiedostoon `knowledge/org/tampere/linjaukset.yaml`.
 
 ## 5 QgsAuthManager-avainten ja lisäosan latauksen testi
 
-`kaavamaaraysavustaja/plugin/auth.py` on luonnos, jota ei voi testata ilman QGISia.
+**Osittain tehty 22.11.2026:** avainten tallennus, luku, päivitys ja poisto testattiin QGIS
+3.44.7:ssä ilman käyttöliittymää, kertakäyttöisessä profiilissa ja testiavaimella. Kaikki
+toimivat, eikä avain näkynyt asetustiedostoissa (ADR-0004). Lisäosapaketti ja tietopohja
+latautuvat QGISin Pythonissa (TP-2026.11-1). **Jäljellä käyttäjälle** (käyttöliittymä):
+lisäosan käyttöönotto lisäosien hallinnassa, *Tietoja*-ikkuna ja pääsalasanaikkuna alla olevilla
+ohjeilla.
 
-**Lisäosan lataus:** linkitä paketti QGIS-profiilin lisäosakansioon (PowerShell, säilön juuresta):
+**Lisäosan lataus:** linkki on luotu tälle työasemalle 22.11.2026 (`default`-profiili). Muilla
+koneilla linkitä paketti QGIS-profiilin lisäosakansioon (PowerShell, säilön juuresta):
 
 ```powershell
 New-Item -ItemType Junction -Path "$env:APPDATA\QGIS\QGIS3\profiles\default\python\plugins\kaavamaaraysavustaja" -Target (Resolve-Path .\kaavamaaraysavustaja)

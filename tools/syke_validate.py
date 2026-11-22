@@ -2,13 +2,15 @@
 
 Usage::
 
-    $env:RYHTI_API_KEY = "<avain>"                       # PowerShell; never commit the key
-    python tools/syke_validate.py                         # minimal synthetic yleiskaava (Tampere 837)
+    python tools/syke_validate.py                         # test env, synthetic yleiskaava (Tampere 837)
+    python tools/syke_validate.py --env prod              # production (needs a production key)
     python tools/syke_validate.py --plan oma_kaava.json --plan-type 23
     python tools/syke_validate.py --dry-run               # print the request, do not send
 
-The key is read from the environment variable ``RYHTI_API_KEY`` and sent in the
-``Ocp-Apim-Subscription-Key`` header. Standard library only (works in the QGIS Python
+The key is read from the environment variable ``RYHTI_API_KEY`` (on Windows also from the
+user environment in the registry, so a key saved with ``SetEnvironmentVariable(..., 'User')``
+works without restarting the shell) and sent in the ``Ocp-Apim-Subscription-Key`` header.
+Never commit the key. Standard library only (works in the QGIS Python
 environment); a proxy is taken from ``HTTPS_PROXY`` like any urllib request.
 
 API description: lahtoaineistot/ryhti-openapi/ryhti-plan-public-validate-api.json
@@ -27,7 +29,11 @@ import urllib.request
 import uuid
 from pathlib import Path
 
-DEFAULT_URL = "https://api.ymparisto.fi/ryhti/plan-public/api/Plan/Validate"
+BASE_URLS = {
+    "test": "https://api-test.ymparisto.fi/ryhti/plan-public",
+    "prod": "https://api.ymparisto.fi/ryhti/plan-public",
+}
+VALIDATE_PATH = "/api/Plan/Validate"
 ENV_KEY = "RYHTI_API_KEY"
 URI = "http://uri.suomi.fi/codelist/rytj/"
 
@@ -94,12 +100,28 @@ def minimal_plan() -> dict:
     }
 
 
+def _windows_user_env(name: str) -> str | None:
+    """Read a user environment variable set after this shell was started (Windows only)."""
+    if sys.platform != "win32":
+        return None
+    import winreg
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as key:
+            return winreg.QueryValueEx(key, name)[0] or None
+    except OSError:
+        return None
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--plan", type=Path, help="Ryhti-kaava JSON (oletus: synteettinen testikaava)")
     parser.add_argument("--plan-type", default="21", help="RY_Kaavalaji-koodi, esim. 21 (yleiskaava)")
     parser.add_argument("--area", default="837", help="kunta- tai maakuntakoodi (Tampere 837)")
-    parser.add_argument("--url", default=DEFAULT_URL)
+    parser.add_argument(
+        "--env", choices=sorted(BASE_URLS), default="test", help="Syken ympäristö (oletus: test)"
+    )
+    parser.add_argument("--url", help="oma perusosoite tai koko Validate-osoite (ohittaa --env)")
     parser.add_argument("--dry-run", action="store_true", help="tulosta pyyntö, älä lähetä")
     parser.add_argument("--out", type=Path, help="tallenna vastaus tiedostoon")
     args = parser.parse_args(argv)
@@ -109,7 +131,10 @@ def main(argv: list[str] | None = None) -> int:
         args.plan_type if args.plan_type.startswith("http") else URI + "RY_Kaavalaji/code/" + args.plan_type
     )
     query = urllib.parse.urlencode({"planType": plan_type, "administrativeAreaIdentifiers": args.area})
-    url = f"{args.url}?{query}"
+    base = (args.url or BASE_URLS[args.env]).rstrip("/")
+    if not base.endswith(VALIDATE_PATH):
+        base += VALIDATE_PATH
+    url = f"{base}?{query}"
     body = json.dumps(plan, ensure_ascii=False).encode("utf-8")
 
     if args.dry_run:
@@ -117,7 +142,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(plan, ensure_ascii=False, indent=1))
         return 0
 
-    key = os.environ.get(ENV_KEY)
+    key = os.environ.get(ENV_KEY) or _windows_user_env(ENV_KEY)
     if not key:
         print(f"Aseta API-avain ympäristömuuttujaan {ENV_KEY} (ks. docs/vaihe0_kayttajan_tehtavat.md).")
         return 2
