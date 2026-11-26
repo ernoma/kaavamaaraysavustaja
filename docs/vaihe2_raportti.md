@@ -143,6 +143,9 @@ tarkistaa ennen ajoa.
 
 ## 6 Mitä jäi käyttäjälle
 
+Tehtävien seurattava lista ja tila: [kayttajan_tehtavat.md](kayttajan_tehtavat.md) (T-03–T-14).
+Painotus 26.11.2026: ensin kokeiltava käyttöliittymä (ADR-0016).
+
 Paikkatietoasiantuntijalle nyt (ei edellytä Arhoa eikä kaavoittajia):
 
 - **Testiaineiston tarkistettavat kohdat**: `tests/golden/keskusta_odotetut.yaml` ja

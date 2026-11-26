@@ -118,8 +118,8 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
    `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto),
    `rules/sanasto_v1.yaml` (täsmäyksen sanasto), `org/tampere/linjaukset.yaml` (linjaukset,
    ADR-0008, ADR-0010), `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset),
-   `prompts/v1/` (kehotteet: `kehote.yaml`, `jarjestelmaohje.md`, `konteksti.md`,
-   `kysymystyypit.yaml`, `esimerkit.yaml`; ADR-0013) ja `llm/hinnasto.yaml` (kielimallien
+   `prompts/v1/` ja `prompts/v2/` (kehotteet, aktiivinen v2: `kehote.yaml`, `jarjestelmaohje.md`,
+   `konteksti.md`, `kysymystyypit.yaml`, `esimerkit.yaml`; ADR-0013) ja `llm/hinnasto.yaml` (kielimallien
    hinnat). Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
    käsin ylläpidettävän tiedoston muutoksen jälkeen (tarkistussummat). Kehotteen muutos
    kasvattaa kehoteversiota, ja tallennetut vastaukset (`tests/recorded_llm/`) äänitetään
@@ -159,7 +159,7 @@ python -m venv .venv
 | Muunnos (sääntöpohjainen) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 [--linjaus L-03=kappaleittain] [--asetukset valinnat.yaml]` |
 | Hybridimuunnos (arvio / ajo) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 --kielimalli claude --arvio` ja `… --budjetti 3 [--projekti aiempi.kma.json]` |
 | Tarkistus (säännöt, skeema, Syke) | `.\.venv\Scripts\kma validate <projekti>.kma.json [--syke]` |
-| Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot] [--hybridi claude --tallennetut]` |
+| Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot] [--hybridi claude] [--vertailu]` |
 | Hybridin arviointi live (arvio ensin, tallentaa vastaukset) | `.\.venv\Scripts\python tools\evaluate.py --hybridi claude --live --arvio` |
 | Verkkotestit (avain tarvitaan) | `.\.venv\Scripts\python -m pytest -m live` |
 
@@ -171,6 +171,16 @@ vastaukset (`tests/recorded_llm/`). Paikalliset työtiedostot
 Ympäristöhuomio: tämän kehityskoneen Bash-työkalu kaatuu, jos komennossa on ä/ö-merkkejä.
 Kirjoita Python-skriptit tiedostoihin, käytä glob-kuvioita (esim. `"LIITE 3*.xlsx"`) tai
 PowerShelliä.
+
+## Käyttäjän tehtävät
+
+Käyttäjälle jäävät tehtävät (paikkatietoasiantuntija, kaavoittajat, avaimet, työasema) kirjataan
+**aina** tiedostoon [`docs/kayttajan_tehtavat.md`](docs/kayttajan_tehtavat.md) tunnisteella
+T-nn, vaiheella ja tilalla, ennen committia. Vaiheen alussa käy lista läpi; kun käyttäjä kertoo
+tehneensä tehtävän, päivitä tila. Vaiheraporttiin riittää viittaus listaan.
+
+Painotus (ADR-0016): ensin QGISissa kokeiltava käyttöliittymä, myös uusien sanallisten
+määräysten muuntamiseen; käyttäjän palaute ohjaa jatkokehitystä.
 
 ## Git ja GitHub
 

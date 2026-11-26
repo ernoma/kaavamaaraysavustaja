@@ -4,7 +4,7 @@ Työkalu sanallisten kaava- ja yleismääräysten muuntamiseen Katja-asetuksen (
 
 Työkalu on QGIS-lisäosa, jonka päävastuullinen käyttäjä on paikkatietoasiantuntija. Se toimii itsenäisesti ilman [Arhoa](https://github.com/GispoCoding/arho-qgis-plugin). Arhon kirjastomuoto on yksi vientimuodoista, ja Arho-integraatio tehdään, kun työkalu toimii itsenäisesti. Kaavoittajat validoivat muunnetut määräykset ennen kuin aineistoa toimitetaan eteenpäin, esimerkiksi Ryhtiin ([ADR-0012](docs/adr/0012-itsenainen-qgis-tyokalu-ensin.md)).
 
-**Tila:** vaihe 2 (kielimalli, perustelut ja tulkintakysymykset) valmis: `kma convert --kielimalli claude` käsittelee kielimallilla vain epävarmat yksiköt, ja testiaineistolla 79 % ehdotuksista menee läpi sellaisenaan ([`docs/vaihe2_raportti.md`](docs/vaihe2_raportti.md)). Vaihe 1 (ydin ja sääntöpohjainen muunnos) valmis. Komentorivi `kma convert` muuntaa koosteen kartan sääntöpohjaisesti muunnosprojektiksi, Ryhti-fragmenteiksi, raportiksi ja Arhon kirjastoksi; `kma validate` tarkistaa säännöillä, skeemalla ja Syken rajapinnalla. Tulokset: [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md). Seuraavaksi kielimalli (vaihe 2) ja itsenäinen QGIS-lisäosa (vaihe 3); suunnitelman luku 12.
+**Tila:** vaihe 2 (kielimalli, perustelut ja tulkintakysymykset) valmis: `kma convert --kielimalli claude` käsittelee kielimallilla vain epävarmat yksiköt, ja testiaineistolla 79 % ehdotuksista menee läpi sellaisenaan ([`docs/vaihe2_raportti.md`](docs/vaihe2_raportti.md)). Vaihe 1 (ydin ja sääntöpohjainen muunnos) valmis. Komentorivi `kma convert` muuntaa koosteen kartan sääntöpohjaisesti muunnosprojektiksi, Ryhti-fragmenteiksi, raportiksi ja Arhon kirjastoksi; `kma validate` tarkistaa säännöillä, skeemalla ja Syken rajapinnalla. Tulokset: [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md). Seuraavaksi QGISissa kokeiltava käyttöliittymä myös uusien määräysten muuntamiseen (vaihe 3, ADR-0016); suunnitelman luku 12.
 
 Kehittäjän ohjeet ja komennot: [`CLAUDE.md`](CLAUDE.md).
 
@@ -15,6 +15,7 @@ Kehittäjän ohjeet ja komennot: [`CLAUDE.md`](CLAUDE.md).
 | [`docs/Toteutussuunnitelma_Kaavamaaraysavustaja.md`](docs/Toteutussuunnitelma_Kaavamaaraysavustaja.md) | Toteutussuunnitelma: tavoitteet, arkkitehtuuri, vaiheistus, riskit ja avoimet kysymykset |
 | [`docs/adr/`](docs/adr/) | Arkkitehtuuripäätökset |
 | [`docs/laaturaportti_liite3.md`](docs/laaturaportti_liite3.md) | Katja-liitteen 4 taulukon tarkistus koodistoja vasten |
+| [`docs/kayttajan_tehtavat.md`](docs/kayttajan_tehtavat.md) | **Käyttäjän tehtävät: seurattava lista ja tila** |
 | [`docs/vaihe0_kayttajan_tehtavat.md`](docs/vaihe0_kayttajan_tehtavat.md) | Vaiheen 0 tehtävät, jotka tehdään Tampereen työasemalla tai kaavoittajien kanssa |
 | [`docs/vaihe1_raportti.md`](docs/vaihe1_raportti.md) | Vaiheen 1 tulokset, mittarit, Syke-testi ja Arhon testiohje (vaihe 6) |
 | [`docs/vaihe2_raportti.md`](docs/vaihe2_raportti.md) | Vaiheen 2 tulokset: hybridi vs. sääntöpohjainen, kustannukset, Syke-testi |

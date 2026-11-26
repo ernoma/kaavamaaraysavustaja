@@ -160,6 +160,8 @@ noin 15 minuuttia.
 
 ## 6 Mitä jäi käyttäjälle
 
+Tehtävien seurattava lista ja tila: [kayttajan_tehtavat.md](kayttajan_tehtavat.md).
+
 Nyt, paikkatietoasiantuntijalle (ei edellytä Arhoa eikä kaavoittajia):
 
 - **Normalisoinnin vahvistettavat kohdat**: raportissa ovat kohdassa "Vahvistettavat

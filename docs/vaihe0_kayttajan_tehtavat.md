@@ -1,5 +1,8 @@
 # Vaihe 0: käyttäjän tehtävät
 
+> Kaikkien vaiheiden avoimet käyttäjän tehtävät seurataan tiedostossa
+> [kayttajan_tehtavat.md](kayttajan_tehtavat.md). Tämä tiedosto säilyttää vaiheen 0 ohjeet ja tulokset.
+
 Nämä vaiheen 0 tehtävät vaativat Tampereen työaseman, omat tunnukset tai kaavoittajien
 päätöksiä, joten niitä ei voi tehdä säilössä automaattisesti. Valmiit skriptit ja pohjat on
 tehty. Kirjaa tulokset kunkin tehtävän *Tulokset*-kohtaan tai ADR:ään ja pyydä sitten
