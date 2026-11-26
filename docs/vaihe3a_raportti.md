@@ -18,6 +18,7 @@ päätökset [ADR-0016](adr/0016-kokeiltava-kayttoliittyma-ja-uudet-maaraykset-e
 | Skeemavalidointi | Ryhdin arvotyypit erotellaan `dataType`-kentän mukaan (OpenAPI:n `oneOf` hylkäsi jokaisen numeroarvon) |
 | Testiaineisto | 16 synteettistä uutta määräystä (`tests/golden/laadinta_odotetut.yaml`, vahvistamaton), live-ajon tallenne ja laatuportti |
 | Testit | 228 testiä CI:ssä (ilman QGISia, verkkoa ja SDK:ita); QGIS-savutesti `tests/qgis/qgis_smoke.py` (merkki `qgis`) |
+| CI | korjattu: `build_knowledge.py --check` oli epäonnistunut Linuxissa vaiheesta 2 alkaen, koska manifestin tarkistussummat oli laskettu CRLF-rivinvaihdoista (Git tallentaa LF). Nyt CI on vihreä. |
 | Dokumentaatio | [käyttöohje](kayttoohje.md), [palautepohja](palaute_vaihe3.md), ADR-0017, tämä raportti |
 
 Commitit: `71e2044` … (ks. `git log`), kaikki pushattu `main`-haaraan.
