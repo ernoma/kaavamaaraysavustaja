@@ -182,3 +182,21 @@ def test_syke_live(kb, project):
     unit = next(u for u in project.units if u.heading == "RAUTATIE")
     result = validate_plan(ryhti_json.synthetic_plan([unit.proposal], name="live"), key=key)
     assert result.status == 200, result.body
+
+
+def test_schema_discriminates_numeric_values_by_data_type(kb):
+    """Ryhti's OpenAPI lists the value types in oneOf without a discriminator: an integer matches
+    four of them. Validation picks the alternative by dataType (ADR-0017)."""
+    schema = kb.load_schema()
+    value = {"dataType": "PositiveNumeric", "number": 6000, "unitOfMeasure": "k-m²"}
+    regulation = {
+        "planRegulationKey": "00000000-0000-0000-0000-000000000001",
+        "lifeCycleStatus": "http://uri.suomi.fi/codelist/rytj/kaavaelinkaari/code/03",
+        "type": "http://uri.suomi.fi/codelist/rytj/RY_Kaavamaarayslaji/code/sallittuKerrosala",
+        "value": value,
+    }
+    assert not [e for e in validate(regulation, "PlanRegulation", schema) if e.startswith("value")]
+    wrong = {**regulation, "value": {**value, "number": 0.5}}
+    assert [e for e in validate(wrong, "PlanRegulation", schema) if e.startswith("value")]
+    decimal = {**regulation, "value": {"dataType": "PositiveDecimal", "number": 0.6}}
+    assert not [e for e in validate(decimal, "PlanRegulation", schema) if e.startswith("value")]

@@ -8,8 +8,12 @@ Usage::
     python tools/evaluate.py --vertailu                   # rule-based vs hybrid (Claude, Mistral if recorded)
     python tools/evaluate.py --hybridi claude --live --arvio            # cost estimate only
     python tools/evaluate.py --hybridi claude --live --budjetti 8       # live run, records the responses
+    python tools/evaluate.py --laadinta                   # drafting mode set (new regulations, ADR-0017)
+    python tools/evaluate.py --laadinta --hybridi claude  # … with recorded responses
+    python tools/evaluate.py --laadinta --hybridi claude --live --arvio  # cost estimate of a live run
 
-Recorded responses are in ``tests/recorded_llm/golden_v2_<provider>.json`` (no API keys).
+Recorded responses are in ``tests/recorded_llm/golden_v2_<provider>.json`` and, for the drafting
+set, ``tests/recorded_llm/laadinta_<provider>.json`` (no API keys).
 A live run shows the cost estimate first and records every response, so CI can replay them.
 Prints Markdown for docs/vaihe2_raportti.md.
 """
@@ -36,7 +40,7 @@ from kaavamaaraysavustaja.core.evaluation import (  # noqa: E402
     percent,
     structure_of,
 )
-from kaavamaaraysavustaja.core.ingest import parse  # noqa: E402
+from kaavamaaraysavustaja.core.ingest import parse, single_unit  # noqa: E402
 from kaavamaaraysavustaja.core.policy import PolicyLibrary  # noqa: E402
 from kaavamaaraysavustaja.knowledge.base import KnowledgeBase  # noqa: E402
 
@@ -47,22 +51,65 @@ GOLDEN_SETS = [
     ("keskusta", GOLDEN / "keskusta_otos.txt", GOLDEN / "keskusta_odotetut.yaml"),
     ("kartat2_4", GOLDEN / "kartat2_4_otos.txt", GOLDEN / "kartat2_4_odotetut.yaml"),
 ]
+# Drafting mode (laadintatila): synthetic new regulations; the input is in the expected file.
+DRAFTING_SETS = [("laadinta", None, GOLDEN / "laadinta_odotetut.yaml")]
 DEFAULT_MODELS = {"claude": "claude-opus-5-5", "mistral": "mistral-large-latest"}
 
 
-def recorded_path(provider: str) -> Path:
-    return RECORDED / f"golden_v2_{provider}.json"
+def recorded_path(provider: str, drafting: bool = False) -> Path:
+    return RECORDED / (f"laadinta_{provider}.json" if drafting else f"golden_v2_{provider}.json")
+
+
+def drafting_units(expected: dict) -> list:
+    return [
+        single_unit(
+            item["syote"]["otsikko"],
+            item["syote"]["teksti"],
+            letter_code=item["syote"].get("tunnus"),
+            kind=item["syote"].get("tyyppi", "merkinta"),
+            unit_id=f"u{n:03d}",
+        )
+        for n, item in enumerate(expected["yksikot"], 1)
+    ]
 
 
 def rule_based(kb, sets=GOLDEN_SETS):
     projects, evaluations = [], []
     choices = PolicyLibrary.load().resolve()
     for name, text, expected in sets:
-        units = parse(text.read_text(encoding="utf-8")).units
-        project = convert_units(kb, units, choices, name=f"testiaineisto {name}")
+        data = yaml.safe_load(expected.read_text(encoding="utf-8"))
+        if text is None:  # drafting set: one unit per item, mode laadinta
+            units, mode = drafting_units(data), "laadinta"
+        else:
+            units, mode = parse(text.read_text(encoding="utf-8")).units, "vooka"
+        project = convert_units(kb, units, choices, mode=mode, name=f"testiaineisto {name}")
         projects.append(project)
-        evaluations.append(evaluate(project, yaml.safe_load(expected.read_text(encoding="utf-8"))))
+        evaluations.append(evaluate(project, data))
     return projects, evaluations
+
+
+def drafting_lines(projects, sets=DRAFTING_SETS) -> list[str]:
+    """Drafting-mode checks that the generic metrics do not cover: K13 and quantities."""
+    k13_hit = k13_total = quantity_hit = quantity_total = recs = 0
+    for project, (_, _, expected) in zip(projects, sets, strict=True):
+        items = yaml.safe_load(expected.read_text(encoding="utf-8"))["yksikot"]
+        for unit, item in zip(project.units, items, strict=True):
+            p = unit.proposal
+            if "suositus" in item:
+                k13_total += 1
+                k13 = next((q for q in p.questions if q.kind == "K13"), None)
+                k13_hit += bool(k13 and (k13.answer or k13.recommendation) == item["suositus"])
+            wanted = [s for s in item.get("rakenne", []) if s in ("sallittuKerrosala()", "tehokkuusluku()")]
+            if wanted:
+                quantity_total += 1
+                values = [r for r in p.regulations if r.type.value + "()" in wanted]
+                quantity_hit += bool(values and all(r.value and r.value.number for r in values))
+            recs += len(p.recommendations)
+    return [
+        f"| K13: suositus oikein (maarays / suositus) | {percent((k13_hit, k13_total))} |",
+        f"| suure tunnistettu arvoineen | {percent((quantity_hit, quantity_total))} |",
+        f"| kaavasuosituksiksi siirrettyjä kappaleita | {recs} |",
+    ]
 
 
 def hybrid(kb, provider, model, budget, sets=GOLDEN_SETS, progress=None, quality="medium"):
@@ -78,10 +125,10 @@ def hybrid(kb, provider, model, budget, sets=GOLDEN_SETS, progress=None, quality
     return projects, evaluations
 
 
-def replay_provider(name: str):
+def replay_provider(name: str, drafting: bool = False):
     from kaavamaaraysavustaja.core.llm.fake import ReplayProvider
 
-    path = recorded_path(name)
+    path = recorded_path(name, drafting)
     if not path.exists():
         return None, None
     provider = ReplayProvider.from_file(path)
@@ -155,7 +202,8 @@ def live(args, kb) -> int:
 
     name = args.hybridi
     model = args.malli or DEFAULT_MODELS[name]
-    projects, _ = rule_based(kb)
+    sets = DRAFTING_SETS if args.laadinta else GOLDEN_SETS
+    projects, _ = rule_based(kb, sets)
     estimates = [estimate_run(kb, project, model, cached=name == "claude") for project in projects]
     units = sum(e.units for e in estimates)
     usd = sum(e.usd for e in estimates)  # conservative: the cache write is counted once per set
@@ -163,7 +211,7 @@ def live(args, kb) -> int:
         f"Kustannusarvio koko testiaineistolle ({model}): {units} yksikköä mallille, noin {usd:.2f} $ "
         f"(budjettiraja {args.budjetti:.2f} $)."
     )
-    for (set_name, _, _), e in zip(GOLDEN_SETS, estimates, strict=True):
+    for (set_name, _, _), e in zip(sets, estimates, strict=True):
         print(f"  {set_name}: {e.describe()}")
     if args.arvio:
         return 0
@@ -175,10 +223,10 @@ def live(args, kb) -> int:
         "kehote": PromptSet.load(kb).label,
         "tietopohja": kb.version,
         "laatu": args.laatu,
-        "aineisto": [n for n, _, _ in GOLDEN_SETS],
+        "aineisto": [n for n, _, _ in sets],
     }
     existing = {}
-    path = recorded_path(name)
+    path = recorded_path(name, args.laadinta)
     if path.exists():
         old = json.loads(path.read_text(encoding="utf-8"))
         if old.get("kehote") == meta["kehote"] and old.get("malli") == model and not args.uudelleen:
@@ -188,12 +236,14 @@ def live(args, kb) -> int:
     budget = Budget(args.budjetti)
     started = time.monotonic()
     projects, evaluations = hybrid(
-        kb, recorder, model, budget, progress=print if args.eteneminen else None, quality=args.laatu
+        kb, recorder, model, budget, sets, progress=print if args.eteneminen else None, quality=args.laatu
     )
     print(f"Live-ajo: {budget.calls} kutsua, {budget.spent:.2f} $, {time.monotonic() - started:.0f} s.")
     recorder.save(path, **meta)
-    print(f"Vastaukset tallennettu: {recorded_path(name).relative_to(ROOT)}")
+    print(f"Vastaukset tallennettu: {path.relative_to(ROOT)}")
     print("\n".join(metrics_table({f"hybridi ({name}, live)": (evaluations, projects)})))
+    if args.laadinta:
+        print("\n".join(drafting_lines(projects, sets)))
     return 0
 
 
@@ -214,6 +264,9 @@ def main(argv: list[str] | None = None) -> int:
         "--uudelleen", action="store_true", help="live: älä käytä aiempia tallennettuja vastauksia"
     )
     parser.add_argument("--json", type=Path, help="tallenna mittarit JSON-tiedostoon")
+    parser.add_argument(
+        "--laadinta", action="store_true", help="laadintatilan testiaineisto (uudet määräykset, synteettinen)"
+    )
     args = parser.parse_args(argv)
     sys.stdout.reconfigure(encoding="utf-8")
     kb = KnowledgeBase.load()
@@ -226,22 +279,30 @@ def main(argv: list[str] | None = None) -> int:
     from kaavamaaraysavustaja.core.llm.budget import Budget
 
     columns: dict[str, tuple[list, object]] = {}
-    rule_projects, rule_evals = rule_based(kb)
+    sets = DRAFTING_SETS if args.laadinta else GOLDEN_SETS
+    rule_projects, rule_evals = rule_based(kb, sets)
     if args.vertailu or not args.hybridi:
         columns["sääntöpohjainen"] = (rule_evals, rule_projects)
     wanted = (
-        ["claude_kehote_v1", "claude", "mistral"]
+        (["claude", "mistral"] if args.laadinta else ["claude_kehote_v1", "claude", "mistral"])
         if args.vertailu
         else ([args.hybridi] if args.hybridi else [])
     )
     for name in wanted:
-        provider, model = replay_provider(name)
+        provider, model = replay_provider(name, args.laadinta)
         if provider is None:
-            print(f"Huom. {recorded_path(name).relative_to(ROOT)} puuttuu: hybridi ({name}) jää vertailusta.")
+            print(
+                f"Huom. {recorded_path(name, args.laadinta).relative_to(ROOT)} puuttuu: "
+                f"hybridi ({name}) jää vertailusta."
+            )
             continue
-        projects, evaluations = hybrid(kb, provider, model, Budget(None))
+        projects, evaluations = hybrid(kb, provider, model, Budget(None), sets)
         columns[f"hybridi ({name})"] = (evaluations, projects)
     print("\n".join(metrics_table(columns)))
+    if args.laadinta:
+        for name, (_, projects) in columns.items():
+            print(f"\n| {name} | |\n|---|---|")
+            print("\n".join(drafting_lines(projects, sets)))
     last = list(columns.values())[-1][0]
     unmatched = combine(last).unmatched
     if unmatched:
