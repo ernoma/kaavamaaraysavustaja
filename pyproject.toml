@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kaavamaaraysavustaja"
-version = "0.2.0"
+version = "0.3.0"
 description = "Sanallisten kaava- ja yleismääräysten muuntaminen Katja-asetuksen mukaiseen rakenteiseen muotoon (Ryhti-JSON, Arho-kirjasto)"
 readme = "README.md"
 license = "GPL-2.0-or-later"
@@ -26,9 +26,10 @@ include = ["kaavamaaraysavustaja*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra -m 'not live'"
+addopts = "-ra -m 'not live and not qgis'"
 markers = [
     "live: vaatii verkon ja API-avaimen (ei ajeta CI:ssä)",
+    "qgis: vaatii QGISin Pythonin (KMA_QGIS_PYTHON; ei ajeta CI:ssä)",
 ]
 
 [tool.ruff]

@@ -6,7 +6,7 @@ point; it imports the QGIS-dependent ``plugin`` subpackage lazily so that the pu
 tested without QGIS.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 def classFactory(iface):  # noqa: N802 (QGIS API name)

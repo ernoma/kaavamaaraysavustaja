@@ -1,13 +1,15 @@
 [general]
 name=Kaavamääräysavustaja
 description=Sanallisten kaava- ja yleismääräysten muuntaminen Katja-asetuksen mukaiseen rakenteiseen muotoon
-about=Muuntaa sanalliset kaava- ja yleismääräykset Katja-asetuksen (YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja Arho-yhteensopivaksi kaavamääräysryhmäkirjastoksi. Kehitysvaiheessa (vaihe 0), ei vielä tuotantokäyttöön.
-version=0.2.0
+about=Muuntaa sanalliset kaava- ja yleismääräykset Katja-asetuksen (YM 311/2024) mukaisiksi kaavamääräysryhmiksi: Ryhti-JSONiksi ja Arho-yhteensopivaksi kaavamääräysryhmäkirjastoksi. Kokeiluversio (vaihe 3a): uuden ja voimassa olevan määräyksen muunnos telakasta, tulkintakysymysten ratkaisu ja vienti ilman Arhoa. Ei vielä tuotantokäyttöön.
+version=0.3.0
 qgisMinimumVersion=3.40
 qgisMaximumVersion=4.99
 author=Erno Mäkinen
 email=noreply@example.invalid
-changelog=0.0.1 Vaihe 0: projektirunko, tietopohja TP-2026.11-1
+changelog=0.3.0 Vaihe 3a: telakka (syöte, muunnos taustatehtävänä, ehdotus, ratkaisut, vienti), laadintatila, kehote v3
+    0.2.0 Vaihe 2: kielimalli (Claude, Mistral), perustelut, tulkintakysymykset
+    0.0.1 Vaihe 0: projektirunko, tietopohja TP-2026.11-1
 tags=kaavoitus,Ryhti,Katja,Arho,kaavamääräys
 repository=https://github.com/ernoma/kaavamaaraysavustaja
 tracker=https://github.com/ernoma/kaavamaaraysavustaja/issues
