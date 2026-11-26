@@ -87,8 +87,14 @@ def plain_structure(kb: KnowledgeBase | None, proposal: GroupProposal) -> list[s
             short = text if len(text) <= 120 else text[:117] + "…"
             kinds = ", ".join(name(v.uri, v.value) for v in reg.verbal_types) or "–"
             lines.append(f'{title}: "{short}" (lajit: {kinds})')
+        elif reg.value and reg.value.number is not None:
+            number = f"{reg.value.number:g}".replace(".", ",")
+            lines.append(f"{title}: {number}{' ' + reg.value.unit if reg.value.unit else ''}")
         else:
             lines.append(title + (f" ({'; '.join(infos)})" if infos else ""))
+    for rec in proposal.recommendations:
+        text = rec.text.get("fin", "")
+        lines.append(f'Kaavasuositus: "{text if len(text) <= 120 else text[:117] + "…"}"')
     return lines
 
 
@@ -170,6 +176,7 @@ def unit_markdown(unit: SourceUnit, kb: KnowledgeBase | None) -> list[str]:
         f"- Tekninen: `{code_list(p) or '–'}`",
     ]
     rationale = [*p.rationale, *(r for reg in p.regulations for r in reg.rationale)]
+    rationale += [r for rec in p.recommendations for r in rec.rationale]
     if rationale:
         out += ["", "Perustelut:"]
         for r in rationale:

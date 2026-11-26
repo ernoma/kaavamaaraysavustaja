@@ -166,3 +166,15 @@ def test_k12_law_reference_stays_open_in_drafting_mode(kb, policies):
     p = convert(kb, policies, [unit("Rantavyöhyke", text, kind="yleismaarays")]).units[0].proposal
     k12 = next(q for q in p.questions if q.kind == "K12")
     assert k12.is_open
+
+
+def test_report_shows_quantity_and_recommendation(kb, policies):
+    from kaavamaaraysavustaja.exporters.report import markdown, plain_structure
+
+    text = "Alueelle saa rakentaa enintään 12 000 k-m² asuntoja.\n\nPihoille suositellaan puita."
+    decisions = parse_decisions([{"kysymys": "u001-K13", "valinta": "suositus"}])
+    project = convert(kb, policies, [unit("Asuntoalue", text, "A")], decisions=decisions)
+    lines = plain_structure(kb, project.units[0].proposal)
+    assert "Sallittu kerrosala: 12000 k-m²" in lines
+    assert 'Kaavasuositus: "Pihoille suositellaan puita."' in lines
+    assert "Kappale on kaavasuositus (K13)" in markdown(project, kb)

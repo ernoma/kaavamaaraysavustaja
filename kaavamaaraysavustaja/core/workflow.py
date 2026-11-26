@@ -435,8 +435,6 @@ def detail_html(kb: KnowledgeBase, unit: SourceUnit) -> str:
     )
     out.append("<h4>Rakenne</h4><ul>")
     out += [f"<li>{_e(line)}</li>" for line in plain_structure(kb, p)] or ["<li>–</li>"]
-    for rec in p.recommendations:
-        out.append(f'<li>Kaavasuositus: "{_e(rec.text.get("fin", ""))}"</li>')
     out.append("</ul>")
     out.append("<h4>Tekninen näkymä</h4><ul>")
     for reg in p.regulations:
