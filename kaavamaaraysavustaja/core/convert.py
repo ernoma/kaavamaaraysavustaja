@@ -1234,8 +1234,8 @@ def apply_recommendations(ctx: Context, unit: SourceUnit) -> None:
     if ctx.mode != "laadinta" or proposal is None:
         return
     k13 = next((q for q in proposal.questions if q.kind == "K13"), None)
-    if k13 is None or k13.answer != "suositus":
-        return
+    if k13 is None or k13.answer != "suositus" or proposal.recommendations:
+        return  # not answered, or already applied (idempotent: hybrid and re-runs call this again)
     method = "kielimalli" if k13.resolved_by == "kielimalli" else "kayttaja"
     regulations: list[Regulation] = []
     for reg in proposal.regulations:

@@ -29,10 +29,12 @@ from typing import Any
 
 from kaavamaaraysavustaja import __version__ as ASSISTANT_VERSION
 from kaavamaaraysavustaja.core import decisions as decision_log
+from kaavamaaraysavustaja.core import match
 from kaavamaaraysavustaja.core.convert import (
     VERBAL_TYPES,
     Context,
     Structure,
+    apply_recommendations,
     apply_title_policy,
     letter_code_for,
     overall_confidence,
@@ -118,13 +120,15 @@ class HybridSettings:
     quality: str = "medium"
     reuse: dict[str, dict[str, Any]] = field(default_factory=dict)  # unit key -> earlier response
     progress: Callable[[str], None] | None = None
+    # Checked before every unit (QgsTask.isCanceled in the QGIS dock); True = stop.
+    should_stop: Callable[[], bool] | None = None
 
 
 @dataclass
 class UnitOutcome:
     unit_id: str
     key: str
-    status: str  # kielimalli | uudelleenkaytetty | ohitettu_budjetti | virhe
+    status: str  # kielimalli | uudelleenkaytetty | ohitettu_budjetti | keskeytetty | virhe
     usage: Usage = field(default_factory=Usage)
     cost: float = 0.0
     seconds: float = 0.0
@@ -153,6 +157,7 @@ class HybridReport:
             "kutsuja": len(called),
             "uudelleenkaytettyja": sum(o.status == "uudelleenkaytetty" for o in self.outcomes),
             "budjetin_takia_ohitettuja": sum(o.status == "ohitettu_budjetti" for o in self.outcomes),
+            "keskeytettyja": sum(o.status == "keskeytetty" for o in self.outcomes),
             "virheita": sum(o.status == "virhe" for o in self.outcomes),
             "tokenit": tokens,
             "kustannus_usd": round(sum(o.cost for o in self.outcomes), 4),
@@ -306,6 +311,7 @@ def proposal_from_model(
 
     # -- non-verbal regulations ------------------------------------------------------
     regulations: list[Regulation] = []
+    used_quantities: set[str] = set()
     model_verbal: list[str] = []
     model_verbal_type: str | None = None
     texts: list[str] = []
@@ -326,6 +332,20 @@ def proposal_from_model(
                     f"Kielimallin koodi {laji!r} ei ole käytettävissä; ohitettu.", "kielimalli", "matala"
                 )
             )
+            continue
+        if ctx.mode == "laadinta" and _is_quantity(kb, laji):
+            quantity = _quantity_from_rules(rule_proposal, laji, used_quantities)
+            if quantity is None:
+                rationale.append(
+                    Rationale(
+                        f"Kielimallin suure {laji} ohitettu: tekstistä ei tunnistettu sille numeroarvoa "
+                        "(arvo tulee aina lähdetekstistä).",
+                        "saanto",
+                        "matala",
+                    )
+                )
+            else:
+                regulations.append(quantity)
             continue
         infos = []
         for info in item.get("lisatiedot", []) or []:
@@ -362,6 +382,20 @@ def proposal_from_model(
                 )
         regulations.append(regulation)
 
+    if ctx.mode == "laadinta":
+        for reg in rule_proposal.regulations:
+            if _is_quantity(kb, reg.type.value) and reg.key not in used_quantities:
+                kept = copy.deepcopy(reg)
+                kept.rationale.append(
+                    Rationale(
+                        "Numeroarvo säilytetty suureena sääntöpohjaisesta vaiheesta (kielimalli ei antanut sitä).",
+                        "saanto",
+                        "keskitaso",
+                        reference="Opas 3.3.9",
+                    )
+                )
+                regulations.append(kept)
+
     # -- verbal regulations: the source text, classified by the model ---------------------
     verbal = [copy.deepcopy(r) for r in rule_proposal.regulations if r.type.value in VERBAL_TYPES]
     types = _verbal_types(kb, model_verbal)
@@ -392,6 +426,7 @@ def proposal_from_model(
             )
         )
     proposal.regulations = regulations + verbal
+    proposal.recommendations = copy.deepcopy(rule_proposal.recommendations)
 
     # -- geometry ----------------------------------------------------------------------
     geometry = [g for g in group.get("geometria", []) or [] if g in GEOMETRIES]
@@ -525,6 +560,20 @@ def proposal_from_model(
     return proposal, rejected, agreement
 
 
+def _is_quantity(kb: KnowledgeBase, value: str) -> bool:
+    code = kb.index.get(REGULATION_TYPE, value)
+    return bool(code and code.in_extension(match.QUANTITY, kb.valid_on))
+
+
+def _quantity_from_rules(rule_proposal: GroupProposal, laji: str, used: set[str]) -> Regulation | None:
+    """The rule-based quantity of the same code: its value comes from the source text."""
+    for reg in rule_proposal.regulations:
+        if reg.type.value == laji and reg.key not in used and reg.value and reg.value.number is not None:
+            used.add(reg.key)
+            return copy.deepcopy(reg)
+    return None
+
+
 def _dedupe(questions: list[InterpretationQuestion]) -> list[InterpretationQuestion]:
     seen: dict[str, InterpretationQuestion] = {}
     for q in questions:
@@ -608,6 +657,11 @@ def run_hybrid(
     for n, unit in enumerate(send, 1):
         key = unit_key(unit)
         outcome = UnitOutcome(unit.id, key, "kielimalli", model=settings.model)
+        if settings.should_stop and settings.should_stop():
+            outcome.status, outcome.message = "keskeytetty", "käyttäjä keskeytti"
+            report.outcomes.append(outcome)
+            say(f"{n}/{len(send)} {unit.id} {unit.heading}: keskeytetty")
+            continue
         if key in settings.reuse:
             entry = settings.reuse[key]
             outcome.status, outcome.response, outcome.model = (
@@ -701,6 +755,7 @@ def run_hybrid(
         decision_log.apply_answers(kb, project, decisions)
         for unit in project.units:
             if unit.proposal:
+                apply_recommendations(ctx, unit)
                 engine.apply(unit, plan_level=project.meta.plan_level, mode=project.meta.mode)
                 _confidence(unit)
     return report
@@ -719,6 +774,7 @@ def _apply(ctx: Context, engine, unit: SourceUnit, outcome: UnitOutcome, prompts
         "kokonaisvarmuus": proposal.confidence,
     }
     unit.proposal = proposal
+    apply_recommendations(ctx, unit)
     engine.apply(unit, plan_level=project.meta.plan_level, mode=project.meta.mode)
     _confidence(unit)
     proposal.status = "ehdotus"

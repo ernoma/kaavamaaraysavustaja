@@ -19,17 +19,26 @@ class ProviderUnavailable(LLMError):
     pass
 
 
-def create_provider(name: str, model: str | None = None) -> Any:
+def sdk_available(name: str) -> bool:
+    """Is the SDK of the provider importable (without importing it)?"""
+    import importlib.util
+
+    module = SDK.get(name)
+    return bool(module and importlib.util.find_spec(module.split(".")[0]) is not None)
+
+
+def create_provider(name: str, model: str | None = None, *, api_key: str | None = None) -> Any:
+    """``api_key=None``: the SDK reads the environment variable (development, ADR-0004)."""
     model = model or DEFAULT_MODELS[name]
     try:
         if name == "claude":
             from kaavamaaraysavustaja.core.llm.claude import ClaudeProvider
 
-            return ClaudeProvider(model=model)
+            return ClaudeProvider(model=model, api_key=api_key)
         if name == "mistral":
             from kaavamaaraysavustaja.core.llm.mistral import MistralProvider
 
-            return MistralProvider(model=model)
+            return MistralProvider(model=model, api_key=api_key)
     except ImportError as error:
         raise ProviderUnavailable(
             f'Kielimallin {name} SDK ({SDK[name]}) puuttuu: asenna pip install -e ".[llm]" ({error}).'
