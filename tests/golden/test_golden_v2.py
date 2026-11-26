@@ -112,7 +112,9 @@ def test_hybrid_uses_recorded_responses_for_every_unit(hybrid):
     for project in projects:
         step = next(s for s in project.provenance if s.step == "kielimalli")
         assert step.details["virheita"] == 0
-        assert step.details["kehote"] == "prompts/v2 v2"
+        # Prompts v3 (ADR-0017): the VOOKA request is identical to v2 (tests/unit/test_prompts.py),
+        # so the responses recorded with v2 replay as such.
+        assert step.details["kehote"] == "prompts/v3 v3"
 
 
 def test_hybrid_quality_gate(hybrid, rule_based):

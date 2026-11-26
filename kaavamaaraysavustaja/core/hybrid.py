@@ -179,6 +179,7 @@ class RequestBuilder:
         plan_level, mode = project.meta.plan_level, project.meta.mode
         self.schema = conversion_schema(kb.index, plan_level, kb.valid_on)
         self.static_context = prompts.static_context(kb, plan_level, mode, project.policy_choices)
+        self.system = prompts.system_for(mode)
 
     def resolved_items(self, unit: SourceUnit) -> list[dict[str, str]]:
         proposal = unit.proposal
@@ -189,11 +190,13 @@ class RequestBuilder:
         )
 
     def task(self, unit: SourceUnit) -> str:
-        return self.prompts.task_input(self.kb, unit, unit.proposal, self.resolved_items(unit))
+        return self.prompts.task_input(
+            self.kb, unit, unit.proposal, self.resolved_items(unit), self.project.meta.mode
+        )
 
     def request(self, unit: SourceUnit, quality: str) -> StructuredRequest:
         return StructuredRequest(
-            system=self.prompts.system,
+            system=self.system,
             static_context=self.static_context,
             task_input=self.task(unit),
             json_schema=self.schema,
@@ -241,7 +244,7 @@ def estimate_run(
     return estimate(
         Pricing.load(kb),
         model,
-        prompts.system + builder.static_context,
+        builder.system + builder.static_context,
         tasks,
         cached=cached,
         schema_text=json.dumps(builder.schema, ensure_ascii=False),

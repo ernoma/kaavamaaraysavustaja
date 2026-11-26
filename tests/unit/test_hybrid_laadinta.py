@@ -21,7 +21,7 @@ def responder(*, quantity_value=None, solve_k13=None, with_quantity=True):
         unit = task["yksikko"]
         regs = [
             {
-                "laji": "asuinalue",
+                "laji": "asumisenAlue",
                 "arvo": None,
                 "lisatiedot": [{"laji": "paakayttotarkoitus", "arvo": None}],
                 "sanallisen_lajit": [],

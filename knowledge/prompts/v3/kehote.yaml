@@ -1,0 +1,38 @@
+# Kielimallin kehotteet v3 (käsin ylläpidettävä; suunnitelman luku 6.8, ADR-0013, ADR-0017).
+#
+# Kehote koostuu neljästä osasta:
+#   1. järjestelmäohje        jarjestelmaohje.md (VOOKA) tai jarjestelmaohje_laadinta.md (laadinta)
+#                             (vakaa, välimuistitetaan)
+#   2. staattinen konteksti   konteksti.md + tietopohjasta generoidut luettelot (vakaa ajon ajan,
+#                             välimuistitetaan): koodit, liitteen 4 vakiomääräykset,
+#                             kysymystyypit K1–K15 (kysymystyypit.yaml) ja voimassa olevat linjaukset;
+#                             laadintatilassa lisäksi laadintaohje.md (paikkamerkki {{LAADINTAOHJE}})
+#   3. esimerkit              esimerkit.yaml ja knowledge/org/tampere/hyvaksytyt.yaml; tehtävään
+#                             valitaan sanastohaulla samankaltaisimmat (ei upotuksia). Esimerkki,
+#                             jolla on 'tila: laadinta', on mukana vain laadintatilassa.
+#   4. tehtävä                määräysyksikkö, vaiheen 1 löydökset, avoimet tulkintakysymykset ja
+#                             käyttäjän ratkaisut (JSON)
+#
+# Muutos kehotteeseen = uusi versio tai tämän version 'versio'-kentän kasvatus.
+# Kehoteversio tallentuu jokaiseen muunnosprojektiin (provenance) ja tallennettuun vastaukseen.
+# Aja muutoksen jälkeen python tools/build_knowledge.py ja tools/evaluate.py (suunnitelma 10.4).
+#
+# v2 (22.11.2026): kysymysten nostamisen kynnys (ks. prompts/v2/kehote.yaml).
+# v3 (26.11.2026, vaihe 3, ADR-0017): laadintatilan (uusi määräys, UC2) ohjeosa. VOOKA-tilan
+# pyyntö on merkki merkiltä sama kuin v2:ssa (testi tests/unit/test_prompts.py), joten v2:n
+# tallennetut vastaukset (tests/recorded_llm/golden_v2_claude.json) pätevät sellaisinaan.
+
+versio: 3
+tunnus: prompts/v3
+paivitetty: 2026-11-26
+kieli: fi
+jarjestelmaohje: jarjestelmaohje.md
+jarjestelmaohje_laadinta: jarjestelmaohje_laadinta.md
+konteksti: konteksti.md
+laadintaohje: laadintaohje.md
+kysymystyypit: kysymystyypit.yaml
+esimerkit: esimerkit.yaml
+# Esimerkkejä tehtävää kohden (sanastohaku otsikosta ja tekstistä).
+esimerkkeja_enintaan: 3
+# Lyhin sanan alku, jota sanastohaku vertaa (suomen taivutus: "keskustatoimintojen" ~ "keskusta").
+haun_sanan_alku: 6

@@ -52,13 +52,15 @@ VOCABULARY_FILE = "rules/sanasto_v1.yaml"
 POLICY_FILE = "org/tampere/linjaukset.yaml"
 APPROVED_FILE = "org/tampere/hyvaksytyt.yaml"
 # Active prompt version; earlier versions stay in the knowledge base for traceability.
-PROMPTS_DIR = "prompts/v2"
-PROMPT_VERSIONS = ["prompts/v1", "prompts/v2"]
-PROMPT_FILES = [
-    f"{directory}/{name}"
-    for directory in PROMPT_VERSIONS
-    for name in ("kehote.yaml", "jarjestelmaohje.md", "konteksti.md", "kysymystyypit.yaml", "esimerkit.yaml")
-]
+PROMPTS_DIR = "prompts/v3"
+PROMPT_NAMES = ["kehote.yaml", "jarjestelmaohje.md", "konteksti.md", "kysymystyypit.yaml", "esimerkit.yaml"]
+# v3 adds the drafting mode (ADR-0017): its own system instructions and context section.
+PROMPT_VERSIONS = {
+    "prompts/v1": PROMPT_NAMES,
+    "prompts/v2": PROMPT_NAMES,
+    "prompts/v3": [*PROMPT_NAMES, "jarjestelmaohje_laadinta.md", "laadintaohje.md"],
+}
+PROMPT_FILES = [f"{directory}/{name}" for directory, names in PROMPT_VERSIONS.items() for name in names]
 PRICING_FILE = "llm/hinnasto.yaml"
 # Hand-maintained knowledge files (CLAUDE.md rule 4): copied as such and checksummed.
 HAND_MAINTAINED = [RULES_FILE, VOCABULARY_FILE, POLICY_FILE, APPROVED_FILE, *PROMPT_FILES, PRICING_FILE]

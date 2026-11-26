@@ -1,10 +1,14 @@
-"""Prompts v1 as data (``knowledge/prompts/v1/``, plan 6.8, ADR-0013).
+"""Prompts as data (``knowledge/prompts/v<n>/``, plan 6.8, ADR-0013, ADR-0017).
 
 The request is split into a stable, cached part (system instructions and the static context
 generated from the knowledge base: codes, annex 4, question types K1–K15 and the policy
 choices of the run) and a varying task part (the regulation unit, the phase 1 findings, open
 questions, resolved items and the most similar examples found by a vocabulary search).
 Only regulation text and this context are sent to the model, never PDFs (CLAUDE.md rule 5).
+
+From v3 on the drafting mode (laadinta) has its own system instructions and a context section
+(placeholder ``{{LAADINTAOHJE}}``), and examples marked ``tila: laadinta`` are used only in that
+mode, so the VOOKA request stays the same as in v2.
 """
 
 from __future__ import annotations
@@ -49,6 +53,8 @@ class PromptSet:
     examples: list[dict[str, Any]]
     max_examples: int
     stem_length: int
+    drafting_system: str = ""  # system instructions in drafting mode ("" = same as VOOKA)
+    drafting_context: str = ""  # replaces {{LAADINTAOHJE}} in drafting mode
 
     @property
     def label(self) -> str:
@@ -56,15 +62,21 @@ class PromptSet:
         return f"{self.directory} v{self.version}"
 
     @classmethod
-    def load(cls, kb: KnowledgeBase) -> PromptSet:
+    def load(cls, kb: KnowledgeBase, directory: str | None = None) -> PromptSet:
+        """The active prompt version, or ``directory`` (e.g. ``prompts/v2``) for comparisons."""
         info = kb.manifest.get("kehotteet") or {}
-        if not info:
+        if not info and directory is None:
             raise ValueError("Tietopohjassa ei ole kehotteita (manifest: kehotteet).")
-        directory = info["hakemisto"]
+        directory = directory or info["hakemisto"]
         base = kb.directory / directory
-        meta = yaml.safe_load((kb.directory / info["kehote"]).read_text(encoding="utf-8"))
+        meta = yaml.safe_load((base / "kehote.yaml").read_text(encoding="utf-8"))
         types = yaml.safe_load((base / meta["kysymystyypit"]).read_text(encoding="utf-8"))
         examples = yaml.safe_load((base / meta["esimerkit"]).read_text(encoding="utf-8"))
+
+        def optional(key: str) -> str:
+            name = meta.get(key)
+            return (base / name).read_text(encoding="utf-8").strip() if name else ""
+
         return cls(
             directory=directory,
             version=int(meta["versio"]),
@@ -74,7 +86,13 @@ class PromptSet:
             examples=examples.get("esimerkit", []),
             max_examples=int(meta.get("esimerkkeja_enintaan", 3)),
             stem_length=int(meta.get("haun_sanan_alku", 6)),
+            drafting_system=optional("jarjestelmaohje_laadinta"),
+            drafting_context=optional("laadintaohje"),
         )
+
+    def system_for(self, mode: str) -> str:
+        """System instructions of the conversion mode (VOOKA or drafting)."""
+        return self.drafting_system if mode == "laadinta" and self.drafting_system else self.system
 
     # -- question types -------------------------------------------------------------------
 
@@ -149,6 +167,7 @@ class PromptSet:
                 code_line(VERBAL_REGULATION_TYPE, v) for v in enums["verbal_types"]
             ),
             "{{LIITE4}}": "\n".join(annex_lines),
+            "{{LAADINTAOHJE}}": self.drafting_context if mode == "laadinta" else "",
         }
         text = self.context_template
         for key, value in values.items():
@@ -165,7 +184,7 @@ class PromptSet:
                     terms.add(word[: self.stem_length])
         return terms
 
-    def all_examples(self, kb: KnowledgeBase) -> list[dict[str, Any]]:
+    def all_examples(self, kb: KnowledgeBase, mode: str = "vooka") -> list[dict[str, Any]]:
         approved = []
         for entry in kb.approved:
             source = entry.get("lahde", {})
@@ -182,14 +201,16 @@ class PromptSet:
                     "tulos": entry.get("ryhma", {}),
                 }
             )
-        return approved + list(self.examples)
+        return approved + [e for e in self.examples if e.get("tila", mode) == mode]
 
-    def select_examples(self, kb: KnowledgeBase, unit: SourceUnit) -> list[dict[str, Any]]:
+    def select_examples(
+        self, kb: KnowledgeBase, unit: SourceUnit, mode: str = "vooka"
+    ) -> list[dict[str, Any]]:
         """The most similar examples by shared word stems (heading weighted twice)."""
         heading_terms = self._terms(unit.heading)
         text_terms = self._terms(unit.normalized_text)
         scored = []
-        for n, example in enumerate(self.all_examples(kb)):
+        for n, example in enumerate(self.all_examples(kb, mode)):
             source = example.get("yksikko", {})
             e_heading = self._terms(source.get("otsikko"))
             e_text = self._terms(source.get("teksti"))
@@ -216,6 +237,7 @@ class PromptSet:
         unit: SourceUnit,
         proposal: GroupProposal,
         resolved: list[dict[str, str]],
+        mode: str = "vooka",
     ) -> str:
         from kaavamaaraysavustaja.core.evaluation import structure_of
 
@@ -265,7 +287,7 @@ class PromptSet:
                     "yksikko": e["yksikko"],
                     "tulos": e["tulos"],
                 }
-                for e in self.select_examples(kb, unit)
+                for e in self.select_examples(kb, unit, mode)
             ],
         }
         return json.dumps(task, ensure_ascii=False, indent=1)

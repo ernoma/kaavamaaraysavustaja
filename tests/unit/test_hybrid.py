@@ -112,7 +112,7 @@ def test_request_content(kb, project):
     assert "eheytettavaTaiTiivistettava" in request.static_context  # the policy on additional infos
     task = json.loads(request.task_input)
     assert {"yksikko", "vaihe1", "avoimet_kysymykset", "ratkaistut", "esimerkit"} <= set(task)
-    assert request.metadata["kehote"] == "prompts/v2 v2"
+    assert request.metadata["kehote"] == "prompts/v3 v3"
     assert len({r.static_context for r in provider.requests}) == 1  # identical prefix -> cache hits
     assert "%PDF" not in request.task_input
 

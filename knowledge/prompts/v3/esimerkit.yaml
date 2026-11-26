@@ -1,0 +1,208 @@
+# Kehotteen esimerkkimuunnokset v1 (käsin ylläpidettävä; suunnitelman luku 6.8 kohta 3).
+#
+# Esimerkit ovat SYNTEETTISIÄ: ne on kirjoitettu suunnitelman lukujen 6.10 ja 8 periaatteiden
+# mukaan, eivätkä ne ole testiaineiston (tests/golden/) yksiköitä, jotta arviointi ei vääristy.
+# Kun Tampere hyväksyy muunnoksia (knowledge/org/tampere/hyvaksytyt.yaml), ne otetaan
+# esimerkeiksi näiden rinnalle samalla sanastohaulla.
+#
+# Kentät:
+#   tunnus      E-01 …
+#   periaate    mitä esimerkki havainnollistaa
+#   yksikko     tyyppi (merkinta | yleismaarays), otsikko, kirjaintunnus, teksti
+#   tulos       otsikko, kirjaintunnus, geometria, maaraykset [{laji, lisatiedot [{laji, arvo}]}],
+#               sanallisen_lajit, tulkintakysymykset (tyypit)
+
+versio: 1
+
+esimerkit:
+
+  - tunnus: E-01
+    periaate: Liitteen 4 vakiomääräys; lähteen otsikko poikkeaa liitteestä vain muodoltaan.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: TEOLLISUUS- JA VARASTOALUE
+      kirjaintunnus: T
+      teksti: Alueelle saa sijoittaa teollisuus- ja varastotoimintoja. Alueen suunnittelussa on huolehdittava riittävistä suojaetäisyyksistä asutukseen.
+    tulos:
+      otsikko: Teollisuus- ja varastoalue
+      kirjaintunnus: T
+      geometria: [alue]
+      maaraykset:
+        - laji: teollisuusalue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+        - laji: varastoalue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+      sanallisen_lajit: [ymparistohairiot]
+      tulkintakysymykset: []
+
+  - tunnus: E-02
+    periaate: >
+      Osa-alue aluevarauksen päällä. Pienaakkosinen indeksoitu tunnus ja kehittämisperiaatetta
+      kuvaava teksti; aluevaraus on selitteessä omana merkintänään (K1 jää käyttäjälle).
+      Lisätietoa ei lisätä tekstin sivuavan sanan ("tiivistetään") perusteella.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: TIIVISTYVÄ ASUINALUE
+      kirjaintunnus: a-2
+      teksti: Aluetta kehitetään tiivistyvänä asuinalueena. Täydennysrakentamisen tulee sopeutua alueen ominaispiirteisiin.
+    tulos:
+      otsikko: Tiivistyvä asuinalue
+      kirjaintunnus: a-2
+      geometria: [alue]
+      maaraykset:
+        - laji: kehittamisvyohyke
+          lisatiedot: [{laji: osaAlue}, {laji: kayttotarkoituskohdistus, arvo: asumisenAlue}]
+      sanallisen_lajit: [kehittamisperiaate, taydennysrakentaminen]
+      tulkintakysymykset: [K1]
+
+  - tunnus: E-03
+    periaate: Sekoittunut käyttötarkoitus määräysyhdistelmänä (K2, opas 3.3.2); ei liitteen 4 otsikkoa.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: TYÖPAIKKOJEN JA ASUMISEN SEKOITTUNUT ALUE
+      kirjaintunnus: null
+      teksti: Alueelle saa sijoittaa työpaikkatoimintoja ja asumista. Asuminen ei saa estää alueen työpaikkatoimintojen kehittämistä.
+    tulos:
+      otsikko: Työpaikkojen ja asumisen sekoittunut alue
+      kirjaintunnus: null
+      geometria: [alue]
+      maaraykset:
+        - laji: tyopaikkojenAlue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+        - laji: asumisenAlue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+      sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+      tulkintakysymykset: [K2, K14]
+
+  - tunnus: E-04
+    periaate: >
+      Viivamainen kohde ilman liitteen 4 vastinetta: lähin koodi nimestä, geometria nimestä
+      (reitti → viiva), määre UUSI lisätiedoksi, ei pääkäyttötarkoitusta.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: UUSI ULKOILUREITTI
+      kirjaintunnus: null
+      teksti: Reitti suunnitellaan esteettömäksi, ja se liitetään olemassa olevaan reittiverkostoon.
+    tulos:
+      otsikko: Uusi ulkoilureitti
+      kirjaintunnus: null
+      geometria: [viiva]
+      maaraykset:
+        - laji: ulkoiluTaiVirkistysReitti
+          lisatiedot: [{laji: uusi}]
+      sanallisen_lajit: [virkistys]
+      tulkintakysymykset: []
+
+  - tunnus: E-05
+    periaate: >
+      Pistemäinen kohde (asema → piste); yhdistelmämääre OHJEELLINEN ja TUTKITTAVA kysytään (K7).
+    yksikko:
+      tyyppi: merkinta
+      otsikko: TUTKITTAVA OHJEELLINEN SEISAKE
+      kirjaintunnus: null
+      teksti: Seisakkeen toteutettavuus selvitetään tarkemmassa suunnittelussa.
+    tulos:
+      otsikko: Tutkittava ohjeellinen seisake
+      kirjaintunnus: null
+      geometria: [piste]
+      maaraykset:
+        - laji: raideliikenteenAsemaTaiSeisake
+          lisatiedot: [{laji: ohjeellinenSijainti}, {laji: vaihtoehtoinen}]
+      sanallisen_lajit: [joukkoliikenne]
+      tulkintakysymykset: [K7]
+
+  - tunnus: E-06
+    periaate: Yleismääräys koko kaava-alueelle; vain sanallinen määräys lajeineen.
+    yksikko:
+      tyyppi: yleismaarays
+      otsikko: Hulevedet
+      kirjaintunnus: null
+      teksti: Hulevedet on käsiteltävä ensisijaisesti niiden syntypaikalla. Suunnittelussa on varattava tilaa hulevesien viivyttämiselle.
+    tulos:
+      otsikko: Hulevedet
+      kirjaintunnus: null
+      geometria: []
+      maaraykset: []
+      sanallisen_lajit: [hulevedet]
+      tulkintakysymykset: []
+
+  - tunnus: E-07
+    periaate: Osa-alue ilman kohdistusta (pohjavesialue), liitteen 4 mukaisesti osa-alue-lisätieto.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: POHJAVESIALUE
+      kirjaintunnus: pv
+      teksti: Alueelle ei saa sijoittaa toimintoja, jotka voivat vaarantaa pohjaveden laadun.
+    tulos:
+      otsikko: Pohjavesialue
+      kirjaintunnus: pv
+      geometria: [alue]
+      maaraykset:
+        - laji: pohjavesialue
+          lisatiedot: [{laji: osaAlue}]
+      sanallisen_lajit: [ymparistoarvot]
+      tulkintakysymykset: []
+
+  # Laadintatilan esimerkit (ADR-0017): mukana vain laadintatilassa (tila: laadinta).
+
+  - tunnus: E-L1
+    tila: laadinta
+    periaate: >
+      Uusi määräys, joka vastaa liitteen 4 vakiomääräystä; tekstin yksi numeroarvo annetaan
+      suureena ja teksti säilyy sellaisenaan.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: Pientaloalue
+      kirjaintunnus: null
+      teksti: Alue on tarkoitettu pientaloasumiselle. Alueen kokonaiskerrosala saa olla enintään 8 000 k-m².
+    tulos:
+      otsikko: Pientalovaltainen asuntoalue
+      kirjaintunnus: AP
+      geometria: [alue]
+      maaraykset:
+        - laji: asuinpientaloalue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+        - laji: sallittuKerrosala
+          arvo: "8000"
+          lisatiedot: []
+      sanallisen_lajit: [rakennusoikeus]
+      tulkintakysymykset: []
+
+  - tunnus: E-L2
+    tila: laadinta
+    periaate: >
+      Velvoittamaton kappale on kaavasuositus (K13 ratkaistaan: suositus); velvoittava kappale
+      jää sanalliseksi määräykseksi.
+    yksikko:
+      tyyppi: merkinta
+      otsikko: Lähivirkistysalue
+      kirjaintunnus: VL
+      teksti: "Alueen puusto tulee säilyttää.\n\nAlueelle suositellaan istutettavaksi kotimaisia lajeja."
+    tulos:
+      otsikko: Lähivirkistysalue
+      kirjaintunnus: VL
+      geometria: [alue]
+      maaraykset:
+        - laji: lahivirkistysalue
+          lisatiedot: [{laji: paakayttotarkoitus}]
+      sanallisen_lajit: [virkistys, luontoarvot]
+      tulkintakysymykset: []
+      ratkaistut: [K13 suositus]
+
+  - tunnus: E-L3
+    tila: laadinta
+    periaate: >
+      Uusi yleismääräys koko kaava-alueelle; vanhentunut lakiviittaus jää tekstiin ja K12
+      avoimeksi laatijalle.
+    yksikko:
+      tyyppi: yleismaarays
+      otsikko: Rakennuslupa
+      kirjaintunnus: null
+      teksti: Yleiskaavaa saa käyttää rakennusluvan perusteena MRL 44 §:n mukaisesti.
+    tulos:
+      otsikko: Rakennuslupa
+      kirjaintunnus: null
+      geometria: []
+      maaraykset: []
+      sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+      tulkintakysymykset: [K12]
