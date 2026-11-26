@@ -1,0 +1,262 @@
+# Laadintatilan (uusi määräys, UC2) testiaineisto ja odotetut tulokset (ADR-0016, ADR-0017).
+#
+# TILA: VAHVISTAMATON. Kehittäjän SYNTEETTISET esimerkit 26.11.2026. Ne eivät ole Tampereen
+# todellisia määräyksiä. Käyttäjän kuvaamat todelliset muunnostarpeet ja esimerkkitekstit
+# (docs/kayttajan_tehtavat.md T-02, docs/palaute_vaihe3.md) korvaavat tai täydentävät ne.
+# Esimerkit eivät ole kehotteen esimerkkejä (knowledge/prompts/v3/esimerkit.yaml), jotta
+# arviointi ei vääristy.
+#
+# Kentät kuten tests/golden/kartta1_odotetut.yaml, lisäksi:
+#   syote     käyttäjän syöte: tyyppi (merkinta | yleismaarays), otsikko, tunnus (null = ei annettu)
+#             ja teksti (tyhjä rivi = kappaleraja), kuten QGIS-telakan tekstikentässä
+#   suositus  K13:n odotettu suositus (maarays | suositus), kun teksti sisältää suosittelevan
+#             ilmauksen
+#
+# Odotettu otsikko ja tunnus koskevat linjausten oletuksia (L-06 alkuperäinen tunnus; puuttuva
+# liitteestä 4). Yksikkö tunnistetaan arvioinnissa käyttäjän otsikosta ja tunnuksesta.
+
+tila: vahvistamaton
+laatija: kehittäjä (synteettinen luonnos)
+paivays: 2026-11-26
+muunnostila: laadinta
+linjaukset: oletukset
+
+yksikot:
+  - syote:
+      tyyppi: merkinta
+      otsikko: Kerrostalovaltainen asuntoalue
+      tunnus: AK
+      teksti: Alueen täydennysrakentamisessa tulee sovittaa uudet rakennukset olemassa olevaan kaupunkikuvaan.
+    otsikko: Kerrostalovaltainen asuntoalue
+    tunnus: AK
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asuinkerrostaloalue(paakayttotarkoitus)"]
+    kirjaintunnus: AK
+    sanallinen: true
+    sanallisen_lajit: [taydennysrakentaminen]
+    sanallisen_lajit_muut: [rakentamistapa, kulttuuriymparisto]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Pientalovaltainen asuntoalue
+      tunnus: null
+      teksti: Alueelle saa rakentaa enintään 6 000 k-m² pientaloja.
+    otsikko: Pientalovaltainen asuntoalue
+    tunnus: null
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asuinpientaloalue(paakayttotarkoitus)", "sallittuKerrosala()"]
+    kirjaintunnus: AP
+    sanallinen: true
+    sanallisen_lajit: [rakennusoikeus]
+    kysymykset: [K11, K14]
+    huomautus: Tunnus puuttuu syötteestä, liitteestä 4 AP (L-06). Numeroarvo suureena.
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Työpaikka-alue
+      tunnus: TP
+      teksti: Alueen rakentamistehokkuus on e=0,8. Alueelle ei saa sijoittaa ympäristöhäiriöitä aiheuttavaa toimintaa.
+    otsikko: Työpaikka-alue
+    tunnus: TP
+    ryhmatyyppi: kaavakohde
+    rakenne: ["tyopaikkojenAlue(paakayttotarkoitus)", "tehokkuusluku()"]
+    kirjaintunnus: TP
+    sanallinen: true
+    sanallisen_lajit: [ymparistohairiot]
+    sanallisen_lajit_muut: [rakennusoikeus]
+    kysymykset: [K10, K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Lähivirkistysalue
+      tunnus: VL
+      teksti: "Alueella on säilytettävä yhtenäinen ulkoilureitti.\n\nPuustoa suositellaan hoidettavaksi monilajisena."
+    otsikko: Lähivirkistysalue
+    tunnus: VL
+    ryhmatyyppi: kaavakohde
+    rakenne: ["lahivirkistysalue(paakayttotarkoitus)"]
+    kirjaintunnus: VL
+    sanallinen: true
+    sanallisen_lajit: [virkistys]
+    sanallisen_lajit_muut: [luontoarvot, biodiversiteetti, jalankulku]
+    kysymykset: [K11, K13]
+    suositus: suositus
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Keskustatoimintojen alue
+      tunnus: C
+      teksti: Kivijalkaliiketilat tulee sijoittaa katutasoon, ja julkisivuissa suositellaan käytettävän puuta.
+    otsikko: Keskustatoimintojen alue
+    tunnus: C
+    ryhmatyyppi: kaavakohde
+    rakenne: ["keskustatoimintojenAlue(paakayttotarkoitus)"]
+    kirjaintunnus: C
+    sanallinen: true
+    sanallisen_lajit: [julkisivut]
+    sanallisen_lajit_muut: [rakentamistapa, kaupanOhjaus, tontinKaytto]
+    kysymykset: [K11, K13]
+    suositus: maarays
+    huomautus: Velvoittava ja suositteleva ilmaus samassa kappaleessa → kaavamääräys.
+
+  - syote:
+      tyyppi: yleismaarays
+      otsikko: Hulevedet
+      tunnus: null
+      teksti: Hulevedet tulee viivyttää ja imeyttää ensisijaisesti tonteilla.
+    otsikko: Hulevedet
+    tunnus: null
+    ryhmatyyppi: yleismaarays
+    rakenne: []
+    sanallinen: true
+    sanallisen_lajit: [hulevedet]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: yleismaarays
+      otsikko: Ranta-alueiden rakentaminen
+      tunnus: null
+      teksti: Yleiskaavaa voidaan käyttää rakennusluvan myöntämisen perusteena ranta-alueilla MRL 72 §:n mukaisesti.
+    otsikko: Ranta-alueiden rakentaminen
+    tunnus: null
+    ryhmatyyppi: yleismaarays
+    rakenne: []
+    sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+    sanallisen_lajit_muut: [rakentamistapa]
+    kysymykset: [K11, K12]
+    huomautus: Laadintatilassa K12 jää avoimeksi (laatija päivittää viittauksen).
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Uusi asuntovaltainen alue
+      tunnus: A
+      teksti: Alueen suunnittelussa on varattava tilaa lähipalveluille.
+    otsikko: Uusi asuntovaltainen alue
+    tunnus: A
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asumisenAlue(paakayttotarkoitus,uusi)"]
+    kirjaintunnus: A
+    sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+    sanallisen_lajit_muut: [kehittamisperiaate]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Maa- ja metsätalousvaltainen alue
+      tunnus: M
+      teksti: Alue on tarkoitettu pääasiassa maa- ja metsätalouteen. Haja-asutusluonteinen rakentaminen on sallittua.
+    otsikko: Maa- ja metsätalousvaltainen alue
+    tunnus: M
+    ryhmatyyppi: kaavakohde
+    rakenne: ["maaJaMetsatalousAlue(paakayttotarkoitus)"]
+    kirjaintunnus: M
+    sanallinen: true
+    sanallisen_lajit: [yhdyskuntarakenteenOhjaus]
+    sanallisen_lajit_muut: [rakentamistapa, maisema]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Pohjavesialue
+      tunnus: pv
+      teksti: Alueella ei saa varastoida pohjavettä pilaavia aineita.
+    otsikko: Pohjavesialue
+    tunnus: pv
+    ryhmatyyppi: kaavakohde
+    rakenne: ["pohjavesialue(osaAlue)"]
+    kirjaintunnus: pv
+    sanallinen: true
+    sanallisen_lajit: [ymparistoarvot]
+    sanallisen_lajit_muut: [vesihuolto]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Asuntoalue
+      tunnus: A-1
+      teksti: Kortteliin saa rakentaa 5 000 k-m² asumista ja 800 k-m² liiketilaa.
+    otsikko: Asuntoalue
+    tunnus: A-1
+    ryhmatyyppi: kaavakohde
+    rakenne: ["asumisenAlue(paakayttotarkoitus)"]
+    kirjaintunnus: A-1
+    sanallinen: true
+    sanallisen_lajit: [rakennusoikeus]
+    kysymykset: [K11, K14]
+    huomautus: Kaksi numeroarvoa (R-04 yksi suure) → jäävät sanallisiksi; tunnus A-1 vs. liitteen A.
+
+  - syote:
+      tyyppi: yleismaarays
+      otsikko: Energiaratkaisut
+      tunnus: null
+      teksti: Rakennuksissa suositellaan uusiutuvan energian käyttöä.
+    otsikko: Energiaratkaisut
+    tunnus: null
+    ryhmatyyppi: yleismaarays
+    rakenne: []
+    sanallinen: true
+    sanallisen_lajit: [ilmastonmuutos]
+    sanallisen_lajit_muut: [yhdyskuntatekniikka, rakentamistapa]
+    kysymykset: [K11, K13]
+    suositus: suositus
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Virkistysalue
+      tunnus: V
+      teksti: Alueelle ei saa sijoittaa virkistyskäyttöä haittaavaa rakentamista.
+    otsikko: Virkistysalue
+    tunnus: V
+    ryhmatyyppi: kaavakohde
+    rakenne: ["virkistysalue(paakayttotarkoitus)"]
+    kirjaintunnus: V
+    sanallinen: true
+    sanallisen_lajit: [virkistys]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Suojaviheralue
+      tunnus: EV
+      teksti: Alue on varattu melun ja pölyn torjuntaan. Puusto tulee säilyttää peitteisenä.
+    otsikko: Suojaviheralue
+    tunnus: EV
+    ryhmatyyppi: kaavakohde
+    rakenne: ["suojaviheralue(paakayttotarkoitus)"]
+    kirjaintunnus: EV
+    sanallinen: true
+    sanallisen_lajit: [ymparistohairiot]
+    sanallisen_lajit_muut: [melu, luontoarvot]
+    kysymykset: [K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Liikennealue
+      tunnus: L
+      teksti: Alueen suunnittelussa on otettava huomioon joukkoliikenteen ja pyöräilyn yhteydet.
+    otsikko: Liikennealue
+    tunnus: L
+    ryhmatyyppi: kaavakohde
+    rakenne: ["liikennealue(paakayttotarkoitus)"]
+    kirjaintunnus: L
+    sanallinen: true
+    sanallisen_lajit: [joukkoliikenne, pyoraily]
+    sanallisen_lajit_muut: [liikenne, kevytLiikenne]
+    kysymykset: [K10, K11]
+
+  - syote:
+      tyyppi: merkinta
+      otsikko: Teollisuus- ja varastoalue
+      tunnus: T
+      teksti: Alueen tehokkuusluku on e=0,5.
+    otsikko: Teollisuus- ja varastoalue
+    tunnus: T
+    ryhmatyyppi: kaavakohde
+    rakenne: ["teollisuusalue(paakayttotarkoitus)", "varastoalue(paakayttotarkoitus)", "tehokkuusluku()"]
+    kirjaintunnus: T
+    sanallinen: true
+    sanallisen_lajit: [rakennusoikeus]
+    kysymykset: [K11]

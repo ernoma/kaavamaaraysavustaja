@@ -1,0 +1,1762 @@
+{
+ "muoto": 1,
+ "toimittaja": "claude",
+ "malli": "claude-opus-5-5",
+ "kehote": "prompts/v3 v3",
+ "tietopohja": "TP-2026.11-3",
+ "laatu": "medium",
+ "aineisto": [
+  "laadinta"
+ ],
+ "vastaukset": {
+  "f6e74f93598e6844": {
+   "yksikko": "u001",
+   "otsikko": "Kerrostalovaltainen asuntoalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2007,
+    "output_tokens": 1857,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 50618
+   },
+   "kesto_s": 18.5,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Kerrostalovaltainen asuntoalue",
+      "kirjaintunnus": "AK",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "asuinkerrostaloalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Kerrostalovaltainen asuntoalue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueen täydennysrakentamisessa tulee sovittaa uudet rakennukset olemassa olevaan kaupunkikuvaan.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "taydennysrakentaminen",
+         "rakentamistapa"
+        ],
+        "tekstiviitteet": [
+         "Alueen täydennysrakentamisessa tulee sovittaa uudet rakennukset olemassa olevaan kaupunkikuvaan."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko ja tunnus vastaavat liitteen 4 vakiomääräystä AK Kerrostalovaltainen asuntoalue: asuinkerrostaloalue + paakayttotarkoitus. Otsikko ja tunnus ovat samat kuin liitteessä.",
+      "lainaus": "Kerrostalovaltainen asuntoalue",
+      "tietopohjaviite": "Katja liite 4 / AK",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue. Liitteen 4 AK-rivi on aluemainen, ja otsikko kuvaa aluetta.",
+      "lainaus": "asuntoalue",
+      "tietopohjaviite": "Katja liite 4 / AK [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallinen määräys on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen pääaihe on täydennysrakentaminen.",
+      "lainaus": "täydennysrakentamisessa",
+      "tietopohjaviite": "Koodin kuvaus: taydennysrakentaminen",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Toinen sanallisen määräyksen laji on rakentamistapa, koska teksti ohjaa uusien rakennusten sovittamista kaupunkikuvaan.",
+      "lainaus": "tulee sovittaa uudet rakennukset olemassa olevaan kaupunkikuvaan",
+      "tietopohjaviite": "Koodin kuvaus: rakentamistapa",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Teksti on velvoittava (\"tulee\"), joten se on kaavamääräys eikä kaavasuositus. K13 ei nouse.",
+      "lainaus": "tulee sovittaa",
+      "tietopohjaviite": "Laadintaohje: K13",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Lisätieto eheytettavaTaiTiivistettava täydennysrakentamisen perusteella.",
+      "miksi_ei_ensisijainen": "Otsikossa tai liitteen 4 AK-rivillä ei ole vastaavaa ilmausta. Teksti vain sivuaa täydennysrakentamista, joten lisätietoa ei lisätä."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen laji kulttuuriymparisto kaupunkikuvan perusteella.",
+      "miksi_ei_ensisijainen": "Teksti ei käsittele kulttuuriympäristön arvoja, vaan rakennusten sovittamista kaupunkikuvaan. Siksi rakentamistapa kuvaa aihetta tarkemmin."
+     },
+     {
+      "kuvaus": "Geometria piste (liitteen 4 AK [piste]).",
+      "miksi_ei_ensisijainen": "Otsikko ja teksti puhuvat alueesta (\"Alueen\"), joten aluemainen aluevaraus on luonteva."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "71aa9117e26c5e83": {
+   "yksikko": "u002",
+   "otsikko": "Pientalovaltainen asuntoalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2456,
+    "output_tokens": 2397,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 21.1,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Pientalovaltainen asuntoalue",
+      "kirjaintunnus": "AP",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "asuinpientaloalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Pientalovaltainen asuntoalue"
+        ]
+       },
+       {
+        "laji": "sallittuKerrosala",
+        "arvo": "6000",
+        "lisatiedot": [],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "enintään 6 000 k-m²"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueelle saa rakentaa enintään 6 000 k-m² pientaloja.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "rakennusoikeus"
+        ],
+        "tekstiviitteet": [
+         "Alueelle saa rakentaa enintään 6 000 k-m² pientaloja."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko vastaa sellaisenaan liitteen 4 vakiomääräystä AP Pientalovaltainen asuntoalue: asuinpientaloalue + paakayttotarkoitus. Otsikko ei poikkea liitteestä.",
+      "lainaus": "Pientalovaltainen asuntoalue",
+      "tietopohjaviite": "Katja liite 4 / AP",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue, koska kyse on aluevarauksesta ja teksti puhuu alueesta.",
+      "lainaus": "Alueelle saa rakentaa",
+      "tietopohjaviite": "Katja liite 4 / AP [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kirjaintunnus AP otetaan liitteestä 4, koska käyttäjä ei antanut tunnusta.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-06",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Tekstin ainoa numeroarvo on kerrosala, joten se annetaan suureena sallittuKerrosala arvolla 6000.",
+      "lainaus": "enintään 6 000 k-m²",
+      "tietopohjaviite": "Koodin kuvaus: sallittuKerrosala",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti säilyy sanallisena määräyksenä sellaisenaan yläkoodilla sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji on rakennusoikeus, koska teksti määrää alueen enimmäisrakennusoikeuden.",
+      "lainaus": "Alueelle saa rakentaa enintään 6 000 k-m² pientaloja.",
+      "tietopohjaviite": "Koodin kuvaus: rakennusoikeus",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Suureelle sallittuKerrosala ei anneta pääkäyttötarkoitusta, koska sen voi antaa vain aluevarauskoodille. R-08-löydös johtuu suureesta, ja rakenne vastaa esimerkkimuunnosta.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.3.1 ja 3.3.9",
+      "varmuus": "keskitaso"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Numeroarvo jätetään vain sanalliseen tekstiin ilman suuretta sallittuKerrosala.",
+      "miksi_ei_ensisijainen": "Laadintatilassa tekstin yksi numeroarvo annetaan suureena. Arvo koskee koko merkintää eikä ole paikkasidonnainen. Numeroarvon esiintyminen myös tekstissä on R-18:n huomio, ja laatija päättää sen poistamisesta."
+     },
+     {
+      "kuvaus": "Suureelle sallittuKerrosala annetaan lisätieto paakayttotarkoitus R-08:n tyydyttämiseksi.",
+      "miksi_ei_ensisijainen": "Pääkäyttötarkoituksen voi antaa vain aluevarauskoodille, eikä sallittuKerrosala ole aluevaraus."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi lisätään myös rakentamistapa.",
+      "miksi_ei_ensisijainen": "Teksti koskee rakennusoikeuden määrää eikä rakentamisen tapaa."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "1bfbeefa28aac2d9": {
+   "yksikko": "u003",
+   "otsikko": "Työpaikka-alue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2285,
+    "output_tokens": 2816,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 23.6,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Työpaikka-alue",
+      "kirjaintunnus": "TP",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "tyopaikkojenAlue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Työpaikka-alue"
+        ]
+       },
+       {
+        "laji": "tehokkuusluku",
+        "arvo": "0,8",
+        "lisatiedot": [],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Alueen rakentamistehokkuus on e=0,8."
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueen rakentamistehokkuus on e=0,8. Alueelle ei saa sijoittaa ympäristöhäiriöitä aiheuttavaa toimintaa.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "ymparistohairiot"
+        ],
+        "tekstiviitteet": [
+         "Alueelle ei saa sijoittaa ympäristöhäiriöitä aiheuttavaa toimintaa."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko ja tunnus vastaavat liitteen 4 vakiomääräystä TP Työpaikka-alue: tyopaikkojenAlue + paakayttotarkoitus. Käyttäjän otsikko on sama kuin liitteen otsikko.",
+      "lainaus": "Työpaikka-alue",
+      "tietopohjaviite": "Katja liite 4 / TP",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue. Kyseessä on aluevaraus, ja tehokkuusluku koskee alueen pinta-alaa.",
+      "lainaus": "Alueen rakentamistehokkuus",
+      "tietopohjaviite": "Katja liite 4 / TP [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Tekstin ainoa numeroarvo annetaan suureena tehokkuusluku, arvo 0,8 sellaisenaan. Arvo jää myös sanalliseen tekstiin, koska tekstiä ei muuteta (R-18).",
+      "lainaus": "e=0,8",
+      "tietopohjaviite": "Koodin kuvaus: tehokkuusluku; laadintatilan suureohje",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Tehokkuusluvulle ei anneta pääkäyttötarkoitusta, koska se ei ole aluevarauskoodi. R-08-virhe johtuu suureesta, ja tarkistaja voi kuitata sen.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.3.1 ja 3.3.9",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen pääaihe on ympäristöhäiriöt.",
+      "lainaus": "ympäristöhäiriöitä aiheuttavaa toimintaa",
+      "tietopohjaviite": "Koodin kuvaus: ymparistohairiot",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti on velvoittava, joten se on kaavamääräys eikä kaavasuositus.",
+      "lainaus": "ei saa sijoittaa",
+      "tietopohjaviite": "Laadintaohje, kohta 9",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Lisätieto ymparistoAsettaaToiminnanLaadulleErityisiaVaatimuksia ympäristöhäiriökiellon perusteella.",
+      "miksi_ei_ensisijainen": "Liitteen 4 TP-rivi ei sisällä lisätietoa, eikä otsikossa ole sitä vastaavaa ilmausta. Teksti vain sivuaa asiaa."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi lisäksi rakennusoikeus tehokkuusluvun vuoksi.",
+      "miksi_ei_ensisijainen": "Tehokkuus on jo ilmaistu suureena, joten rakennusoikeus-laji olisi päällekkäinen."
+     },
+     {
+      "kuvaus": "Pääkäyttötarkoitus myös tehokkuusluvulle R-08:n täyttämiseksi.",
+      "miksi_ei_ensisijainen": "Pääkäyttötarkoituksen voi antaa vain aluevarauskoodille, eikä tehokkuusluku ole aluevaraus."
+     },
+     {
+      "kuvaus": "Piste-geometria (liitteen 4 TP-pisterivi).",
+      "miksi_ei_ensisijainen": "Tehokkuusluku edellyttää pinta-alaa, ja teksti puhuu alueesta."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "keskitaso"
+   }
+  },
+  "bccd8acc356b32fa": {
+   "yksikko": "u004",
+   "otsikko": "Lähivirkistysalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2094,
+    "output_tokens": 1869,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 17.3,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Lähivirkistysalue",
+      "kirjaintunnus": "VL",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "lahivirkistysalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Lähivirkistysalue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueella on säilytettävä yhtenäinen ulkoilureitti.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "virkistys"
+        ],
+        "tekstiviitteet": [
+         "Alueella on säilytettävä yhtenäinen ulkoilureitti."
+        ]
+       }
+      ],
+      "suositukset": [
+       "Puustoa suositellaan hoidettavaksi monilajisena."
+      ]
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko ja tunnus vastaavat liitteen 4 vakiomääräystä VL Lähivirkistysalue: lahivirkistysalue + paakayttotarkoitus.",
+      "lainaus": "Lähivirkistysalue",
+      "tietopohjaviite": "Katja liite 4 / VL",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue, koska kyseessä on aluevaraus (liitteen 4 VL-alue-rivi); pääkäyttötarkoitus edellyttää aluemaista kohdetta.",
+      "lainaus": "",
+      "tietopohjaviite": "Katja liite 4 / VL [alue]; Opas 3.3.1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Ensimmäinen kappale on velvoittava ja jää sanalliseksi määräykseksi; lajiksi virkistys, koska se koskee ulkoilureitin säilyttämistä.",
+      "lainaus": "Alueella on säilytettävä yhtenäinen ulkoilureitti.",
+      "tietopohjaviite": "Koodin kuvaus: virkistys",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Toinen kappale on kokonaan velvoittamaton, joten se on kaavasuositus (K13 ratkaistu: suositus).",
+      "lainaus": "Puustoa suositellaan hoidettavaksi monilajisena.",
+      "tietopohjaviite": "Laadintaohje: Kaavasuositus (K13)",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Koko teksti yhtenä sanallisena määräyksenä (K13: maarays), lajeina virkistys ja luontoarvot/biodiversiteetti.",
+      "miksi_ei_ensisijainen": "Toinen kappale on kokonaan velvoittamaton (suositellaan), joten laadintaohjeen mukaan se on kaavasuositus."
+     },
+     {
+      "kuvaus": "Lisätään sanallisen määräyksen lajiksi kevytLiikenne tai jalankulku ulkoilureitin vuoksi.",
+      "miksi_ei_ensisijainen": "Reitti on ulkoilureitti, jonka pääaihe on virkistys; liikennelajit eivät kuvaa tekstin pääaihetta."
+     },
+     {
+      "kuvaus": "Lisätieto sailytettava sanan 'säilytettävä' perusteella.",
+      "miksi_ei_ensisijainen": "Ilmaus koskee reittiä eikä aluevarausta, eikä liitteen 4 VL-rivi sisällä lisätietoa; epävarma lisätieto jätetään pois."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [
+     {
+      "tunnus": "u004-K13",
+      "valinta": "suositus",
+      "peruste": "Toinen kappale on kokonaan velvoittamaton, joten se siirtyy kaavasuositukseksi; velvoittava ensimmäinen kappale jää sanalliseksi määräykseksi.",
+      "lainaus": "Puustoa suositellaan hoidettavaksi monilajisena."
+     }
+    ],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "cb241215dcf15e4e": {
+   "yksikko": "u005",
+   "otsikko": "Keskustatoimintojen alue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2534,
+    "output_tokens": 2238,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 19.2,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Keskustatoimintojen alue",
+      "kirjaintunnus": "C",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "keskustatoimintojenAlue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Keskustatoimintojen alue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Kivijalkaliiketilat tulee sijoittaa katutasoon, ja julkisivuissa suositellaan käytettävän puuta.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "rakentamistapa",
+         "julkisivut"
+        ],
+        "tekstiviitteet": [
+         "Kivijalkaliiketilat tulee sijoittaa katutasoon",
+         "julkisivuissa suositellaan käytettävän puuta"
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko vastaa liitteen 4 vakiomääräystä C Keskustatoimintojen alue, joten rakenne on keskustatoimintojenAlue ja lisätieto paakayttotarkoitus. Otsikko ja tunnus ovat samat kuin liitteessä 4.",
+      "lainaus": "Keskustatoimintojen alue",
+      "tietopohjaviite": "Katja liite 4 / C",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue. Aluevarauksen pääkäyttötarkoitus edellyttää aluemaista kohdetta.",
+      "lainaus": "",
+      "tietopohjaviite": "Katja liite 4 / C [alue]; Opas 3.3.1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Tekstin pääaihe on liiketilojen sijoittaminen rakennuksessa, joten sanallisen määräyksen pääaiheeksi valitaan rakentamistapa.",
+      "lainaus": "Kivijalkaliiketilat tulee sijoittaa katutasoon",
+      "tietopohjaviite": "Koodin kuvaus: rakentamistapa",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Teksti käsittelee julkisivujen materiaalia, joten lajiksi valitaan myös julkisivut.",
+      "lainaus": "julkisivuissa suositellaan käytettävän puuta",
+      "tietopohjaviite": "Koodin kuvaus: julkisivut",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kappaleessa on velvoittava ilmaus, joten koko teksti jää kaavamääräykseksi (K13: maarays).",
+      "lainaus": "tulee sijoittaa",
+      "tietopohjaviite": "Laadintaohje: Kaavasuositus (K13)",
+      "varmuus": "keskitaso"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Puun käyttöä koskeva lause kaavasuositukseksi (K13: suositus).",
+      "miksi_ei_ensisijainen": "Samassa kappaleessa on velvoittava ilmaus \"tulee\", eikä tekstiä jaeta. Jos lause on tarkoitettu suositukseksi, laatija voi erottaa sen omaksi kappaleekseen, jolloin sen voi siirtää kaavasuositukseksi."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi kaupanOhjaus tai tontinKaytto kivijalkaliiketilojen vuoksi.",
+      "miksi_ei_ensisijainen": "Teksti ei ohjaa vähittäiskaupan määrää eikä sijoittumista alueella. Se ohjaa liiketilojen sijoittamista rakennuksessa, mikä on rakentamistapaa."
+     },
+     {
+      "kuvaus": "Pistemäinen C-merkintä (keskustatoimintojenAlue ilman pääkäyttötarkoitusta).",
+      "miksi_ei_ensisijainen": "Otsikko puhuu alueesta, ja aluevarauksena merkintä on liitteen 4 aluemainen C."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [
+     {
+      "tunnus": "u005-K13",
+      "valinta": "maarays",
+      "peruste": "Kappale ei ole kokonaan velvoittamaton, koska siinä on velvoittava ilmaus. Laadintaohjeen mukaan valitaan tällöin kaavamääräys. Tekstiä ei jaeta, joten suositusosa jää osaksi sanallista määräystä.",
+      "lainaus": "Kivijalkaliiketilat tulee sijoittaa katutasoon"
+     }
+    ],
+    "kokonaisvarmuus": "keskitaso"
+   }
+  },
+  "ac6b1c38942e1926": {
+   "yksikko": "u006",
+   "otsikko": "Hulevedet",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1737,
+    "output_tokens": 1006,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 9.3,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Hulevedet",
+      "kirjaintunnus": null,
+      "ryhmatyyppi": "yleismaarays",
+      "geometria": [],
+      "maaraykset": [
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Hulevedet tulee viivyttää ja imeyttää ensisijaisesti tonteilla.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "hulevedet"
+        ],
+        "tekstiviitteet": [
+         "Hulevedet tulee viivyttää ja imeyttää ensisijaisesti tonteilla."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Yksikkö on yleismääräys, joka koskee koko kaava-aluetta; siinä ei ole pääkäyttötarkoitusta eikä osa-aluetta, vaan sanallinen määräys lajeineen.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.2.1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji on hulevedet, koska teksti koskee hulevesien viivyttämistä ja imeyttämistä.",
+      "lainaus": "Hulevedet tulee viivyttää ja imeyttää",
+      "tietopohjaviite": "Koodin kuvaus: hulevedet",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti on velvoittava (\"tulee\"), joten se on kaavamääräys eikä kaavasuositus.",
+      "lainaus": "tulee viivyttää",
+      "tietopohjaviite": "Laadintaohje: K13",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Otsikko säilyy käyttäjän antamana; yleismääräykselle ei ole liitteen 4 tunnusta.",
+      "lainaus": "Hulevedet",
+      "tietopohjaviite": "Linjaus L-15, L-06",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Lisätään sanallisen määräyksen lajiksi myös tontinKaytto (\"tonteilla\").",
+      "miksi_ei_ensisijainen": "Tontti mainitaan vain hulevesien käsittelyn sijaintina; pääaihe on hulevesien hallinta."
+     },
+     {
+      "kuvaus": "Lisätään laji ilmastonmuutos tai vesihuolto.",
+      "miksi_ei_ensisijainen": "Teksti ei käsittele ilmastonmuutosta eikä vesihuoltoa, ainoastaan hulevesiä."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "372da93878c0abc3": {
+   "yksikko": "u007",
+   "otsikko": "Ranta-alueiden rakentaminen",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1298,
+    "output_tokens": 2465,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 21.9,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Ranta-alueiden rakentaminen",
+      "kirjaintunnus": null,
+      "ryhmatyyppi": "yleismaarays",
+      "geometria": [],
+      "maaraykset": [
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Yleiskaavaa voidaan käyttää rakennusluvan myöntämisen perusteena ranta-alueilla MRL 72 §:n mukaisesti.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "yhdyskuntarakenteenOhjaus"
+        ],
+        "tekstiviitteet": [
+         "Yleiskaavaa voidaan käyttää rakennusluvan myöntämisen perusteena ranta-alueilla"
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Yksikkö on yleismääräys, joka koskee koko kaava-aluetta. Siinä ei ole pääkäyttötarkoitusta, osa-aluetta eikä geometriaa.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.2.1; yksikön tyyppi yleismaarays",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Määräyksen tyyppi on yläkoodi sanallinenMaarays, ja koko teksti on yhtenä määräyksenä sellaisenaan.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04; Linjaus L-03",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen lajiksi valitaan yhdyskuntarakenteen ohjaus. Teksti ohjaa sitä, millä alueilla yleiskaava toimii suoraan rakentamisen perusteena.",
+      "lainaus": "Yleiskaavaa voidaan käyttää rakennusluvan myöntämisen perusteena ranta-alueilla",
+      "tietopohjaviite": "Koodin kuvaus: yhdyskuntarakenteenOhjaus",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Viittaus ranta-alueisiin jää tekstiin. Yleismääräys säilyy, ja kohdistus näytetään huomiona.",
+      "lainaus": "ranta-alueilla",
+      "tietopohjaviite": "Linjaus L-05",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Lakiviittaus MRL on vanhentunut. Teksti säilyy muuttamattomana, ja K12 jää avoimeksi laatijalle.",
+      "lainaus": "MRL 72 §:n mukaisesti",
+      "tietopohjaviite": "Laadintaohje: lakiviittaus (K12)",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi rakentamismaarays tai tontinKaytto.",
+      "miksi_ei_ensisijainen": "Teksti ei koske rakentamisen tapaa eikä tontin käyttöä. Se määrittää kaavan oikeusvaikutuksen rakennusluvan perusteena, mikä on lähinnä yhdyskuntarakenteen ohjausta."
+     },
+     {
+      "kuvaus": "Lisätieto rakennusluvanPeruste.",
+      "miksi_ei_ensisijainen": "Lisätieto liittyy kaavakohteen määräykseen. Yleismääräyksessä on vain sanallinen määräys, jolle lisätietoa ei anneta."
+     },
+     {
+      "kuvaus": "K3: yleismääräys koskee vain ranta-alueita.",
+      "miksi_ei_ensisijainen": "Teksti ei viittaa tiettyihin kaavamerkintöihin. Lisäksi linjaus L-05 ratkaisee käsittelyn: teksti säilyy yleismääräyksenä."
+     }
+    ],
+    "tulkintakysymykset": [
+     {
+      "tyyppi": "K12",
+      "kysymys": "Vanhentunut lakiviittaus: MRL 72 §. Päivitetäänkö viittaus voimassa olevaan alueidenkäyttölakiin?",
+      "vaihtoehdot": [
+       {
+        "kuvaus": "Teksti säilyy ennallaan",
+        "seuraus": "Määräyksessä säilyy viittaus maankäyttö- ja rakennuslakiin."
+       },
+       {
+        "kuvaus": "Viittaus päivitetään",
+        "seuraus": "Laatija korjaa lakiviittauksen itse tekstiin. Rakenne ei muutu."
+       }
+      ],
+      "suositus": "Viittaus päivitetään",
+      "peruste": "Kyseessä on uuden kaavan luonnos (laadintatila). Laatijan tulee itse päivittää vanhentunut MRL-viittaus voimassa olevaan lakiin. Avustaja ei muuta tekstiä."
+     }
+    ],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "keskitaso"
+   }
+  },
+  "9dacc255750f500e": {
+   "yksikko": "u008",
+   "otsikko": "Uusi asuntovaltainen alue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1870,
+    "output_tokens": 2085,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 18.0,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Uusi asuntovaltainen alue",
+      "kirjaintunnus": "A",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "asumisenAlue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         },
+         {
+          "laji": "uusi",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Uusi asuntovaltainen alue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueen suunnittelussa on varattava tilaa lähipalveluille.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "suunnittelumaarays",
+         "yhdyskuntarakenteenOhjaus"
+        ],
+        "tekstiviitteet": [
+         "Alueen suunnittelussa on varattava tilaa lähipalveluille."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko vastaa liitteen 4 vakiomääräystä A Uusi asuntovaltainen alue: asumisenAlue + paakayttotarkoitus + uusi. Otsikko ja tunnus A säilyvät sellaisinaan (L-15, L-06).",
+      "lainaus": "Uusi asuntovaltainen alue",
+      "tietopohjaviite": "Katja liite 4 / A Uusi asuntovaltainen alue [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Lisätieto uusi perustuu otsikon määreeseen UUSI ja liitteen 4 riviin.",
+      "lainaus": "Uusi",
+      "tietopohjaviite": "Katja liite 4 / A Uusi asuntovaltainen alue",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue: merkintä on aluevaraus ja liitteen 4 aluerivi sisältää pääkäyttötarkoituksen.",
+      "lainaus": "asuntovaltainen alue",
+      "tietopohjaviite": "Katja liite 4 / A [alue]; opas 3.3.1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti annetaan yhtenä sanallisena määräyksenä yläkoodilla sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04, L-03",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen pääaihe on tarkemman suunnittelun ohjaus, joten laji suunnittelumaarays.",
+      "lainaus": "Alueen suunnittelussa on varattava",
+      "tietopohjaviite": "Koodin kuvaus: suunnittelumaarays",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Lähipalvelujen tilavaraus ohjaa palvelujen sijoittumista asuinalueelle, joten toissijainen laji yhdyskuntarakenteenOhjaus.",
+      "lainaus": "tilaa lähipalveluille",
+      "tietopohjaviite": "Koodin kuvaus: yhdyskuntarakenteenOhjaus",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Teksti on velvoittava, joten kyseessä on kaavamääräys eikä suositus; K13 ei nouse.",
+      "lainaus": "on varattava",
+      "tietopohjaviite": "Laadintaohje: velvoittava ilmaus → kaavamääräys",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Lähipalveluille erillinen palvelujenAlue-määräys tai sekoittunut käyttötarkoitus (asumisenAlue + palvelujenAlue).",
+      "miksi_ei_ensisijainen": "Teksti velvoittaa vain varaamaan tilaa suunnittelussa; se ei osoita alueelle toista pääkäyttötarkoitusta, ja alueella on vain yksi aluevaraus."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi tontinKaytto.",
+      "miksi_ei_ensisijainen": "Teksti koskee yleiskaavatason suunnittelua eikä yksittäisen tontin käyttöä."
+     },
+     {
+      "kuvaus": "Geometriaksi piste (liitteen 4 pisterivi A Uusi asuntovaltainen alue).",
+      "miksi_ei_ensisijainen": "Vaihe 1 ja aluevarausrakenne (pääkäyttötarkoitus) edellyttävät aluetta; pistekohde ei saa pääkäyttötarkoitusta."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "0ddc6a5ad680afb3": {
+   "yksikko": "u009",
+   "otsikko": "Maa- ja metsätalousvaltainen alue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1637,
+    "output_tokens": 1728,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 15.5,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Maa- ja metsätalousvaltainen alue",
+      "kirjaintunnus": "M",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "maaJaMetsatalousAlue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Maa- ja metsätalousvaltainen alue",
+         "Alue on tarkoitettu pääasiassa maa- ja metsätalouteen."
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alue on tarkoitettu pääasiassa maa- ja metsätalouteen. Haja-asutusluonteinen rakentaminen on sallittua.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "yhdyskuntarakenteenOhjaus"
+        ],
+        "tekstiviitteet": [
+         "Haja-asutusluonteinen rakentaminen on sallittua."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Merkintä vastaa liitteen 4 vakiomääräystä M Maa- ja metsätalousvaltainen alue: maaJaMetsatalousAlue + paakayttotarkoitus. Otsikko ja tunnus ovat samat kuin liitteessä 4.",
+      "lainaus": "Maa- ja metsätalousvaltainen alue",
+      "tietopohjaviite": "Katja liite 4 / M",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti vahvistaa käyttötarkoituksen maa- ja metsätaloudeksi.",
+      "lainaus": "Alue on tarkoitettu pääasiassa maa- ja metsätalouteen.",
+      "tietopohjaviite": "Koodin kuvaus: maaJaMetsatalousAlue",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue, koska liitteen 4 M-rivi on aluemainen ja kyse on aluevarauksesta.",
+      "lainaus": "",
+      "tietopohjaviite": "Katja liite 4 / M [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti säilyy kokonaisena yhtenä sanallisena määräyksenä yläkoodilla sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-03, Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji yhdyskuntarakenteenOhjaus, koska teksti sallii haja-asutusluonteisen rakentamisen ja ohjaa siten asutuksen sijoittumista. Tämä korjaa vaiheen 1 virheen R-03.",
+      "lainaus": "Haja-asutusluonteinen rakentaminen on sallittua.",
+      "tietopohjaviite": "Koodin kuvaus: yhdyskuntarakenteenOhjaus",
+      "varmuus": "keskitaso"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi rakennusoikeus tai tontinKaytto rakentamisen sallimisen perusteella.",
+      "miksi_ei_ensisijainen": "Teksti ei määrää rakennusoikeuden määrää eikä tontin käyttöä. Se ohjaa asutuksen luonnetta (haja-asutus), mikä vastaa paremmin yhdyskuntarakenteen ohjausta."
+     },
+     {
+      "kuvaus": "Lisätieto olemassaOleva.",
+      "miksi_ei_ensisijainen": "Otsikossa ja liitteen 4 M-rivillä ei ole vastaavaa ilmausta."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "927d480049813ca0": {
+   "yksikko": "u010",
+   "otsikko": "Pohjavesialue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2202,
+    "output_tokens": 1826,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 15.3,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Pohjavesialue",
+      "kirjaintunnus": "pv",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "pohjavesialue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "osaAlue",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Pohjavesialue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueella ei saa varastoida pohjavettä pilaavia aineita.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "vesihuolto"
+        ],
+        "tekstiviitteet": [
+         "Alueella ei saa varastoida pohjavettä pilaavia aineita."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Merkintä vastaa liitteen 4 vakiomääräystä pv (Tärkeä vedenhankintaan soveltuva pohjavesialue): pohjavesialue + osaAlue. Osa-alue osoitetaan aluevarauksen päälle, joten pääkäyttötarkoitusta ei anneta.",
+      "lainaus": "Pohjavesialue",
+      "tietopohjaviite": "Katja liite 4 / pv",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kirjaintunnus pv on käyttäjän antama ja vastaa liitteen 4 tunnusta.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-06; Katja liite 4 / pv",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Otsikoksi säilyy käyttäjän otsikko \"Pohjavesialue\". Liitteen 4 otsikko on \"Tärkeä vedenhankintaan soveltuva pohjavesialue\". R-15 antaa tästä huomion.",
+      "lainaus": "Pohjavesialue",
+      "tietopohjaviite": "Linjaus L-15; Katja 2 §",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Geometria on alue, koska kyse on aluemaisesta pohjavesialueesta. Liitteen 4 pv-rivi [alue] vastaa tätä.",
+      "lainaus": "Alueella",
+      "tietopohjaviite": "Katja liite 4 / pv [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti on velvoittava (\"ei saa\"), joten se on kaavamääräys. Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "ei saa varastoida",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji on vesihuolto, koska määräys suojaa vedenhankintaan soveltuvaa pohjavettä pilaantumiselta.",
+      "lainaus": "pohjavettä pilaavia aineita",
+      "tietopohjaviite": "Koodin kuvaus: vesihuolto; Katja liite 4 / pv",
+      "varmuus": "keskitaso"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi ymparistoarvot (vrt. esimerkkimuunnos) vesihuollon sijaan tai sen lisäksi.",
+      "miksi_ei_ensisijainen": "Määräys kohdistuu pohjaveden laadun turvaamiseen vedenhankintaa varten (liitteen 4 pv). Vesihuolto kuvaa pääaihetta tarkemmin, ja sääntöpohjainen vaihe ehdotti sitä."
+     },
+     {
+      "kuvaus": "Liitteen 4 otsikko \"Tärkeä vedenhankintaan soveltuva pohjavesialue\".",
+      "miksi_ei_ensisijainen": "Linjauksen L-15 mukaan käyttäjän otsikko säilyy. Liitteen otsikko näkyy perusteluissa."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "9ad0ee682f9b80f6": {
+   "yksikko": "u011",
+   "otsikko": "Asuntoalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2418,
+    "output_tokens": 2299,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 19.2,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Asuntoalue",
+      "kirjaintunnus": "A-1",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "asumisenAlue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Asuntoalue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Kortteliin saa rakentaa 5 000 k-m² asumista ja 800 k-m² liiketilaa.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "rakennusoikeus"
+        ],
+        "tekstiviitteet": [
+         "Kortteliin saa rakentaa",
+         "k-m² asumista",
+         "k-m² liiketilaa"
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko vastaa liitteen 4 vakiomääräystä A Asuntoalue, joten rakenne on asumisenAlue ja lisätietona pääkäyttötarkoitus. Käyttäjän otsikko on sama kuin liitteen 4 otsikko.",
+      "lainaus": "Asuntoalue",
+      "tietopohjaviite": "Katja liite 4 / A Asuntoalue",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue, koska liitteen 4 rivi A Asuntoalue on aluemainen ja teksti koskee korttelia.",
+      "lainaus": "Kortteliin",
+      "tietopohjaviite": "Katja liite 4 / A Asuntoalue [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kirjaintunnukseksi säilyy käyttäjän antama A-1.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-06",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti on yhtenä sanallisena määräyksenä. Tyyppi on yläkoodi sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-03, Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji on rakennusoikeus, koska teksti osoittaa korttelin rakennusoikeuden käyttötarkoituksittain. Laji korjaa vaiheen 1 R-03-virheen.",
+      "lainaus": "Kortteliin saa rakentaa",
+      "tietopohjaviite": "Koodin kuvaus: rakennusoikeus",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Suureita ei anneta, koska tekstissä on kaksi numeroarvoa ja ryhmässä voi olla enintään yksi suure. Arvot jäävät sanalliseen tekstiin.",
+      "lainaus": "k-m² liiketilaa",
+      "tietopohjaviite": "Opas 3.3.9; laadintatilan ohje (useita numeroarvoja)",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Arvo 5 000 k-m² annetaan suureena sallittuKerrosala.",
+      "miksi_ei_ensisijainen": "Tekstissä on useita numeroarvoja (5 000 k-m² asumista ja 800 k-m² liiketilaa), ja ryhmässä saa olla enintään yksi suure. Jos suureet halutaan, ne jaetaan ryhmiin."
+     },
+     {
+      "kuvaus": "Liiketilan osuus ilmaistaan lisätiedolla kayttotarkoituksenOsuusKerrosalastaK-m2 tai sekoittuneena alueena (asumisenAlue + liikerakennustenAlue).",
+      "miksi_ei_ensisijainen": "Otsikko osoittaa yhden pääkäyttötarkoituksen (asuntoalue). Liiketila on tekstissä rakennusoikeuden osa, ei toinen pääkäyttötarkoitus. Numeroarvoja on useita, joten ne jäävät tekstiin."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi lisätään kaupanOhjaus.",
+      "miksi_ei_ensisijainen": "Teksti ei ohjaa vähittäiskauppaa. Se osoittaa liiketilan kerrosalan osana rakennusoikeutta."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "keskitaso"
+   }
+  },
+  "8ae5850b36a55bfe": {
+   "yksikko": "u012",
+   "otsikko": "Energiaratkaisut",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1573,
+    "output_tokens": 1556,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 14.0,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Energiaratkaisut",
+      "kirjaintunnus": null,
+      "ryhmatyyppi": "yleismaarays",
+      "geometria": [],
+      "maaraykset": [],
+      "suositukset": [
+       "Rakennuksissa suositellaan uusiutuvan energian käyttöä."
+      ]
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Yksikkö on yleismääräys, joka koskee koko kaava-aluetta. Siinä ei ole pääkäyttötarkoitusta, osa-aluetta eikä geometriaa.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.2.1; vaihe 1: YLEISMÄÄRÄYS-lohko",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Koko teksti on velvoittamaton, eikä siinä ole velvoittavaa ilmausta. Siksi se ehdotetaan kaavasuositukseksi, ja K13 ratkaistaan valinnalla suositus.",
+      "lainaus": "suositellaan",
+      "tietopohjaviite": "Laadintatila: Kaavasuositus (K13); ehdoton sääntö 9",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti siirtyy suositukseksi sellaisenaan ja muuttamattomana.",
+      "lainaus": "Rakennuksissa suositellaan uusiutuvan energian käyttöä.",
+      "tietopohjaviite": "Ehdoton sääntö 1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kun teksti siirtyy suositukseksi, ryhmään ei jää sanallista määräystä. Vaiheen 1 sääntöhuomio R-03 (puuttuva sanallisen määräyksen laji) ei siksi enää koske ryhmää.",
+      "lainaus": "",
+      "tietopohjaviite": "Vaihe 1: R-03; Linjaus L-04",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Otsikko säilyy käyttäjän antamana. Kirjaintunnusta ei anneta, koska kyseessä on yleismääräys eikä liitteen 4 vakiomääräys.",
+      "lainaus": "Energiaratkaisut",
+      "tietopohjaviite": "Linjaus L-15; Linjaus L-06; laadintatila: Kirjaintunnus",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Teksti säilyisi sanallisena määräyksenä (sanallinenMaarays, linjaus L-04), ja sen lajeiksi tulisivat ilmastonmuutos ja rakentamistapa.",
+      "miksi_ei_ensisijainen": "Teksti on kokonaan velvoittamaton (\"suositellaan\"). Laadintaohjeen mukaan avoin K13 ratkaistaan tällöin valinnalla suositus. Jos laatija haluaa velvoittavan määräyksen, hän voi itse muuttaa tekstiä ja valita määräyksen."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [
+     {
+      "tunnus": "u012-K13",
+      "valinta": "suositus",
+      "peruste": "Koko kappale on velvoittamaton, eikä siinä ole velvoittavaa ilmausta (tulee, on, ei saa). Laadintatilan ohjeen mukaan K13 ratkaistaan tällöin valinnalla suositus.",
+      "lainaus": "suositellaan"
+     }
+    ],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "c5287d3f6fb79330": {
+   "yksikko": "u013",
+   "otsikko": "Virkistysalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1917,
+    "output_tokens": 1292,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 11.5,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Virkistysalue",
+      "kirjaintunnus": "V",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "virkistysalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Virkistysalue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueelle ei saa sijoittaa virkistyskäyttöä haittaavaa rakentamista.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "virkistys",
+         "rakentamismaarays"
+        ],
+        "tekstiviitteet": [
+         "Alueelle ei saa sijoittaa virkistyskäyttöä haittaavaa rakentamista."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Merkintä vastaa liitteen 4 vakiomääräystä V Virkistysalue: virkistysalue + paakayttotarkoitus. Otsikko ja tunnus vastaavat liitettä.",
+      "lainaus": "Virkistysalue",
+      "tietopohjaviite": "Katja liite 4 / V",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue, koska kyseessä on aluevaraus ja otsikko on 'alue'.",
+      "lainaus": "Virkistysalue",
+      "tietopohjaviite": "Katja liite 4 / V [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen tyyppi on yläkoodi sanallinenMaarays linjauksen mukaisesti.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen pääaihe on virkistyskäytön turvaaminen.",
+      "lainaus": "virkistyskäyttöä haittaavaa",
+      "tietopohjaviite": "Koodin kuvaus: virkistys",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti rajoittaa rakentamista alueella, joten toiseksi lajiksi rakentamismaarays.",
+      "lainaus": "ei saa sijoittaa virkistyskäyttöä haittaavaa rakentamista",
+      "tietopohjaviite": "Koodin kuvaus: rakentamismaarays (sanallisen määräyksen laji)",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Teksti on velvoittava ('ei saa'), joten kyseessä on kaavamääräys eikä suositus.",
+      "lainaus": "ei saa",
+      "tietopohjaviite": "Ohje: velvoittava ilmaus → kaavamääräys",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Pelkkä sanallisen määräyksen laji virkistys ilman rakentamismaarays-lajia.",
+      "miksi_ei_ensisijainen": "Teksti koskee nimenomaan rakentamisen rajoittamista, joten rakentamismaarays kuvaa toista pääaihetta; laatija voi poistaa sen tarvittaessa."
+     },
+     {
+      "kuvaus": "Geometria piste (liitteen 4 V-rivi pistemäisenä).",
+      "miksi_ei_ensisijainen": "Otsikko 'alue' ja aluevarauksen rakenne viittaavat aluemaiseen kohteeseen; pistemerkinnässä ei olisi pääkäyttötarkoitusta."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "850d5cd179ee5900": {
+   "yksikko": "u014",
+   "otsikko": "Suojaviheralue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 1993,
+    "output_tokens": 1585,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 13.4,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Suojaviheralue",
+      "kirjaintunnus": "EV",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "suojaviheralue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Suojaviheralue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alue on varattu melun ja pölyn torjuntaan. Puusto tulee säilyttää peitteisenä.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "melu",
+         "ymparistohairiot"
+        ],
+        "tekstiviitteet": [
+         "Alue on varattu melun ja pölyn torjuntaan.",
+         "Puusto tulee säilyttää peitteisenä."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko ja tunnus vastaavat liitteen 4 vakiomääräystä EV Suojaviheralue; rakenne suojaviheralue + paakayttotarkoitus.",
+      "lainaus": "Suojaviheralue",
+      "tietopohjaviite": "Katja liite 4 / EV",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue: liitteen 4 EV-alueriviä vastaava aluevaraus, ja teksti puhuu alueesta.",
+      "lainaus": "Alue on varattu",
+      "tietopohjaviite": "Katja liite 4 / EV [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallinen teksti annetaan yläkoodilla sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Pääaihe on melun torjunta: sanallisen määräyksen laji melu.",
+      "lainaus": "melun ja pölyn torjuntaan",
+      "tietopohjaviite": "Koodin kuvaus: melu",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Pölyn torjunta on yleinen ympäristöhäiriö, jolle ei ole omaa alakoodia: laji ymparistohairiot.",
+      "lainaus": "pölyn torjuntaan",
+      "tietopohjaviite": "Koodin kuvaus: ymparistohairiot",
+      "varmuus": "keskitaso"
+     },
+     {
+      "vaite": "Teksti on velvoittava, joten se on kaavamääräys eikä suositus; K13 ei nouse.",
+      "lainaus": "Puusto tulee säilyttää peitteisenä.",
+      "tietopohjaviite": "Laadintaohje: velvoittava ilmaus",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi lisäksi maisema tai luontoarvot puuston säilyttämisen vuoksi.",
+      "miksi_ei_ensisijainen": "Peitteisen puuston säilyttäminen palvelee tekstissä suojavaikutusta (melu ja pöly), ei ensisijaisesti maisema- tai luontoarvoja; lajit pidetään pääaiheissa."
+     },
+     {
+      "kuvaus": "Lisätieto meluntorjuntatarve suojaviheraluemääräykselle.",
+      "miksi_ei_ensisijainen": "Liitteen 4 EV-rivi ei sisällä lisätietoa, eikä otsikossa ole sitä vastaavaa määrettä; tekstin perusteella ei lisätä valinnaisia lisätietoja."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "57d81b3ce8442147": {
+   "yksikko": "u015",
+   "otsikko": "Liikennealue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2028,
+    "output_tokens": 1805,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 14.7,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Liikennealue",
+      "kirjaintunnus": "L",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "liikennealue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Liikennealue"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueen suunnittelussa on otettava huomioon joukkoliikenteen ja pyöräilyn yhteydet.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "liikenne",
+         "joukkoliikenne",
+         "pyoraily"
+        ],
+        "tekstiviitteet": [
+         "joukkoliikenteen ja pyöräilyn yhteydet"
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Merkintä vastaa liitteen 4 vakiomääräystä L Liikennealue: liikennealue + paakayttotarkoitus. Otsikko ja kirjaintunnus ovat samat kuin liitteessä 4.",
+      "lainaus": "Liikennealue",
+      "tietopohjaviite": "Katja liite 4 / L",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue: liitteen 4 L-rivi on aluemainen, ja määräys koskee aluetta.",
+      "lainaus": "Alueen suunnittelussa",
+      "tietopohjaviite": "Katja liite 4 / L [alue]",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Koko teksti on yksi sanallinen määräys yläkoodilla sanallinenMaarays.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-03 ja Linjaus L-04",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti on velvoittava (\"on otettava huomioon\"), joten se on kaavamääräys eikä suositus.",
+      "lainaus": "on otettava huomioon",
+      "tietopohjaviite": "Ohje 9: velvoittava ilmaus",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji liikenne: teksti käsittelee liikenneyhteyksiä.",
+      "lainaus": "yhteydet",
+      "tietopohjaviite": "Koodin kuvaus: liikenne",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji joukkoliikenne.",
+      "lainaus": "joukkoliikenteen",
+      "tietopohjaviite": "Koodin kuvaus: joukkoliikenne",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Sanallisen määräyksen laji pyöräily.",
+      "lainaus": "pyöräilyn yhteydet",
+      "tietopohjaviite": "Koodin kuvaus: pyoraily",
+      "varmuus": "korkea"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Lisätään sanallisen määräyksen lajiksi suunnittelumaarays, koska teksti koskee alueen suunnittelua.",
+      "miksi_ei_ensisijainen": "Lajeja suositellaan enintään kolme. Tekstin pääaiheet ovat liikenne, joukkoliikenne ja pyöräily."
+     },
+     {
+      "kuvaus": "Käytetään sanallisen määräyksen lajina kevytLiikenne-koodia pyoraily-koodin sijaan.",
+      "miksi_ei_ensisijainen": "Teksti mainitsee nimenomaan pyöräilyn, joten tarkempi koodi pyoraily kuvaa sitä paremmin."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  },
+  "dd88b482159aa369": {
+   "yksikko": "u016",
+   "otsikko": "Teollisuus- ja varastoalue",
+   "malli": "claude-opus-5-5",
+   "stop_reason": "end_turn",
+   "kaytto": {
+    "input_tokens": 2443,
+    "output_tokens": 2452,
+    "cache_read_input_tokens": 50618,
+    "cache_creation_input_tokens": 0
+   },
+   "kesto_s": 22.2,
+   "varoitukset": [],
+   "vastaus": {
+    "ryhmat": [
+     {
+      "otsikko": "Teollisuus- ja varastoalue",
+      "kirjaintunnus": "T",
+      "ryhmatyyppi": "kaavakohde",
+      "geometria": [
+       "alue"
+      ],
+      "maaraykset": [
+       {
+        "laji": "teollisuusalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Teollisuus- ja varastoalue"
+        ]
+       },
+       {
+        "laji": "varastoalue",
+        "arvo": null,
+        "lisatiedot": [
+         {
+          "laji": "paakayttotarkoitus",
+          "arvo": null
+         }
+        ],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "Teollisuus- ja varastoalue"
+        ]
+       },
+       {
+        "laji": "tehokkuusluku",
+        "arvo": "0,5",
+        "lisatiedot": [],
+        "sanallisen_lajit": [],
+        "tekstiviitteet": [
+         "e=0,5"
+        ]
+       },
+       {
+        "laji": "sanallinenMaarays",
+        "arvo": "Alueen tehokkuusluku on e=0,5.",
+        "lisatiedot": [],
+        "sanallisen_lajit": [
+         "rakennusoikeus"
+        ],
+        "tekstiviitteet": [
+         "Alueen tehokkuusluku on e=0,5."
+        ]
+       }
+      ],
+      "suositukset": []
+     }
+    ],
+    "perustelut": [
+     {
+      "vaite": "Otsikko vastaa liitteen 4 vakiomääräystä T Teollisuus- ja varastoalue: teollisuusalue + varastoalue, kumpikin pääkäyttötarkoituksena. Käyttäjän otsikko ja tunnus ovat samat kuin liitteessä 4.",
+      "lainaus": "Teollisuus- ja varastoalue",
+      "tietopohjaviite": "Katja liite 4 / T",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Geometria on alue: tekstissä puhutaan alueesta, ja tehokkuusluku koskee aluetta. Liitteen 4 piste-T ei sovellu, koska pistekohde ei voi saada pääkäyttötarkoitusta.",
+      "lainaus": "Alueen tehokkuusluku",
+      "tietopohjaviite": "Katja liite 4 / T [alue]; Opas 3.3.1",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Tekstin ainoa numeroarvo annetaan suureellisena määräyksenä tehokkuusluku, ja arvo on 0,5 sellaisenaan.",
+      "lainaus": "e=0,5",
+      "tietopohjaviite": "Koodin kuvaus: tehokkuusluku; Opas 3.3.9",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Teksti säilyy sanallisena määräyksenä sellaisenaan. Linjauksen L-04 mukaan tyyppi on yläkoodi sanallinenMaarays, ja laji on rakennusoikeus, koska teksti määrää alueen rakentamistehokkuuden.",
+      "lainaus": "Alueen tehokkuusluku on e=0,5.",
+      "tietopohjaviite": "Linjaus L-04; Koodin kuvaus: rakennusoikeus",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "Kirjaintunnus T on käyttäjän antama ja sama kuin liitteessä 4.",
+      "lainaus": "",
+      "tietopohjaviite": "Linjaus L-06; Katja liite 4 / T",
+      "varmuus": "korkea"
+     },
+     {
+      "vaite": "R-15-varoitus ei sovellu. Koodiyhdistelmä on liitteen 4 T-rivin mukainen, joten liitteen otsikkoa saa käyttää. Suure laajentaa tietosisältöä, ja Katja 2 § sallii sen.",
+      "lainaus": "",
+      "tietopohjaviite": "Opas 3.1.1; Katja 2 §; Linjaus L-15",
+      "varmuus": "keskitaso"
+     }
+    ],
+    "vaihtoehdot": [
+     {
+      "kuvaus": "Tehokkuusluvulle lisätieto paakayttotarkoitus, jotta R-08-sääntö täyttyisi.",
+      "miksi_ei_ensisijainen": "Pääkäyttötarkoituksen voi antaa vain aluevarauskoodille. Suureellinen määräys on yksinkertainen (opas 3.3.9), ja vastaavassa esimerkissä suure on ilman lisätietoa. R-08 kannattaa tarkistaa käsin."
+     },
+     {
+      "kuvaus": "Numeroarvo jätetään vain sanalliseen tekstiin eikä suuretta anneta.",
+      "miksi_ei_ensisijainen": "Laadintatilassa tekstin yksi numeroarvo annetaan suureena. R-18 huomauttaa päällekkäisyydestä, mutta tekstiä ei muuteta, joten laatija päättää, poistetaanko arvo tekstistä."
+     },
+     {
+      "kuvaus": "Sanallisen määräyksen lajiksi rakentamismaarays tai tontinKaytto.",
+      "miksi_ei_ensisijainen": "Teksti koskee rakentamisen tehokkuutta eli rakennusoikeutta, ei rakentamistapaa eikä tontin käyttöä."
+     }
+    ],
+    "tulkintakysymykset": [],
+    "ratkaistut_kysymykset": [],
+    "kokonaisvarmuus": "korkea"
+   }
+  }
+ }
+}

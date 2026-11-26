@@ -70,7 +70,9 @@ def test_number_becomes_quantity_in_drafting_mode(kb, policies):
     assert q.value.data_type == "PositiveNumeric" and q.value.number == 12000 and q.value.unit == "k-m²"
     assert q.text_span is not None and text[q.text_span[0] : q.text_span[1]] == "12 000 k-m²"
     assert any("3.3.9" in (r.reference or "") for r in q.rationale)
-    assert not [r for r in p.rule_results if r.rule_id in ("R-04", "R-05")], p.rule_results
+    # A quantity is simple (opas 3.3.9): it gets no main use (R-08) and does not change the annex 4
+    # combination of the group (R-15).
+    assert not [r for r in p.rule_results if r.rule_id in ("R-04", "R-05", "R-08", "R-15")], p.rule_results
     # The verbal text keeps the number (no rewording); R-18 tells that it is now also a quantity.
     r18 = [r for r in p.rule_results if r.rule_id == "R-18"]
     assert r18 and "myös suureena" in r18[0].message

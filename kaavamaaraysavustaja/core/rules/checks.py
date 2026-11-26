@@ -57,6 +57,11 @@ class CheckContext:
     def non_verbal(self) -> list[tuple[int, Regulation]]:
         return [(n, r) for n, r in enumerate(self.proposal.regulations) if not self.is_verbal(r)]
 
+    def structural(self) -> list[tuple[int, Regulation]]:
+        """Neither verbal nor quantity: a quantity is simple (opas 3.3.9, one code and one value), so
+        it gets no main use or sub-area and does not change the annex 4 combination."""
+        return [(n, r) for n, r in self.non_verbal() if not self.is_quantity(r)]
+
 
 Check = Callable[[CheckContext], Iterator[Finding]]
 CHECKS: dict[str, Check] = {}
@@ -199,7 +204,7 @@ def same_main_use_or_sub_area(ctx: CheckContext) -> Iterator[Finding]:
     if ctx.proposal.kind != "kaavakohde":
         return
     geometry = set(ctx.proposal.geometry_types)
-    regs = ctx.non_verbal()
+    regs = ctx.structural()
     kinds = [{MAIN_USE, SUB_AREA} & set(info_values(r)) for _, r in regs]
     if not geometry:
         if regs and any(kinds):
@@ -296,7 +301,7 @@ def temporary_restriction(ctx: CheckContext) -> Iterator[Finding]:
 
 def signature_of_regulations(ctx: CheckContext) -> frozenset:
     items = set()
-    for _, reg in ctx.non_verbal():
+    for _, reg in ctx.structural():
         items.add(("laji", reg.type.value))
         for info in reg.additional_infos:
             items.add(
@@ -328,7 +333,7 @@ def signature_of_row(row: dict) -> frozenset:
 
 @check
 def annex_title(ctx: CheckContext) -> Iterator[Finding]:
-    if ctx.proposal.kind != "kaavakohde" or not ctx.non_verbal():
+    if ctx.proposal.kind != "kaavakohde" or not ctx.structural():
         return
     rows = ctx.kb.annex.get(ctx.plan_level, [])
     title = match.fold(ctx.proposal.title.get("fin", ""))
