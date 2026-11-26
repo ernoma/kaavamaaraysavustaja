@@ -13,20 +13,22 @@ Käytäntö (CLAUDE.md):
 
 Tila: **avoin**, **odottaa** (edellytys puuttuu), **tehty**, **rajattu pois**.
 Painotus 26.11.2026 (ADR-0016): ensin QGISissa kokeiltava käyttöliittymä, myös uusien
-määräysten muuntamiseen. Kokeilun palaute ohjaa jatkokehitystä.
+määräysten muuntamiseen. Kokeilun palaute ohjaa jatkokehitystä. Ensimmäinen kokeiltava versio
+(0.3.0, vaihe 3a) valmistui 26.11.2026: [vaihe3a_raportti.md](vaihe3a_raportti.md).
 
 ## Nyt ja vaiheessa 3 (paikkatietoasiantuntija, ei edellytä Arhoa eikä kaavoittajia)
 
 | # | Tehtävä | Milloin | Tila | Ohje / tulos |
 |---|---|---|---|---|
-| T-01 | **Kokeile QGIS-käyttöliittymää** ja anna palautetta: uuden sanallisen määräyksen muunnos sekä voimassa olevan merkinnän muunnos. Kirjaa mikä toimii, mikä puuttuu ja millaisia muunnostarpeita ja käyttötapauksia sinulla on. | vaihe 3, heti kun ensimmäinen kokeiltava versio on valmis | odottaa (käyttöliittymä) | palaute: `docs/palaute_vaihe3.md` (luodaan ensimmäisen version yhteydessä) |
-| T-02 | Kuvaa 3–5 tyypillistä **uuden määräyksen** muunnostarvetta (millaisia tekstejä, kaavataso, mitä tuloksella tehdään). Riittää vapaamuotoinen kuvaus tai esimerkkitekstit. | vaihe 3, ennen tai kokeilun yhteydessä | avoin | `docs/palaute_vaihe3.md` |
+| T-01 | **Kokeile QGIS-käyttöliittymää** (versio 0.3.0) ja anna palautetta: uuden sanallisen määräyksen muunnos sekä voimassa olevan merkinnän muunnos, tulkintakysymyksen ratkaisu, vienti ja halutessasi kielimalli (Claude-avain *API-avaimet…*-dialogiin) ja Syke-validointi. Kirjaa mikä toimii, mikä puuttuu ja millaisia muunnostarpeita ja käyttötapauksia sinulla on. QGISin käynnistys ja klikkaus jäävät sinulle (tekoäly ajoi vain savutestin ilman ikkunaa). | vaihe 3, nyt (ensimmäinen kokeiltava versio valmis 26.11.2026) | avoin | kokeiluaskeleet: [vaihe3a_raportti.md](vaihe3a_raportti.md) luku 2 ja [kayttoohje.md](kayttoohje.md); palaute: [palaute_vaihe3.md](palaute_vaihe3.md) |
+| T-02 | Kuvaa 3–5 tyypillistä **uuden määräyksen** muunnostarvetta (millaisia tekstejä, kaavataso, mitä tuloksella tehdään). Riittää vapaamuotoinen kuvaus tai esimerkkitekstit. Todelliset esimerkit **korvaavat tai täydentävät** laadintatilan synteettisen testiaineiston (`tests/golden/laadinta_odotetut.yaml`, 16 yksikköä, vahvistamaton), jolla laadintatila nyt arvioidaan; merkitse, saako tekstin julkaista säilössä. | vaihe 3, ennen tai kokeilun yhteydessä | avoin | [palaute_vaihe3.md](palaute_vaihe3.md) kohta T-02 |
 | T-03 | Tarkista testiaineiston epävarmat annotoinnit (`tarkistettava: true`, 23 yksikköä) ja kolme mallin löytämää lisävaihtoehtoa. | ei kiireellinen; ennen kuin automaatioastetta käytetään päätöksiin | avoin | `tests/golden/keskusta_odotetut.yaml`, `kartat2_4_odotetut.yaml`; [vaihe2_raportti.md](vaihe2_raportti.md) luku 6 |
 | T-04 | Tarkista normalisoinnin vahvistettavat kohdat (tekstinpoiminta, esim. `vapaa-⏎ajan`, `MRL128`, `pvpv`). | kun koko koostetta muunnetaan | avoin | muunnosraportin kohta "Vahvistettavat normalisoinnit"; [vaihe1_raportti.md](vaihe1_raportti.md) luku 6 |
 | T-05 | Tee koosteen käsikorjaukset (palstajärjestys kartalla 1a, `KAUPUNKIRAKE NTEEN`) tai vahvista, että ne tehdään käyttöliittymän jäsennystaulukossa. | kun koko koostetta muunnetaan | avoin | otosten otsakekommentit `tests/golden/keskusta_otos.txt` |
 | T-06 | Hanki **Mistral-avain** (`MISTRAL_API_KEY`), jos Mistral-vertailu halutaan; tarkista Mistralin hinnat. | valinnainen | odottaa (avain) | [vaihe2_raportti.md](vaihe2_raportti.md) luku 5; `knowledge/llm/hinnasto.yaml` |
-| T-07 | Valinnainen: SDK-tarkistus QGISin Python-konsolissa käyttöliittymän kanssa. | vaihe 3, lisäosan ensiasennuksen yhteydessä | avoin | [vaihe0_kayttajan_tehtavat.md](vaihe0_kayttajan_tehtavat.md) tehtävä 1, kohta E |
+| T-07 | Valinnainen: SDK-tarkistus käyttöliittymässä. Riittää *Lisäosat → Kaavamääräysavustaja → Tietoja*: "Kielimallien SDK:t: claude ✓" (tekoäly tarkisti QGISin Pythonilla ilman ikkunaa 26.11.2026: anthropic 2.12.0 latautuu `kma_deps`-kansiosta). Kirjaa tulos T-01:n palautteeseen. | vaihe 3, T-01:n yhteydessä | avoin | [kayttoohje.md](kayttoohje.md) luku 1; [vaihe0_kayttajan_tehtavat.md](vaihe0_kayttajan_tehtavat.md) tehtävä 1, kohta E |
 | T-08 | Vaihda `metadata.txt`:n sähköpostiosoite (nyt `noreply@example.invalid`). | ennen julkaisua lisäosarekisteriin | avoin | `kaavamaaraysavustaja/metadata.txt` |
+| T-15 | Valinnainen: jos haluat paikallisen Ryhti-skeematarkistuksen myös QGISissa, asenna `jsonschema` `kma_deps`-kansioon (`python -m pip install --only-binary=:all: --target "%APPDATA%\QGIS\QGIS3\profiles\default\python\kma_deps" jsonschema` OSGeo4W Shellissä). Ilman sitä vienti ilmoittaa tarkistuksen ohitetuksi; Syken validointi kattaa saman. | valinnainen, vaihe 3 | avoin | [kayttoohje.md](kayttoohje.md) luku 8 |
 
 ## Vaihe 4 (kytkentä vektoriaineistoon)
 

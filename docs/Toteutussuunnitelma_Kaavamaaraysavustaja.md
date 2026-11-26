@@ -944,9 +944,9 @@ Linjauksia L-01–L-07 käytetään vaiheissa 2–4 suositelluin oletuksin, ja p
 
 ## 15 Seuraavat askeleet
 
-Vaiheet 0–2 ovat valmiit (tulokset: [vaihe1_raportti.md](vaihe1_raportti.md), [vaihe2_raportti.md](vaihe2_raportti.md)). Seuraavaksi, ilman Arhoa ja kaavoittajia:
+Vaiheet 0–2 ovat valmiit (tulokset: [vaihe1_raportti.md](vaihe1_raportti.md), [vaihe2_raportti.md](vaihe2_raportti.md)). Vaiheen 3 ensimmäinen kokeiltava versio (3a, lisäosa 0.3.0) valmistui 26.11.2026 ([vaihe3a_raportti.md](vaihe3a_raportti.md), ADR-0017). Seuraavaksi, ilman Arhoa ja kaavoittajia:
 
-1. Vaihe 3 (ADR-0016): ensin QGISissa kokeiltava käyttöliittymä, jolla voi muuntaa sekä uuden että voimassa olevan sanallisen määräyksen (hybridiputki, kustannusarvio, perustelut ja tulkintakysymykset). Paikkatietoasiantuntijan kokeilu ja palaute (`docs/kayttajan_tehtavat.md` T-01, T-02) ohjaavat jatkoa; koko koosteen eräkäsittely ja muokkausnäkymät sen jälkeen.
+1. Vaihe 3 (ADR-0016): kokeiltava käyttöliittymä on valmis (3a), jolla voi muuntaa sekä uuden että voimassa olevan sanallisen määräyksen (hybridiputki, kustannusarvio, perustelut ja tulkintakysymykset). Paikkatietoasiantuntijan kokeilu ja palaute (`docs/kayttajan_tehtavat.md` T-01, T-02) ohjaavat jatkoa; koko koosteen eräkäsittely ja muokkausnäkymät sen jälkeen.
 2. Paikkatietoasiantuntija tarkistaa testiaineiston kohdat `tarkistettava: true` ja vaiheen 1 vahvistettavat normalisoinnit.
 3. Mistral-vertailu, kun avain on käytettävissä (vaiheen 2 raportin luku 5).
 

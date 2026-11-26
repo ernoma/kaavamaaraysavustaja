@@ -118,9 +118,10 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
    `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto),
    `rules/sanasto_v1.yaml` (täsmäyksen sanasto), `org/tampere/linjaukset.yaml` (linjaukset,
    ADR-0008, ADR-0010), `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset),
-   `prompts/v1/` ja `prompts/v2/` (kehotteet, aktiivinen v2: `kehote.yaml`, `jarjestelmaohje.md`,
-   `konteksti.md`, `kysymystyypit.yaml`, `esimerkit.yaml`; ADR-0013) ja `llm/hinnasto.yaml` (kielimallien
-   hinnat). Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
+   `prompts/v1/`–`prompts/v3/` (kehotteet, aktiivinen v3: `kehote.yaml`, `jarjestelmaohje.md`,
+   `jarjestelmaohje_laadinta.md`, `konteksti.md`, `laadintaohje.md`, `kysymystyypit.yaml`,
+   `esimerkit.yaml`; ADR-0013, ADR-0017; VOOKA-pyynnön on pysyttävä samana kuin v2:ssa, ellei
+   tallenteita äänitetä uudelleen) ja `llm/hinnasto.yaml` (kielimallien hinnat). Muuta lähdettä tai rakentajaa ja aja `python tools/build_knowledge.py`, myös
    käsin ylläpidettävän tiedoston muutoksen jälkeen (tarkistussummat). Kehotteen muutos
    kasvattaa kehoteversiota, ja tallennetut vastaukset (`tests/recorded_llm/`) äänitetään
    uudelleen. Lähdeaineistoja (`lahtoaineistot/`) ei muokata.
@@ -160,11 +161,15 @@ python -m venv .venv
 | Hybridimuunnos (arvio / ajo) | `.\.venv\Scripts\kma convert work\kooste.txt --kartta 1 --kielimalli claude --arvio` ja `… --budjetti 3 [--projekti aiempi.kma.json]` |
 | Tarkistus (säännöt, skeema, Syke) | `.\.venv\Scripts\kma validate <projekti>.kma.json [--syke]` |
 | Arviointi testiaineistolla | `.\.venv\Scripts\python tools\evaluate.py [--yksikot] [--hybridi claude] [--vertailu]` |
+| Laadintatilan arviointi (uudet määräykset) | `.\.venv\Scripts\python tools\evaluate.py --laadinta [--hybridi claude] [--vertailu]` |
 | Hybridin arviointi live (arvio ensin, tallentaa vastaukset) | `.\.venv\Scripts\python tools\evaluate.py --hybridi claude --live --arvio` |
 | Verkkotestit (avain tarvitaan) | `.\.venv\Scripts\python -m pytest -m live` |
+| QGIS-savutesti (paikallinen, ei CI) | `C:\OSGeo4W\bin\python-qgis.bat tests\qgis\qgis_smoke.py` tai `$env:KMA_QGIS_PYTHON="C:\OSGeo4W\bin\python-qgis.bat"; .\.venv\Scripts\python -m pytest -m qgis` |
 
 CI (`.github/workflows/ci.yml`) ajaa ruffin, tietopohjan `--check`-tarkistuksen ja pytestin
-ilman QGISia ja ilman verkkoa. `@pytest.mark.live`-testit eivät aja oletuksena. Hybridin laatuportti toistaa tallennetut
+ilman QGISia ja ilman verkkoa. `@pytest.mark.live`- ja `@pytest.mark.qgis`-testit eivät aja
+oletuksena. Telakan logiikka on `core/workflow.py`:ssä, jotta se testataan CI:ssä; `plugin/`
+vain kokoaa widgetit ja ajaa työn `QgsTask`issa (ADR-0017). Hybridin laatuportti toistaa tallennetut
 vastaukset (`tests/recorded_llm/`). Paikalliset työtiedostot
 (PDF-poiminnat, muunnostulokset) kuuluvat `work/`-kansioon, joka ei mene säilöön.
 
