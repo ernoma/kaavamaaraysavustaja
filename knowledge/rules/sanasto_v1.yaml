@@ -83,10 +83,12 @@ sanallisen_maarayksen_tyypit:
   suojelumaarays: [suojel, säilytettävä, säilyttää]
 
 # (e) Numeroarvot ja yksiköt → Suure-hierarkian kaavamääräyslaji (huomio R-18).
+# Laadintatilassa (ADR-0017) yksi numeroarvo ehdotetaan suureena: arvotyyppi (Ryhti dataType) ja
+# mittayksikkö (unitOfMeasure; null = ei yksikköä).
 suureet:
-  - { yksikko: "k-m²", kaavamaarayslaji: sallittuKerrosala }
-  - { yksikko: "k-m2", kaavamaarayslaji: sallittuKerrosala }
-  - { yksikko: "e=", kaavamaarayslaji: tehokkuusluku }
+  - { yksikko: "k-m²", kaavamaarayslaji: sallittuKerrosala, arvotyyppi: PositiveNumeric, mittayksikko: "k-m²" }
+  - { yksikko: "k-m2", kaavamaarayslaji: sallittuKerrosala, arvotyyppi: PositiveNumeric, mittayksikko: "k-m²" }
+  - { yksikko: "e=", kaavamaarayslaji: tehokkuusluku, arvotyyppi: PositiveDecimal, mittayksikko: null }
 
 # (f) Yleismääräyksen kohdistus tiettyihin merkintöihin (R-16, K3) ja linjauksen L-05
 # vaihtoehdon "sailytys_ja_rakenteinen_lisays" rakenteinen lisäys kohdemerkintöihin.
@@ -103,3 +105,7 @@ lakiviittaukset:
 
 # R-17: velvoittavat ilmaukset kaavasuosituksessa (opas 2.3.4).
 velvoittavat_ilmaukset: [tulee, täytyy, pitää, on oltava, ei saa, on velvollinen]
+
+# K13 (laadintatila, ADR-0017): ei-velvoittavat ilmaukset, joiden perusteella kappale voi olla
+# kaavasuositus. Verrataan kokonaisina sanoina (kirjainkoko ja välimerkit ohitetaan).
+suosittelevat_ilmaukset: [suositellaan, suositeltavaa, suositeltava, suositeltavat, suositeltavia, suotavaa, suotava, olisi hyvä]

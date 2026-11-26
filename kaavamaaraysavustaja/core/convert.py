@@ -7,6 +7,7 @@ stored as resolved with ``resolved_by = "linjaus L-0n"`` (ADR-0010).
 
 from __future__ import annotations
 
+import copy
 import re
 import uuid
 from dataclasses import dataclass, field
@@ -28,6 +29,7 @@ from kaavamaaraysavustaja.core.model import (
     Provenance,
     QuestionOption,
     Rationale,
+    Recommendation,
     Regulation,
     SourceDocument,
     SourceUnit,
@@ -1045,6 +1047,8 @@ def finish(
                 f"{verbal[0].type.value}: {ctx.describe('L-04')}.",
             )
         )
+    if ctx.mode == "laadinta":
+        drafting_additions(ctx, unit, proposal, questions, rationale, start_index)
     for number in match.find_numbers(ctx.kb, text):
         if number.place:
             questions.append(
@@ -1119,6 +1123,175 @@ def finish(
 
 def fold(text: str) -> str:
     return match.fold(text or "")
+
+
+# --------------------------------------------------------------------------------------
+# Drafting mode (laadintatila, UC2, ADR-0017)
+
+
+def paragraphs_of(text: str, base: int = 0) -> list[tuple[int, int, str]]:
+    """Paragraphs (empty line = break) with their spans in the text, offset by ``base``."""
+    found, offset = [], 0
+    for paragraph in text.split("\n\n"):
+        start = text.index(paragraph, offset)
+        offset = start + len(paragraph)
+        if paragraph.strip():
+            found.append((base + start, base + offset, paragraph))
+    return found
+
+
+def recommendation_paragraphs(ctx: Context, text: str) -> list[tuple[int, int, str]]:
+    return [p for p in paragraphs_of(text) if match.recommendation_words(ctx.kb, p[2])]
+
+
+def drafting_additions(
+    ctx: Context,
+    unit: SourceUnit,
+    proposal: GroupProposal,
+    questions: list[InterpretationQuestion],
+    rationale: list[Rationale],
+    start_index: int,
+) -> None:
+    """A new regulation: one numeric value as a quantity (opas 3.3.9) and K13 for recommendations.
+
+    The text is not changed: the number stays in the verbal text (R-18 tells that it is also a
+    quantity) and a recommendation paragraph is moved only when K13 is answered ``suositus``.
+    """
+    text = unit.normalized_text
+    numbers = [n for n in match.find_numbers(ctx.kb, text) if not n.place]
+    if proposal.kind == "kaavakohde" and numbers:
+        distinct = {(n.quantity_code, n.value) for n in numbers}
+        if len(distinct) == 1:
+            hit = numbers[0]
+            number: float | int = int(hit.value) if hit.data_type.endswith("Numeric") else hit.value
+            quantity = Regulation(
+                key=ctx.key(unit.id, "q0"),
+                type=ctx.ref(REGULATION_TYPE, hit.quantity_code),
+                value=Value(hit.data_type, number=number, unit=hit.measure),
+                text_span=hit.span,
+            )
+            quantity.rationale.append(
+                Rationale(
+                    f"Numeroarvo {text[hit.span[0] : hit.span[1]]} suureena {hit.quantity_code} "
+                    "(laadintatila: suureellinen määräys, yksi koodi ja yksi arvo). Teksti säilyy ennallaan.",
+                    "sanasto",
+                    "keskitaso",
+                    quote=text[hit.span[0] : hit.span[1]],
+                    reference="Opas 3.3.9; sanasto / suureet",
+                )
+            )
+            proposal.regulations.insert(start_index, quantity)
+        else:
+            rationale.append(
+                Rationale(
+                    f"Tekstissä on useita numeroarvoja ({', '.join(text[n.span[0] : n.span[1]] for n in numbers)}); "
+                    "ryhmässä voi olla vain yksi suure (R-04), joten ne jäävät sanalliseen tekstiin. "
+                    "Jaa tarvittaessa omiksi ryhmikseen.",
+                    "saanto",
+                    "keskitaso",
+                    reference="Opas 3.3.9",
+                )
+            )
+    candidates = recommendation_paragraphs(ctx, text)
+    if not candidates:
+        return
+    binding = [p for p in candidates if match.binding_words(ctx.kb, p[2])]
+    found = sorted({w for p in candidates for w in match.recommendation_words(ctx.kb, p[2])})
+    several = len(paragraphs_of(text)) > 1
+    basis = f"Ei-velvoittavat ilmaukset: {', '.join(found)}."
+    if binding:
+        basis += (
+            " Samassa kappaleessa on myös velvoittava ilmaus, joten suositus on kaavamääräys; "
+            "erota suositus omaksi kappaleekseen (tyhjä rivi), jos se on tarkoitettu kaavasuositukseksi."
+        )
+    questions.append(
+        question(
+            ctx,
+            unit,
+            "K13",
+            f"Määräys vai suositus? – {unit.heading or 'yleismääräys'}",
+            [
+                ("maarays", "Kaavamääräys", "Teksti pysyy sanallisena määräyksenä."),
+                (
+                    "suositus",
+                    "Kaavasuositus" + (" (suosittelevat kappaleet)" if several else ""),
+                    "Kappale siirtyy kaavasuositukseksi (Ryhti PlanRecommendation, Arho plan_propositions).",
+                ),
+            ],
+            "maarays" if binding else "suositus",
+            basis,
+        )
+    )
+
+
+def apply_recommendations(ctx: Context, unit: SourceUnit) -> None:
+    """K13 answered ``suositus``: recommendation paragraphs become plan recommendations.
+
+    The remaining text stays as verbal regulations (one per contiguous run of paragraphs), so
+    every text keeps its span in the source and nothing is reworded.
+    """
+    proposal = unit.proposal
+    if ctx.mode != "laadinta" or proposal is None:
+        return
+    k13 = next((q for q in proposal.questions if q.kind == "K13"), None)
+    if k13 is None or k13.answer != "suositus":
+        return
+    method = "kielimalli" if k13.resolved_by == "kielimalli" else "kayttaja"
+    regulations: list[Regulation] = []
+    for reg in proposal.regulations:
+        if reg.type.value not in VERBAL_TYPES or not reg.value or not reg.text_span:
+            regulations.append(reg)
+            continue
+        parts = paragraphs_of(reg.value.text.get("fin", ""), reg.text_span[0])
+        moving = [p for p in parts if match.recommendation_words(ctx.kb, p[2])] or (
+            parts if len(parts) == 1 else []
+        )
+        if not moving:
+            regulations.append(reg)
+            continue
+        run: list[tuple[int, int, str]] = []
+        for part in parts:
+            if part in moving:
+                _keep_run(ctx, unit, reg, run, regulations)
+                proposal.recommendations.append(
+                    Recommendation(
+                        key=ctx.key(unit.id, f"p{part[0]}"),
+                        text={"fin": part[2]},
+                        text_span=(part[0], part[1]),
+                        rationale=[
+                            Rationale(
+                                "Kappale on kaavasuositus (K13); teksti lähteen mukaisena.",
+                                method,
+                                "keskitaso",
+                                quote=part[2][:120],
+                                reference="Opas 2.3.4",
+                            )
+                        ],
+                    )
+                )
+            else:
+                run.append(part)
+        _keep_run(ctx, unit, reg, run, regulations)
+    proposal.regulations = regulations
+
+
+def _keep_run(
+    ctx: Context,
+    unit: SourceUnit,
+    reg: Regulation,
+    run: list[tuple[int, int, str]],
+    regulations: list[Regulation],
+) -> None:
+    """Contiguous paragraphs that stay a verbal regulation (text = the source span)."""
+    if not run:
+        return
+    start, end = run[0][0], run[-1][1]
+    kept = copy.deepcopy(reg)
+    kept.key = ctx.key(unit.id, f"s{start}")
+    kept.value = Value("LocalizedText", text={"fin": unit.normalized_text[start:end]})
+    kept.text_span = (start, end)
+    regulations.append(kept)
+    run.clear()
 
 
 def propose(ctx: Context, unit: SourceUnit) -> GroupProposal:
@@ -1233,6 +1406,7 @@ def convert_units(
     warnings = decision_log.apply_answers(kb, project, decisions)
     decision_log.record(project, decisions)
     for unit in units:
+        apply_recommendations(ctx, unit)
         engine.apply(unit, plan_level=plan_level, mode=mode)
         unit.proposal.confidence, unit.proposal.confidence_basis = overall_confidence(unit.proposal)
     if decisions:

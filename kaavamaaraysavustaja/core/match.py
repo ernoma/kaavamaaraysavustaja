@@ -314,6 +314,8 @@ class NumberHit:
     span: tuple[int, int]
     place: str | None
     sentence: str
+    data_type: str = "PositiveNumeric"  # Ryhti dataType of the quantity value
+    measure: str | None = None  # unitOfMeasure
 
 
 def find_numbers(kb: KnowledgeBase, text: str) -> list[NumberHit]:
@@ -342,6 +344,9 @@ def find_numbers(kb: KnowledgeBase, text: str) -> list[NumberHit]:
                     (match.start(), match.end()),
                     place,
                     sentence_at(text, match.start()),
+                    entry.get("arvotyyppi")
+                    or ("PositiveNumeric" if value.is_integer() else "PositiveDecimal"),
+                    entry.get("mittayksikko"),
                 )
             )
     return sorted(hits, key=lambda h: h.span)
@@ -401,6 +406,22 @@ def find_sub_areas(text: str) -> list[str]:
     # Numbered items in the text: "5. Amuri. Alueen …", "6. Tammela. …"
     numbered = re.findall(r"(?:^|[.\n]\s*)(\d{1,2}\.\s[A-ZÄÖÅ][\wäöå -]{1,40}?)\.\s", text)
     return numbered if len(numbered) > 1 else []
+
+
+def phrases_in(text: str, phrases: list[str]) -> list[str]:
+    """Phrases found as whole words (case and punctuation ignored)."""
+    tokens = f" {' '.join(words(text))} "
+    return [p for p in phrases if f" {' '.join(words(p))} " in tokens]
+
+
+def recommendation_words(kb: KnowledgeBase, text: str) -> list[str]:
+    """K13 (drafting mode): non-binding expressions such as "suositellaan"."""
+    return phrases_in(text, kb.vocabulary.get("suosittelevat_ilmaukset", []))
+
+
+def binding_words(kb: KnowledgeBase, text: str) -> list[str]:
+    """Binding expressions ("tulee", "ei saa" …), punctuation ignored."""
+    return phrases_in(text, kb.vocabulary.get("velvoittavat_ilmaukset", []))
 
 
 def obligation_words(kb: KnowledgeBase, text: str) -> list[str]:

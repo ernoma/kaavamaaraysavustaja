@@ -378,7 +378,19 @@ def number_in_text(ctx: CheckContext) -> Iterator[Finding]:
         if not ctx.is_verbal(reg) or not reg.value or not reg.value.text:
             continue
         text = reg.value.text.get("fin", "")
+        quantities = {
+            (r.type.value, float(r.value.number))
+            for r in ctx.proposal.regulations
+            if ctx.is_quantity(r) and r.value and r.value.number is not None
+        }
         for hit in match.find_numbers(ctx.kb, text):
+            if (hit.quantity_code, hit.value) in quantities:
+                yield Finding(
+                    f'Numeroarvo "{text[hit.span[0] : hit.span[1]]}" on sanallisessa tekstissä ja myös suureena '
+                    f"{hit.quantity_code}; poista se tarvittaessa tekstistä (teksti on laatijan).",
+                    f"määräys {n + 1}",
+                )
+                continue
             where = f" ({hit.place}: paikkasidonnainen, linjaus L-07)" if hit.place else ""
             yield Finding(
                 f'Numeroarvo "{text[hit.span[0] : hit.span[1]]}" on sanallisena; suure {hit.quantity_code} '

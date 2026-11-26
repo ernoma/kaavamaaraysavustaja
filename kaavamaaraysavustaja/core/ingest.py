@@ -641,6 +641,44 @@ def parse(text: str) -> ParseResult:
     return _Parser(text).run()
 
 
+def single_unit(
+    heading: str | None,
+    text: str,
+    *,
+    letter_code: str | None = None,
+    kind: str = "merkinta",
+    unit_id: str = "u001",
+    geometry: str | None = None,
+) -> SourceUnit:
+    """One unit from a heading and a text typed or pasted by the user (QGIS dock, UC2).
+
+    The text is normalized as in :func:`parse` (line breaks inside a paragraph joined, an
+    empty line = paragraph break), the raw text is kept and every change is recorded.
+    """
+    raw = text.replace("\r\n", "\n").replace("\r", "\n").strip("\n")
+    normalized = normalize_lines([(n, line) for n, line in enumerate(raw.split("\n"), 1)])
+    title = normalize_text(heading.strip()) if heading and heading.strip() else None
+    changes = list(normalized.changes)
+    if title:
+        for change in title.changes:
+            change.part = "otsikko"
+        changes = [*title.changes, *changes]
+    code = (letter_code or "").strip() or None
+    return SourceUnit(
+        id=unit_id,
+        kind=kind,
+        raw_text=raw,
+        normalized_text=normalized.text,
+        normalization_diff=changes,
+        heading_raw=heading.strip() if title else None,
+        heading=title.text if title else None,
+        letter_code_raw=code,
+        letter_code=code,
+        line=1,
+        geometry_hint=geometry,
+    )
+
+
 def select_map(result: ParseResult, wanted: str | None) -> list[SourceUnit]:
     """Units of one map: ``wanted`` is a map id (``1``, ``1a``) or a part of its title."""
     if not wanted:
