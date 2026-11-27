@@ -86,10 +86,11 @@ class KaavamaaraysavustajaPlugin:
 
     def show_about(self) -> None:
         try:
+            from kaavamaaraysavustaja.core.workflow import knowledge_label
             from kaavamaaraysavustaja.knowledge import load_manifest
 
-            manifest = load_manifest()
-            knowledge_text = f"Tietopohja {manifest['tietopohja']}"
+            text, details = knowledge_label(load_manifest())
+            knowledge_text = f"{text}\n{details}"
         except Exception as exc:  # pragma: no cover - shown to the user
             knowledge_text = f"Tietopohjaa ei voitu ladata: {exc}"
         from kaavamaaraysavustaja.core.llm.providers import sdk_available
@@ -98,6 +99,6 @@ class KaavamaaraysavustajaPlugin:
         QMessageBox.information(
             self.iface.mainWindow(),
             "Kaavamääräysavustaja",
-            f"Kaavamääräysavustaja {__version__} (kokeiluversio, vaihe 3a)\n{knowledge_text}\n"
-            f"Kielimallien SDK:t: {sdks}\nkma_deps: {add_dependency_path() or 'ei asennettu'}",
+            f"Kaavamääräysavustaja {__version__} (kokeiluversio)\n\n{knowledge_text}\n\n"
+            f"Kielimallien SDK:t: {sdks}\nSDK-kansio (kma_deps): {add_dependency_path() or 'ei asennettu'}",
         )

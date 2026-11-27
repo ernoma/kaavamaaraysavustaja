@@ -1,9 +1,10 @@
-"""The dock of the first testable version (vaihe 3a, ADR-0016, ADR-0017).
+"""The dock of the testable version (vaihe 3a, ADR-0016, ADR-0017; feedback round 1 in 0.3.1).
 
-Tabs: 1 Syöte (input, mode, plan level, policies, language model), 2 Ehdotus (units with
-status icons, proposal in the planner's language and technically, rationale, rule results,
-interpretation questions with the user's answer and its scope) and 3 Vienti (project, report,
-Ryhti JSON, optional Arho YAML, optional Syke validation).
+Tabs: 1 Syöte (input, mode, plan level, policy choices explained, language model), 2 Ehdotus
+(units with status icons, the proposal in the planner's language and technically, its Ryhti
+JSON, rationale, rule results, interpretation questions with who resolved them and how the
+answer can be changed) and 3 Vienti (project, report, Ryhti JSON, optional Arho YAML,
+optional Syke validation; existing files are kept unless overwriting is chosen).
 
 All conversion logic is in ``core/workflow.py``; this module only builds widgets and runs the
 work in ``QgsTask``s (``plugin/tasks.py``). The dock works without ``iface`` (tests).
@@ -12,12 +13,14 @@ work in ``QgsTask``s (``plugin/tasks.py``). The dock works without ``iface`` (te
 from __future__ import annotations
 
 import copy
-import re
+import html
 from pathlib import Path
 
 from qgis.core import Qgis, QgsApplication, QgsSettings
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, QTimer
+from qgis.PyQt.QtGui import QFontDatabase
 from qgis.PyQt.QtWidgets import (
+    QApplication,
     QButtonGroup,
     QCheckBox,
     QComboBox,
@@ -32,6 +35,7 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPlainTextEdit,
     QProgressBar,
     QPushButton,
@@ -41,6 +45,7 @@ from qgis.PyQt.QtWidgets import (
     QSplitter,
     QTabWidget,
     QTextBrowser,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -50,9 +55,13 @@ from kaavamaaraysavustaja.core.model import ConversionProject
 from kaavamaaraysavustaja.plugin.tasks import FunctionTask
 
 SETTINGS = "kaavamaaraysavustaja/telakka/"
-MODES = [("laadinta", "Uusi määräys (laadinta)"), ("vooka", "Voimassa oleva määräys (VOOKA)")]
+MODES = [(value, text) for value, text in workflow.MODE_TEXT.items()]
 LEVELS = [("yleiskaava", "Yleiskaava"), ("asemakaava", "Asemakaava"), ("maakuntakaava", "Maakuntakaava")]
 LLMS = [("ei", "Ei kielimallia (sääntöpohjainen)"), ("claude", "Claude"), ("mistral", "Mistral")]
+INPUT_KINDS = [
+    ("yksi", "Yksi määräys: otsikko ja teksti erikseen"),
+    ("selite", "Liitetty teksti: otsikko ja kirjaintunnus tekstissä (yksi tai useampi merkintä)"),
+]
 FILTERS = [
     ("kaikki", "Kaikki"),
     ("kysymys", "Avoimet kysymykset"),
@@ -60,11 +69,72 @@ FILTERS = [
     ("valmis", "Valmiit"),
 ]
 SCOPES = [("merkinta", "Vain tämä merkintä"), ("projekti", "Kaikki samankaltaiset tässä muunnoksessa")]
+EXPORT_LABELS = {
+    "projekti": "Muunnosprojekti",
+    "markdown": "Muunnosraportti (Markdown)",
+    "html": "Muunnosraportti (HTML)",
+    "ryhti": "Ryhti-JSON",
+    "arho": "Arho-kirjasto",
+}
+SINGLE_HELP = (
+    "Kirjoita otsikko ja halutessasi kirjaintunnus omiin kenttiinsä ja määräysteksti alle. "
+    "Tyhjä rivi erottaa kappaleet."
+)
+LEGEND_HELP = (
+    "Liitä teksti, jossa merkinnän otsikko on omalla rivillään ISOIN KIRJAIMIN ja kirjaintunnus "
+    "otsikon alussa; määräysteksti seuraa otsikkoa. Sopii yhdelle tai usealle merkinnälle: otsikko ja "
+    "tunnus luetaan tekstistä, joten niille ei ole omia kenttiä. Yleismääräykset kirjoitetaan otsikon "
+    "YLEISMÄÄRÄYKSET alle. Esimerkki yhdestä merkinnästä:"
+)
+SINGLE_PLACEHOLDER = (
+    "Kirjoita tai liitä määräyksen teksti. Voimassa olevan määräyksen teksti siirtyy merkki merkiltä; "
+    "uuden määräyksen tekstiä ei muuteta."
+)
+POLICY_INTRO = (
+    "Linjaukset ovat tulkintaperiaatteita, joita avustaja noudattaa koko muunnoksessa, esimerkiksi "
+    "säilytetäänkö lähteen kirjaintunnus. Oletuksena on suositeltu vaihtoehto. Muuta valintaa vain, jos "
+    "tämä muunnos tarvitsee toisen tulkinnan: valinta tallentuu muunnokseen ja raporttiin, ja se näkyy "
+    "kysymyskorteissa. Lukittu 🔒 linjaus on Tampereen päätös, eikä sitä voi muuttaa."
+)
 
 
-def _slug(text: str) -> str:
-    text = re.sub(r"[^0-9A-Za-zÅÄÖåäö_-]+", "_", text.strip()).strip("_")
-    return text[:60] or "muunnos"
+def _e(text) -> str:
+    return html.escape(str(text if text is not None else ""))
+
+
+def _capital(text: str) -> str:
+    return text[:1].upper() + text[1:]
+
+
+def _wrapped(text: str = "") -> QLabel:
+    label = QLabel(text)
+    label.setWordWrap(True)
+    return label
+
+
+def _narrow(combo: QComboBox) -> QComboBox:
+    """Long items must not make the dock wide: the combo shrinks, the full text is in the list."""
+    combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+    combo.setMinimumContentsLength(16)
+    return combo
+
+
+class _OptionRow(QWidget):
+    """A radio button with a wrapping label (QRadioButton does not wrap long texts)."""
+
+    def __init__(self, text: str):
+        super().__init__()
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.button = QRadioButton()
+        layout.addWidget(self.button, 0, Qt.AlignmentFlag.AlignTop)
+        self.label = _wrapped(_e(text))
+        layout.addWidget(self.label, 1)
+
+    def mousePressEvent(self, event):  # noqa: N802 (Qt API name)
+        if self.button.isEnabled():
+            self.button.setChecked(True)
+        super().mousePressEvent(event)
 
 
 class AvustajaDock(QDockWidget):
@@ -74,29 +144,37 @@ class AvustajaDock(QDockWidget):
         self.iface = iface
         self.settings = QgsSettings()
         self.kb = None
+        self.glossary = None
+        self.policy_opts: list[workflow.PolicyOption] = []
         self.project: ConversionProject | None = None
         self.previous: ConversionProject | None = None  # model answers reused on re-runs
         self.decisions: list = []
         self.request: workflow.ConversionRequest | None = None
         self.tasks: list[FunctionTask] = []
         self.policy_boxes: dict[str, QComboBox] = {}
+        self.policy_effects: dict[str, QLabel] = {}
         self.option_group: QButtonGroup | None = None
+        self.view: workflow.QuestionView | None = None  # the question card shown
         self.last_report = None
         self.last_notice = ""
+        self.last_export: workflow.ExportResult | None = None
         self._confirmed_budget = 2.0
+        self._stem_suggestion: str | None = None
         self.run_synchronously = False  # tests: run tasks in the calling thread
+        self._map_timer = QTimer(self)
+        self._map_timer.setSingleShot(True)
+        self._map_timer.setInterval(500)
+        self._map_timer.timeout.connect(self._refresh_maps)
 
         root = QWidget()
         layout = QVBoxLayout(root)
-        self.header = QLabel()
-        self.header.setWordWrap(True)
+        self.header = _wrapped()
         layout.addWidget(self.header)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
         self.progress = QProgressBar()
         self.progress.setVisible(False)
-        self.status = QLabel()
-        self.status.setWordWrap(True)
+        self.status = _wrapped()
         row = QHBoxLayout()
         row.addWidget(self.progress, 1)
         self.cancel_button = QPushButton("Keskeytä")
@@ -111,8 +189,11 @@ class AvustajaDock(QDockWidget):
             from kaavamaaraysavustaja.knowledge.base import KnowledgeBase
 
             self.kb = KnowledgeBase.load()
+            self.policy_opts = workflow.policy_options(self.kb)
+            self.glossary = workflow.glossary(self.kb)
         except Exception as error:  # noqa: BLE001 - shown to the user
-            self.header.setText(f"<b>Tietopohjaa ei voitu ladata:</b> {error}")
+            self.kb = None
+            self.header.setText(f"<b>Tietopohjaa ei voitu ladata:</b> {_e(error)}")
             return
         self.tabs.addTab(self._input_tab(), "1 Syöte")
         self.tabs.addTab(self._review_tab(), "2 Ehdotus")
@@ -134,20 +215,28 @@ class AvustajaDock(QDockWidget):
         outer.addWidget(scroll)
 
         form = QFormLayout()
+        self.input_form = form
         self.mode = QComboBox()
         for value, text in MODES:
             self.mode.addItem(text, value)
+        self.mode.setToolTip(
+            "Uusi määräys: avustaja ehdottaa rakenteen eikä muuta tekstiä. Voimassa oleva määräys: "
+            "teksti siirtyy merkki merkiltä lähteen mukaisena (VOOKA = voimassa olevan kaavan muunnos)."
+        )
         self.mode.currentIndexChanged.connect(self._update_header)
         form.addRow("Tila", self.mode)
         self.level = QComboBox()
         for value, text in LEVELS:
             self.level.addItem(text, value)
         form.addRow("Kaavataso", self.level)
-        self.input_kind = QComboBox()
-        self.input_kind.addItem("Yksi määräys: otsikko ja teksti", "yksi")
-        self.input_kind.addItem("Liitetty selite (useita merkintöjä, ADR-0009)", "selite")
+        self.input_kind = _narrow(QComboBox())
+        for value, text in INPUT_KINDS:
+            self.input_kind.addItem(text, value)
         self.input_kind.currentIndexChanged.connect(self._update_input_fields)
         form.addRow("Syöte", self.input_kind)
+        self.input_help = _wrapped()
+        self.input_help.setTextFormat(Qt.TextFormat.RichText)
+        form.addRow(self.input_help)
         self.group_kind = QComboBox()
         self.group_kind.addItem("Kaavakohteen määräys (merkintä)", "merkinta")
         self.group_kind.addItem("Yleismääräys (koko kaava-alue)", "yleismaarays")
@@ -158,17 +247,19 @@ class AvustajaDock(QDockWidget):
         self.letter_code = QLineEdit()
         self.letter_code.setPlaceholderText("valinnainen, esim. AK")
         form.addRow("Kirjaintunnus", self.letter_code)
-        self.map_id = QLineEdit()
-        self.map_id.setPlaceholderText("valinnainen: kartan tunnus tai osa nimestä")
-        form.addRow("Kartta", self.map_id)
+        self.map_choice = _narrow(QComboBox())
+        self.map_choice.setToolTip(
+            "Rajaa muunnoksen valitun kartan merkintöihin. Kartan nimi kirjataan muunnosraporttiin ja "
+            "Arho-kirjaston kuvaukseen, ja merkinnät ryhmitellään kirjastossa kartan mukaan."
+        )
+        form.addRow("Kartta", self.map_choice)
+        self.map_help = _wrapped()
+        form.addRow(self.map_help)
         layout.addLayout(form)
         layout.addWidget(QLabel("Määräysteksti (tyhjä rivi = kappaleraja):"))
         self.text = QPlainTextEdit()
-        self.text.setPlaceholderText(
-            "Kirjoita tai liitä määräyksen teksti. Voimassa olevan määräyksen teksti siirtyy "
-            "merkki merkiltä; uuden määräyksen tekstiä ei muuteta."
-        )
         self.text.setMinimumHeight(140)
+        self.text.textChanged.connect(self._text_changed)
         layout.addWidget(self.text, 1)
         files = QHBoxLayout()
         open_text = QPushButton("Avaa tekstitiedosto…")
@@ -178,29 +269,7 @@ class AvustajaDock(QDockWidget):
         open_project.clicked.connect(self.open_project_file)
         files.addWidget(open_project)
         layout.addLayout(files)
-
-        policies = QGroupBox("Linjausvalinnat (oletukset; lukitut linjaukset eivät ole muutettavissa)")
-        policies.setCheckable(True)
-        policies.setChecked(False)
-        pform = QFormLayout()
-        container = QWidget()
-        container.setLayout(pform)
-        for option in workflow.policy_options(self.kb):
-            box = QComboBox()
-            for value, description in option.options.items():
-                suffix = " (oletus)" if value == option.default else ""
-                box.addItem(value + suffix, value)
-                box.setItemData(box.count() - 1, description, Qt.ItemDataRole.ToolTipRole)
-            box.setCurrentIndex(max(0, box.findData(option.default)))
-            box.setEnabled(not option.locked and len(option.options) > 1)
-            box.setToolTip(f"{option.question}\n\n{option.basis}")
-            self.policy_boxes[option.id] = box
-            pform.addRow(f"{option.id} {option.title}" + (" 🔒" if option.locked else ""), box)
-        policies.toggled.connect(container.setVisible)
-        container.setVisible(False)
-        pbox = QVBoxLayout(policies)
-        pbox.addWidget(container)
-        layout.addWidget(policies)
+        layout.addWidget(self._policy_section())
 
         llm = QGroupBox("Kielimalli (valinnainen)")
         lform = QFormLayout(llm)
@@ -234,35 +303,142 @@ class AvustajaDock(QDockWidget):
         self._update_input_fields()
         return page
 
+    def _set_row_visible(self, field: QWidget, visible: bool) -> None:
+        """Qt 5 has no QFormLayout.setRowVisible: hide the label and the field."""
+        label = self.input_form.labelForField(field)
+        if label is not None:
+            label.setVisible(visible)
+        field.setVisible(visible)
+
     def _update_input_fields(self) -> None:
         single = self.input_kind.currentData() == "yksi"
-        for widget in (self.heading, self.letter_code, self.group_kind):
-            widget.setEnabled(single)
-        self.map_id.setEnabled(not single)
+        for widget in (self.group_kind, self.heading, self.letter_code):
+            self._set_row_visible(widget, single)
+        if single:
+            self.input_help.setText(_e(SINGLE_HELP))
+            self.text.setPlaceholderText(SINGLE_PLACEHOLDER)
+        else:
+            self.input_help.setText(f"{_e(LEGEND_HELP)}<pre>{_e(workflow.LEGEND_EXAMPLE)}</pre>")
+            self.text.setPlaceholderText(workflow.LEGEND_EXAMPLE)
+        self._refresh_maps()
+
+    def _text_changed(self) -> None:
+        if self.input_kind.currentData() == "selite":
+            self._map_timer.start()
+
+    def _refresh_maps(self) -> None:
+        """The map choice is shown only when the pasted text has several maps (P1-02, P1-03)."""
+        legend = self.input_kind.currentData() == "selite"
+        maps = workflow.legend_maps(self.text.toPlainText()) if legend else []
+        current = self.map_choice.currentData()
+        self.map_choice.blockSignals(True)
+        self.map_choice.clear()
+        self.map_choice.addItem("Kaikki kartat", None)
+        for title in maps:
+            self.map_choice.addItem(title, title)
+        self.map_choice.setCurrentIndex(max(0, self.map_choice.findData(current)) if current else 0)
+        self.map_choice.blockSignals(False)
+        hint = workflow.map_hint(maps)
+        self._set_row_visible(self.map_choice, bool(hint))
+        self.map_help.setText(hint)
+        self.map_help.setVisible(bool(hint))
+
+    # -- policy choices (P1-04) ------------------------------------------------------------
+
+    def _policy_section(self) -> QWidget:
+        box = QGroupBox()
+        layout = QVBoxLayout(box)
+        self.policy_toggle = QToolButton()
+        self.policy_toggle.setCheckable(True)
+        self.policy_toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.policy_toggle.setArrowType(Qt.ArrowType.RightArrow)
+        self.policy_toggle.setStyleSheet("QToolButton { border: none; font-weight: bold; }")
+        self.policy_toggle.toggled.connect(self._toggle_policies)
+        layout.addWidget(self.policy_toggle)
+        layout.addWidget(_wrapped(POLICY_INTRO))
+        self.policy_body = QWidget()
+        body = QVBoxLayout(self.policy_body)
+        body.setContentsMargins(0, 0, 0, 0)
+        for option in self.policy_opts:
+            body.addWidget(self._policy_row(option))
+        self.policy_body.setVisible(False)
+        layout.addWidget(self.policy_body)
+        self._update_policy_summary()
+        return box
+
+    def _policy_row(self, option: workflow.PolicyOption) -> QWidget:
+        row = QWidget()
+        layout = QVBoxLayout(row)
+        layout.setContentsMargins(0, 6, 0, 0)
+        title = QLabel(f"<b>{_e(option.title)}</b>" + (" 🔒" if option.locked else ""))
+        title.setToolTip(f"Linjaus {option.id}: {option.question}")
+        layout.addWidget(title)
+        if option.explanation:
+            layout.addWidget(_wrapped(_e(option.explanation)))
+        combo = _narrow(QComboBox())
+        for value in option.options:
+            combo.addItem(
+                _capital(option.label(value)) + (" (suositus)" if value == option.default else ""), value
+            )
+            combo.setItemData(combo.count() - 1, option.effect(value), Qt.ItemDataRole.ToolTipRole)
+        combo.setCurrentIndex(max(0, combo.findData(option.default)))
+        combo.setEnabled(option.changeable)
+        combo.setToolTip(f"Linjaus {option.id}")
+        layout.addWidget(combo)
+        effect = _wrapped()
+        layout.addWidget(effect)
+        if option.locked:
+            layout.addWidget(_wrapped("🔒 " + _e(option.lock_reason)))
+        elif len(option.options) < 2:
+            layout.addWidget(
+                _wrapped("<i>Muita vaihtoehtoja ei ole vielä käytettävissä tässä versiossa.</i>")
+            )
+        self.policy_boxes[option.id] = combo
+        self.policy_effects[option.id] = effect
+        combo.currentIndexChanged.connect(lambda _=0, o=option: self._policy_changed(o))
+        self._policy_changed(option, summary=False)
+        return row
+
+    def _policy_changed(self, option: workflow.PolicyOption, summary: bool = True) -> None:
+        value = self.policy_boxes[option.id].currentData()
+        self.policy_effects[option.id].setText(f"<i>Vaikutus:</i> {_e(option.effect(value))}")
+        if summary:
+            self._update_policy_summary()
+
+    def _update_policy_summary(self) -> None:
+        self.policy_toggle.setText(
+            "Linjausvalinnat – " + workflow.policy_summary(self.policy_opts, self._overrides())
+        )
+
+    def _toggle_policies(self, checked: bool) -> None:
+        self.policy_toggle.setArrowType(Qt.ArrowType.DownArrow if checked else Qt.ArrowType.RightArrow)
+        self.policy_body.setVisible(checked)
+
+    def _overrides(self) -> dict[str, str]:
+        selected = {pid: box.currentData() for pid, box in self.policy_boxes.items()}
+        return workflow.policy_overrides(self.policy_opts, selected)
 
     def _update_header(self) -> None:
         if self.kb is None:
             return
-        from kaavamaaraysavustaja.core.llm.prompts import PromptSet
-
-        mode = "VOOKA" if self.mode.currentData() == "vooka" else "laadinta"
-        self.header.setText(
-            f"Tila: <b>{mode}</b> · Tietopohja {self.kb.version} ✓ · kehote {PromptSet.load(self.kb).label}"
-        )
+        text, details = workflow.header(self.kb, self.mode.currentData())
+        self.header.setText(text)
+        self.header.setToolTip(details)
 
     def read_request(self) -> workflow.ConversionRequest:
-        overrides = {pid: box.currentData() for pid, box in self.policy_boxes.items() if box.isEnabled()}
         legend = self.input_kind.currentData() == "selite"
+        if legend:
+            self._refresh_maps()  # the text may have changed just before Muunna
         return workflow.ConversionRequest(
             text=self.text.toPlainText(),
             heading=None if legend else self.heading.text(),
             letter_code=None if legend else self.letter_code.text(),
             kind=self.group_kind.currentData(),
             legend=legend,
-            map=self.map_id.text().strip() or None,
+            map=self.map_choice.currentData() if legend else None,
             mode=self.mode.currentData(),
             plan_level=self.level.currentData(),
-            overrides=overrides,
+            overrides=self._overrides(),
             decisions=list(self.decisions),
         )
 
@@ -286,22 +462,23 @@ class AvustajaDock(QDockWidget):
         self.decisions = list(project.decisions)
         self.mode.setCurrentIndex(max(0, self.mode.findData(project.meta.mode)))
         self.level.setCurrentIndex(max(0, self.level.findData(project.meta.plan_level)))
+        changeable = {o.id for o in self.policy_opts if o.changeable}
         for choice in project.policy_choices:
             box = self.policy_boxes.get(choice.id)
-            if box is not None and box.isEnabled():
+            if box is not None and choice.id in changeable:
                 box.setCurrentIndex(max(0, box.findData(choice.option)))
         if len(project.units) == 1:
             unit = project.units[0]
-            self.input_kind.setCurrentIndex(0)
+            self.input_kind.setCurrentIndex(self.input_kind.findData("yksi"))
             self.heading.setText(unit.heading_raw or unit.heading or "")
             self.letter_code.setText(unit.letter_code_raw or "")
             self.group_kind.setCurrentIndex(max(0, self.group_kind.findData(unit.kind)))
             self.text.setPlainText(unit.raw_text)
         else:
-            self.input_kind.setCurrentIndex(1)
+            self.input_kind.setCurrentIndex(self.input_kind.findData("selite"))
             self.notify(
-                "Monen yksikön muunnos avattu. Liitä selitteen teksti uudelleen Syöte-välilehdelle, "
-                "jos haluat ajaa sen uudelleen (ratkaisut ja kielimallin vastaukset säilyvät)."
+                "Monen yksikön muunnos avattu. Liitä teksti uudelleen Syöte-välilehdelle, jos haluat ajaa "
+                "sen uudelleen (ratkaisut ja kielimallin vastaukset säilyvät)."
             )
         self.set_project(project)
 
@@ -314,6 +491,10 @@ class AvustajaDock(QDockWidget):
         self.units.clear()
         self.detail.clear()
         self._show_questions(None)
+        self._show_json()
+        if self.export_stem.text() == (self._stem_suggestion or ""):
+            self.export_stem.clear()
+        self._stem_suggestion = None
         self.status.setText("")
 
     # ==================================================================================
@@ -344,9 +525,19 @@ class AvustajaDock(QDockWidget):
             return
         project = task.result
         self.set_project(project)
+        skipped = workflow.input_warnings(project)
+        note = ""
+        if skipped:
+            self.notify(
+                "Liitetystä tekstistä ohitettiin rivejä, joita ei tunnistettu merkinnöiksi: "
+                + "; ".join(skipped[:3])
+                + (" …" if len(skipped) > 3 else ""),
+                warning=True,
+            )
+            note = f" Tekstistä ohitettiin {len(skipped)} riviä (otsikkoa ei tunnistettu)."
         provider = self.llm.currentData()
         if provider == "ei":
-            self.status.setText(self._summary(project) + " Sääntöpohjainen muunnos.")
+            self.status.setText(workflow.summary_text(project) + " Sääntöpohjainen muunnos." + note)
             return
         self.run_model(project, provider)
 
@@ -355,6 +546,7 @@ class AvustajaDock(QDockWidget):
         from kaavamaaraysavustaja.core.llm.providers import create_provider
         from kaavamaaraysavustaja.plugin import auth
 
+        summary = workflow.summary_text(project)
         try:
             key = auth.load_api_key(provider)
         except auth.AuthError as error:
@@ -363,19 +555,18 @@ class AvustajaDock(QDockWidget):
         reason = workflow.llm_unavailable_reason(provider, key)
         if reason:
             self.notify(reason, warning=True)
-            self.status.setText(self._summary(project) + " Sääntöpohjainen muunnos (kielimalli ei käytössä).")
+            self.status.setText(summary + " Sääntöpohjainen muunnos (kielimalli ei käytössä).")
             return
         plan = workflow.llm_plan(self.kb, project, provider, previous=self.previous)
         budget = self.budget.value()
         if plan.estimate.units:
             if not self.confirm_estimate(plan, project):
-                self.status.setText(self._summary(project) + " Kielimallia ei kutsuttu.")
+                self.status.setText(summary + " Kielimallia ei kutsuttu.")
                 return
             budget = self._confirmed_budget
         elif not plan.reuse:
             self.status.setText(
-                self._summary(project)
-                + " Kaikki yksiköt ratkesivat sääntöpohjaisesti; kielimallia ei tarvittu."
+                summary + " Kaikki yksiköt ratkesivat sääntöpohjaisesti; kielimallia ei tarvittu."
             )
             return
         try:
@@ -434,7 +625,7 @@ class AvustajaDock(QDockWidget):
             parts.append(f"keskeytetty {t['keskeytettyja']}")
         if t["virheita"]:
             parts.append(f"virheitä {t['virheita']}")
-        self.status.setText(self._summary(project) + " " + ", ".join(parts) + ".")
+        self.status.setText(workflow.summary_text(project) + " " + ", ".join(parts) + ".")
 
     def start_task(self, description: str, function, on_done) -> None:
         task = FunctionTask(description, function, lambda t: self._task_done(t, on_done))
@@ -468,17 +659,6 @@ class AvustajaDock(QDockWidget):
             "Keskeytetään: käsittelyssä oleva kutsu valmistuu, loput jäävät sääntöpohjaisiksi."
         )
 
-    @staticmethod
-    def _summary(project: ConversionProject) -> str:
-        from kaavamaaraysavustaja.exporters.report import summary
-
-        s = summary(project)
-        open_q = sum(s["avoimet"].values())
-        return (
-            f"{s['yksikoita']} yksikköä, hyväksyttävissä sellaisenaan {s['automaatioehdokkaat']}, "
-            f"avoimia kysymyksiä {open_q}."
-        )
-
     # ==================================================================================
     # 2 Ehdotus
 
@@ -497,19 +677,72 @@ class AvustajaDock(QDockWidget):
         self.units = QListWidget()
         self.units.currentItemChanged.connect(self._unit_selected)
         splitter.addWidget(self.units)
+        self.detail_tabs = QTabWidget()
         self.detail = QTextBrowser()
         self.detail.setOpenExternalLinks(False)
-        splitter.addWidget(self.detail)
+        self.detail_tabs.addTab(self.detail, "Ehdotus")
+        self.detail_tabs.addTab(self._json_page(), "Ryhti-JSON")
+        splitter.addWidget(self.detail_tabs)
+        questions = QScrollArea()
+        questions.setWidgetResizable(True)
+        questions.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)  # texts wrap
+        questions.setWidget(self._questions_box())
+        splitter.addWidget(questions)
+        splitter.setSizes([140, 340, 300])
+        layout.addWidget(splitter, 1)
+        self._show_questions(None)
+        return page
+
+    def _json_page(self) -> QWidget:
+        """Ryhti JSON of the selected unit or the whole conversion, as exported (P1-07)."""
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        row = QHBoxLayout()
+        row.addWidget(QLabel("Näytä:"))
+        self.json_scope = QComboBox()
+        self.json_scope.addItem("Valittu yksikkö", "yksikko")
+        self.json_scope.addItem("Koko muunnos", "kaikki")
+        self.json_scope.currentIndexChanged.connect(self._show_json)
+        row.addWidget(self.json_scope, 1)
+        copy_button = QPushButton("Kopioi")
+        copy_button.setToolTip("Kopioi näkyvä Ryhti-JSON leikepöydälle.")
+        copy_button.clicked.connect(self.copy_json)
+        row.addWidget(copy_button)
+        layout.addLayout(row)
+        self.json_notes = _wrapped()
+        layout.addWidget(self.json_notes)
+        self.json_view = QPlainTextEdit()
+        self.json_view.setReadOnly(True)
+        self.json_view.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        self.json_view.setFont(QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont))
+        layout.addWidget(self.json_view, 1)
+        return page
+
+    def _questions_box(self) -> QWidget:
         questions = QGroupBox("Tulkintakysymykset")
         qlayout = QVBoxLayout(questions)
-        self.question = QComboBox()
+        self.question = _narrow(QComboBox())
         self.question.currentIndexChanged.connect(self._question_selected)
         qlayout.addWidget(self.question)
-        self.question_text = QLabel()
-        self.question_text.setWordWrap(True)
+        self.question_text = _wrapped()
         qlayout.addWidget(self.question_text)
+        self.resolution = _wrapped()
+        qlayout.addWidget(self.resolution)
         self.options_box = QVBoxLayout()
         qlayout.addLayout(self.options_box)
+        self.policy_switch_row = QWidget()
+        switch = QHBoxLayout(self.policy_switch_row)
+        switch.setContentsMargins(0, 0, 0, 0)
+        self.policy_switch = _narrow(QComboBox())
+        switch.addWidget(self.policy_switch, 1)
+        self.policy_switch_button = QPushButton("Vaihda linjaus ja aja uudelleen")
+        self.policy_switch_button.setToolTip(
+            "Vaihtaa linjausvalinnan tälle muunnokselle (sama kuin Syöte-välilehden linjausvalinnoissa) ja "
+            "ajaa muunnoksen uudelleen."
+        )
+        self.policy_switch_button.clicked.connect(self.switch_policy)
+        switch.addWidget(self.policy_switch_button)
+        qlayout.addWidget(self.policy_switch_row)
         form = QFormLayout()
         self.scope = QComboBox()
         for value, text in SCOPES:
@@ -523,6 +756,10 @@ class AvustajaDock(QDockWidget):
         self.save_answer = QPushButton("Tallenna ratkaisu")
         self.save_answer.clicked.connect(self.save_decision)
         buttons.addWidget(self.save_answer)
+        self.remove_answer = QPushButton("Poista oma ratkaisu")
+        self.remove_answer.setToolTip("Kysymys palaa avoimeksi, kun ajat muunnoksen uudelleen.")
+        self.remove_answer.clicked.connect(self.remove_own_decision)
+        buttons.addWidget(self.remove_answer)
         self.rerun = QPushButton("Aja uudelleen ratkaisuin")
         self.rerun.setToolTip(
             "Sääntöpohjainen muunnos uudelleen ratkaisujen kanssa; aiemmat kielimallin vastaukset "
@@ -533,18 +770,17 @@ class AvustajaDock(QDockWidget):
         qlayout.addLayout(buttons)
         self.decision_count = QLabel()
         qlayout.addWidget(self.decision_count)
-        splitter.addWidget(questions)
-        splitter.setSizes([160, 360, 220])
-        layout.addWidget(splitter, 1)
-        self._show_questions(None)
-        return page
+        return questions
 
     def set_project(self, project: ConversionProject) -> None:
         self.project = project
         self._fill_units()
         self.decision_count.setText(f"Ratkaisuja päätöslokissa: {len(self.decisions)}")
-        if not self.export_stem.text():
-            self.export_stem.setText(_slug(project.meta.title))
+        stem, self._stem_suggestion = workflow.stem_after_conversion(
+            self.export_stem.text(), self._stem_suggestion, project
+        )
+        self.export_stem.setText(stem)
+        self._show_json()
         self.tabs.setCurrentIndex(1)
 
     def _fill_units(self) -> None:
@@ -575,6 +811,7 @@ class AvustajaDock(QDockWidget):
         else:
             self.detail.clear()
             self._show_questions(None)
+            self._show_json()
 
     def selected_unit(self):
         item = self.units.currentItem()
@@ -586,8 +823,20 @@ class AvustajaDock(QDockWidget):
         unit = self.selected_unit()
         if unit is None:
             return
-        self.detail.setHtml(workflow.detail_html(self.kb, unit))
+        self.detail.setHtml(workflow.detail_html(self.kb, unit, self.glossary))
         self._show_questions(unit)
+        self._show_json()
+
+    def _question_view(self, unit, q) -> workflow.QuestionView:
+        return workflow.question_view(
+            self.kb,
+            self.project,
+            unit,
+            q,
+            decisions=self.decisions,
+            options=self.policy_opts,
+            g=self.glossary,
+        )
 
     def _show_questions(self, unit) -> None:
         self.question.blockSignals(True)
@@ -595,11 +844,16 @@ class AvustajaDock(QDockWidget):
         questions = [] if unit is None or unit.proposal is None else unit.proposal.questions
         ordered = [q for q in questions if q.is_open] + [q for q in questions if not q.is_open]
         for q in ordered:
-            state = "avoin" if q.is_open else f"ratkaistu: {q.answer} ({q.resolved_by})"
-            self.question.addItem(f"{q.kind} {q.question} – {state}", q.id)
+            view = self._question_view(unit, q)
+            self.question.addItem(f"{view.title} – {view.status}", q.id)
+            self.question.setItemData(self.question.count() - 1, view.tooltip, Qt.ItemDataRole.ToolTipRole)
         self.question.blockSignals(False)
         if not ordered:
+            self.view = None
             self.question_text.setText("Ei tulkintakysymyksiä." if unit is not None else "")
+            self.resolution.setText("")
+            self.policy_switch_row.setVisible(False)
+            self.remove_answer.setEnabled(False)
             self._set_options(None)
             return
         self.question.setCurrentIndex(0)
@@ -613,22 +867,42 @@ class AvustajaDock(QDockWidget):
         return unit, next((q for q in unit.proposal.questions if q.id == qid), None)
 
     def _question_selected(self, *_args) -> None:
+        """The card: the question, who resolved it and how the answer can be changed (P1-06)."""
         unit, q = self.current_question()
         if q is None:
+            self.view = None
             self._set_options(None)
             return
-        policy = q.resolved_by.startswith("linjaus") if q.resolved_by else False
-        text = f"<b>{q.question}</b><br>{q.basis}"
-        if policy:
-            text += f"<br><i>Ratkaistu linjauksella ({q.resolved_by}): muuta linjausvalintaa Syöte-välilehdellä.</i>"
-        self.question_text.setText(text)
-        self._set_options(q, editable=not policy)
+        view = self._question_view(unit, q)
+        self.view = view
+        self.question.setToolTip(view.tooltip)
+        self.question_text.setText(
+            f"<b>{_e(view.title)}</b>" + (f"<br>{_e(view.basis)}" if view.basis else "")
+        )
+        text = f"<b>{_e(workflow.RESOLVER_TEXT[view.resolver])}</b> – {_e(view.explanation)}"
+        if view.how_to_change:
+            text += f"<br><i>Muuttaminen:</i> {_e(view.how_to_change)}"
+        if view.pending:
+            text += f"<br>⏳ {_e(view.pending)}"
+        self.resolution.setText(text)
+        self._set_options(q, editable=view.editable)
+        self.policy_switch_row.setVisible(view.policy_switchable)
+        if view.policy_switchable:
+            self.policy_switch.clear()
+            for value, label in view.policy_choices:
+                self.policy_switch.addItem(_capital(label), value)
+            self.policy_switch.setCurrentIndex(max(0, self.policy_switch.findData(view.policy_value)))
+        self.remove_answer.setEnabled(view.own_decision)
 
     def _set_options(self, q, editable: bool = True) -> None:
         while self.options_box.count():
             widget = self.options_box.takeAt(0).widget()
-            if widget is not None:
+            if widget is not None:  # hidden and detached at once, not only when the event loop runs
+                widget.hide()
+                widget.setParent(None)
                 widget.deleteLater()
+        if self.option_group is not None:
+            self.option_group.deleteLater()
         self.option_group = QButtonGroup(self)
         enabled = bool(q is not None and q.options and editable)
         for widget in (self.save_answer, self.scope, self.basis):
@@ -640,12 +914,12 @@ class AvustajaDock(QDockWidget):
             label = option.description + (" (suositus)" if option.id == q.recommendation else "")
             if option.consequence:
                 label += f" – {option.consequence}"
-            button = QRadioButton(label)
-            button.setProperty("option_id", option.id)
-            button.setChecked(option.id == chosen)
-            button.setEnabled(editable)
-            self.option_group.addButton(button)
-            self.options_box.addWidget(button)
+            row = _OptionRow(label)
+            row.button.setProperty("option_id", option.id)
+            row.button.setChecked(option.id == chosen)
+            row.setEnabled(editable)
+            self.option_group.addButton(row.button)
+            self.options_box.addWidget(row)
 
     def save_decision(self) -> None:
         unit, q = self.current_question()
@@ -661,6 +935,54 @@ class AvustajaDock(QDockWidget):
         self.decision_count.setText(
             f"Ratkaisuja päätöslokissa: {len(self.decisions)}. Aja uudelleen, jotta ratkaisu vaikuttaa rakenteeseen."
         )
+        self._question_selected()
+        self._show_json()
+
+    def remove_own_decision(self) -> None:
+        unit, q = self.current_question()
+        if q is None:
+            return
+        self.decisions = workflow.remove_decision(self.decisions, unit, q.kind)
+        self.decision_count.setText(
+            f"Ratkaisuja päätöslokissa: {len(self.decisions)}. Aja uudelleen, jotta kysymys palaa avoimeksi."
+        )
+        self._question_selected()
+        self._show_json()
+
+    def switch_policy(self) -> None:
+        """Change the policy of the shown question for this conversion and re-run (ADR-0008)."""
+        view = self.view
+        if view is None or not view.policy_switchable:
+            return
+        value = self.policy_switch.currentData()
+        try:
+            workflow.set_policy(self.policy_opts, self._overrides(), view.policy_id, value)
+        except workflow.InputError as error:
+            self.notify(str(error), warning=True)
+            return
+        box = self.policy_boxes[view.policy_id]
+        box.setCurrentIndex(max(0, box.findData(value)))
+        self.convert()
+
+    def _show_json(self, *_args) -> None:
+        if self.project is None:
+            self.json_notes.setText("Muunna ensin määräys.")
+            self.json_view.clear()
+            return
+        unit = self.selected_unit() if self.json_scope.currentData() == "yksikko" else None
+        if self.json_scope.currentData() == "yksikko" and unit is None:
+            self.json_notes.setText("Valitse yksikkö listalta.")
+            self.json_view.clear()
+            return
+        view = workflow.ryhti_view(self.project, unit.id if unit else None, decisions=self.decisions)
+        icon = "⚠ " if view.open_questions or not view.included else "✔ "
+        self.json_notes.setText(icon + "<br>".join(_e(note) for note in view.notes))
+        self.json_view.setPlainText(view.text or "(Tätä yksikköä ei viedä Ryhti-JSONiin; syy yllä.)")
+
+    def copy_json(self) -> None:
+        if self.json_view.toPlainText():
+            QApplication.clipboard().setText(self.json_view.toPlainText())
+            self.status.setText("Ryhti-JSON kopioitu leikepöydälle.")
 
     # ==================================================================================
     # 3 Vienti
@@ -677,6 +999,10 @@ class AvustajaDock(QDockWidget):
         row.addWidget(choose)
         form.addRow("Kansio", row)
         self.export_stem = QLineEdit()
+        self.export_stem.setToolTip(
+            "Ehdotus tulee ehdotuksen ensimmäisen kaavamääräysryhmän otsikosta (tai kirjaintunnuksesta) ja "
+            "päivittyy jokaisen muunnoksen jälkeen, ellet ole muuttanut nimeä itse."
+        )
         form.addRow("Tiedostonimen alku", self.export_stem)
         layout.addLayout(form)
         self.export_checks: dict[str, QCheckBox] = {}
@@ -697,6 +1023,14 @@ class AvustajaDock(QDockWidget):
             layout.addWidget(box)
         self.include_incomplete = QCheckBox("Vie Arho-kirjastoon myös ryhmät, joissa on sääntövirheitä")
         layout.addWidget(self.include_incomplete)
+        self.overwrite = QCheckBox("Korvaa samannimiset tiedostot (kysytään ensin)")
+        layout.addWidget(self.overwrite)
+        layout.addWidget(
+            _wrapped(
+                "<small>Jos kansiossa on jo samannimisiä tiedostoja, niitä ei korvata: nimeen lisätään "
+                "juokseva numero (esim. _2), ellei korvaamista ole valittu.</small>"
+            )
+        )
         export = QPushButton("Vie")
         export.clicked.connect(self.export)
         layout.addWidget(export)
@@ -720,6 +1054,17 @@ class AvustajaDock(QDockWidget):
         if path:
             self.export_dir.setText(path)
 
+    def confirm_overwrite(self, paths: list[Path]) -> bool:
+        names = "\n".join(f"• {p.name}" for p in paths)
+        answer = QMessageBox.question(
+            self,
+            "Korvataanko tiedostot?",
+            f"Kansiossa on jo nämä tiedostot:\n{names}\n\nKorvataanko ne? Ei peruu viennin.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        return answer == QMessageBox.StandardButton.Yes
+
     def export(self) -> None:
         if self.project is None:
             self.notify("Muunna ensin määräys.", warning=True)
@@ -731,32 +1076,61 @@ class AvustajaDock(QDockWidget):
             if not directory:
                 return
         formats = [key for key, box in self.export_checks.items() if box.isChecked()]
-        stem = _slug(self.export_stem.text() or self.project.meta.title)
-        paths = workflow.export(
-            self.kb,
-            self.project,
-            Path(directory),
-            stem,
-            formats,
-            include_incomplete=self.include_incomplete.isChecked(),
-        )
+        if not formats:
+            self.notify("Valitse vähintään yksi vietävä tiedosto.", warning=True)
+            return
+        stem = workflow.file_stem(self.export_stem.text() or workflow.suggested_stem(self.project))
+        overwrite = False
+        if self.overwrite.isChecked():
+            existing = workflow.existing_exports(Path(directory), stem, formats)
+            if existing:
+                if not self.confirm_overwrite(existing):
+                    self.status.setText("Vienti peruttu: tiedostoja ei korvattu.")
+                    return
+                overwrite = True
+        try:
+            result = workflow.export(
+                self.kb,
+                self.project,
+                Path(directory),
+                stem,
+                formats,
+                include_incomplete=self.include_incomplete.isChecked(),
+                overwrite=overwrite,
+            )
+        except (workflow.InputError, OSError) as error:
+            self.notify(f"Vienti epäonnistui: {error}", warning=True)
+            return
+        self.last_export = result
         self._save_settings()
         problems = workflow.schema_problems(self.kb, self.project)
         lines = ["<b>Viety:</b><ul>"]
-        lines += [f'<li>{label}: <a href="{p.as_uri()}">{p}</a></li>' for label, p in paths.items()]
+        lines += [
+            f'<li>{_e(EXPORT_LABELS.get(label, label))}: <a href="{p.as_uri()}">{_e(p)}</a></li>'
+            for label, p in result.paths.items()
+        ]
         lines.append("</ul>")
+        if result.renamed:
+            lines.append(
+                f"<p>Kansiossa oli jo tiedostoja nimellä <b>{_e(result.requested_stem)}</b>, joten niitä ei "
+                f"korvattu: nimeen lisättiin numero (<b>{_e(result.stem)}</b>). Jos haluat korvata tiedostot, "
+                "valitse Korvaa samannimiset tiedostot.</p>"
+            )
+        if result.replaced:
+            lines.append(f"<p>Korvattiin {len(result.replaced)} aiempaa tiedostoa.</p>")
         if not problems:
             lines.append("<p>Ryhti-skeema: ei virheitä.</p>")
         elif "skeema" in problems:
             lines.append(
-                f"<p>Ryhti-skeema: {problems['skeema'][0]}. Voit asentaa jsonschema-paketin kma_deps-kansioon "
+                f"<p>Ryhti-skeema: {_e(problems['skeema'][0])}. Voit asentaa jsonschema-paketin kma_deps-kansioon "
                 "tai validoida Syken testiympäristössä.</p>"
             )
         else:
             lines.append(
-                "<p>Ryhti-skeema: " + "; ".join(f"{k}: {v[0]}" for k, v in problems.items()) + "</p>"
+                "<p>Ryhti-skeema: " + _e("; ".join(f"{k}: {v[0]}" for k, v in problems.items())) + "</p>"
             )
         self.export_result.setHtml("".join(lines))
+        self.status.setText(f"Viety {len(result.paths)} tiedostoa nimellä {result.stem}.")
 
     def validate_syke(self) -> None:
         if self.project is None:
@@ -786,9 +1160,9 @@ class AvustajaDock(QDockWidget):
             return
         lines = ["<b>Syke (testiympäristö):</b><ul>"]
         for line in task.result:
-            found = "".join(f"<li>{f}</li>" for f in line.findings)
+            found = "".join(f"<li>{_e(f)}</li>" for f in line.findings)
             lines.append(
-                f"<li>{line.unit_id} {line.title}: {line.status}, määräystason havaintoja {len(line.findings)}"
+                f"<li>{_e(line.title or line.unit_id)}: {_e(line.status)}, määräystason havaintoja {len(line.findings)}"
                 + (f"<ul>{found}</ul>" if found else "")
                 + "</li>"
             )
@@ -838,4 +1212,5 @@ class AvustajaDock(QDockWidget):
 
     def shutdown(self) -> None:
         """Plugin unload: running tasks are cancelled (a call in progress finishes)."""
+        self._map_timer.stop()
         self.cancel_tasks()

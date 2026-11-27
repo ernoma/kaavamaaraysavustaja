@@ -8,7 +8,10 @@ or through pytest: ``KMA_QGIS_PYTHON=C:\\OSGeo4W\\bin\\python-qgis.bat pytest -m
 The script loads the plugin with a minimal ``iface``, opens the dock and goes through the
 first-version path: a new regulation (drafting mode) and a regulation in force (VOOKA, pasted
 legend), an interpretation question answered and re-run, export, the model path with a test
-adapter (cost estimate before the call, no network) and one real ``QgsTask`` run.
+adapter (cost estimate before the call, no network) and one real ``QgsTask`` run. Feedback
+round 1 (0.3.1): plain-language header and policy choices, map choice only for a text with
+several maps, one pasted marking, who resolved a question and the policy switch in the card,
+the Ryhti JSON view, the file name suggestion and export without overwriting.
 No API key is used; settings go to a separate organisation (``KMA-savutesti``).
 """
 
@@ -37,6 +40,15 @@ KESKUSTATOIMINTOJEN ALUE
 Alue varataan julkisille ja yksityisille palveluille. Alueen suunnittelussa tulee kiinnittää huomiota kulttuuriympäristön arvoihin.
 c-1 TÄYDENTYVÄ KESKUSTA
 Aluetta kehitetään täydennettävänä keskustatoimintojen alueena.
+"""
+ONE_MARKING = "c-1 TÄYDENTYVÄ KESKUSTA\nAluetta kehitetään täydennettävänä keskustatoimintojen alueena.\n"
+TWO_MAPS = """\
+@kartta Kartta 1 - Yhdyskuntarakenne
+KESKUSTATOIMINTOJEN ALUE
+Alue varataan julkisille ja yksityisille palveluille.
+@kartta Kartta 2 - Liikenne
+RAITIOTIE
+Raitiotie on ohjeellinen.
 """
 
 
@@ -88,9 +100,13 @@ def check(condition, message):
     print(f"  ok: {message}")
 
 
-def choose(dock, kind: str, option: str, scope: str = "merkinta") -> None:
+def select_question(dock, kind: str) -> None:
     index = next(i for i in range(dock.question.count()) if dock.question.itemData(i).endswith(kind))
     dock.question.setCurrentIndex(index)
+
+
+def choose(dock, kind: str, option: str, scope: str = "merkinta") -> None:
+    select_question(dock, kind)
     button = next(b for b in dock.option_group.buttons() if b.property("option_id") == option)
     button.setChecked(True)
     dock.scope.setCurrentIndex(dock.scope.findData(scope))
@@ -115,7 +131,30 @@ def run() -> None:
     plugin.dock_action.setChecked(True)
     dock = plugin.dock
     check(dock is not None and dock in iface.docks, "telakka avautuu")
-    check("Tietopohja" in dock.header.text() and "prompts/v3" in dock.header.text(), "otsikkorivi")
+    header = dock.header.text()
+    check(
+        "Koodistot ja säännöt" in header and "TP-" not in header and "prompts/" not in header,
+        "otsikkorivi selkokielinen (P1-01)",
+    )
+    check(
+        "TP-" in dock.header.toolTip() and "kehotteen versio" in dock.header.toolTip(),
+        "tunnisteet työkaluvihjeessä",
+    )
+    check(
+        "kaikki suositellussa oletuksessa" in dock.policy_toggle.text()
+        and "L-0" not in dock.policy_toggle.text(),
+        "linjausvalinnat: yhteenveto ilman tunnisteita (P1-04)",
+    )
+    dock.policy_toggle.setChecked(True)
+    check(
+        not dock.policy_body.isHidden() and dock.read_request().overrides == {},
+        "linjaukset auki, oletukset ei ohituksia",
+    )
+    check(
+        dock.policy_effects["L-06"].text().startswith("<i>Vaikutus:</i>")
+        and dock.policy_boxes["L-06"].currentText() == "Lähteen tunnus (suositus)",
+        "linjauksen vaikutus näkyvissä",
+    )
     dock.run_synchronously = True
     out = Path(tempfile.mkdtemp(prefix="kma_savutesti_"))
 
@@ -123,11 +162,15 @@ def run() -> None:
     dock.mode.setCurrentIndex(dock.mode.findData("laadinta"))
     dock.llm.setCurrentIndex(dock.llm.findData("ei"))
     dock.input_kind.setCurrentIndex(dock.input_kind.findData("yksi"))
+    check(
+        dock.map_choice.isHidden() and not dock.heading.isHidden(), "yksi määräys: ei karttavalintaa (P1-03)"
+    )
     dock.heading.setText("Pientalovaltainen asuntoalue")
     dock.text.setPlainText(NEW_TEXT)
     dock.convert()
     project = dock.project
     check(project is not None and project.meta.mode == "laadinta", "uusi määräys muunnettu (laadinta)")
+    check(dock.export_stem.text() == "Pientalovaltainen_asuntoalue", "tiedostonimi ryhmän otsikosta (P1-08)")
     p = project.units[0].proposal
     check(any(r.type.value == "sallittuKerrosala" and r.value.number == 6000 for r in p.regulations), "suure")
     check(
@@ -137,13 +180,50 @@ def run() -> None:
     check("Rakenne" in html and "Tekninen näkymä" in html and "Perustelut" in html, "tarkastelunäkymä")
     check("RY_Kaavamaarayslaji/code/asuinpientaloalue" in html, "tekninen näkymä URIneen")
     check(any(dock.question.itemData(i).endswith("K13") for i in range(dock.question.count())), "K13 näkyy")
+    check(
+        not any("K1" in dock.question.itemText(i) for i in range(dock.question.count())),
+        "kysymyslista ilman K-tunnisteita",
+    )
+    select_question(dock, "K13")
+    check(
+        dock.view.resolver == "avoin" and dock.save_answer.isEnabled(),
+        "avoin kysymys: oma ratkaisu mahdollinen",
+    )
+    check(
+        "Ryhti-JSONiin" not in dock.json_notes.text()
+        and "Avoimia tulkintakysymyksiä 1" in dock.json_notes.text(),
+        "Ryhti-JSON: avoin kysymys kerrotaan (P1-07)",
+    )
     choose(dock, "K13", "suositus")
     check(len(dock.decisions) == 1 and dock.decisions[0].kind == "K13", "ratkaisu päätöslokiin")
+    check(
+        "⏳" in dock.resolution.text() and "Aja uudelleen ratkaisuin" in dock.json_notes.text(),
+        "tallennettu ratkaisu odottaa uudelleenajoa",
+    )
     dock.convert()  # re-run with the decision
     p = dock.project.units[0].proposal
     check(len(p.recommendations) == 1, "uudelleenajo: kappale kaavasuositukseksi")
     k13 = next(q for q in p.questions if q.kind == "K13")
     check(k13.resolved_by == "kayttaja", "ratkaisu säilyy uudelleenajossa")
+    select_question(dock, "K13")
+    check(
+        dock.view.resolver == "kayttaja" and dock.save_answer.isEnabled() and dock.remove_answer.isEnabled(),
+        "oma ratkaisu aina muutettavissa (P1-06)",
+    )
+    check("Ratkaisija: sinä" in dock.resolution.text(), "kortti kertoo ratkaisijan")
+    select_question(dock, "K14")
+    check(
+        dock.view.resolver == "linjaus"
+        and not dock.save_answer.isEnabled()
+        and not dock.policy_switch_row.isHidden(),
+        "linjauksella ratkaistu: vaihto kortista",
+    )
+    check("Ei avoimia tulkintakysymyksiä" in dock.json_notes.text(), "Ryhti-JSON: ei avoimia kysymyksiä")
+    unit_json = json.loads(dock.json_view.toPlainText())
+    check(
+        unit_json["planRegulationGroupKey"] == p.key and unit_json.get("planRecommendations"),
+        "Ryhti-JSON valitusta yksiköstä",
+    )
     dock.export_dir.setText(str(out))
     dock.export_stem.setText("uusi")
     for key in dock.export_checks:
@@ -158,15 +238,64 @@ def run() -> None:
     check(
         not json.loads((out / "uusi.ryhti.json").read_text(encoding="utf-8")).get("plan"), "Ryhti-fragmentit"
     )
+    dock.json_scope.setCurrentIndex(dock.json_scope.findData("kaikki"))
+    check(
+        dock.json_view.toPlainText() == (out / "uusi.ryhti.json").read_text(encoding="utf-8"),
+        "Ryhti-JSON-näkymä = viety tiedosto",
+    )
+    dock.json_scope.setCurrentIndex(dock.json_scope.findData("yksikko"))
+    # -- export does not overwrite without asking (P1-09) ------------------------------------
+    (out / "uusi_raportti.md").write_text("oma muokkaus", encoding="utf-8")
+    dock.export()
+    check(
+        (out / "uusi_2.kma.json").exists()
+        and dock.last_export.renamed
+        and "uusi_2" in dock.export_result.toHtml(),
+        "toinen vienti: juokseva numero",
+    )
+    check(
+        (out / "uusi_raportti.md").read_text(encoding="utf-8") == "oma muokkaus",
+        "olemassa olevaa ei korvattu",
+    )
+    dock.overwrite.setChecked(True)
+    asked = []
+    dock.confirm_overwrite = lambda paths: asked.append(paths) and False
+    dock.export()
+    check(
+        asked and (out / "uusi_raportti.md").read_text(encoding="utf-8") == "oma muokkaus",
+        "korvaus kysytään; Ei peruu",
+    )
+    dock.confirm_overwrite = lambda paths: True
+    dock.export()
+    check(
+        "Muunnosraportti" in (out / "uusi_raportti.md").read_text(encoding="utf-8")
+        and dock.last_export.replaced,
+        "korvaus erillisenä valintana",
+    )
+    dock.overwrite.setChecked(False)
 
     # -- 2. Regulation in force (VOOKA), pasted legend ------------------------------------
     dock.new_conversion()
+    dock.export_stem.clear()
     dock.mode.setCurrentIndex(dock.mode.findData("vooka"))
     dock.input_kind.setCurrentIndex(dock.input_kind.findData("selite"))
+    check(
+        dock.heading.isHidden()
+        and dock.letter_code.isHidden()
+        and "ISOIN KIRJAIMIN" in dock.input_help.text(),
+        "liitetty teksti: otsikko tekstistä, ohje ja esimerkki näkyvissä (P1-05)",
+    )
     dock.text.setPlainText(LEGEND)
+    dock._refresh_maps()
+    check(dock.map_choice.isHidden(), "yksi kartta: ei karttavalintaa")
     dock.convert()
     project = dock.project
     check(project.meta.mode == "vooka" and len(project.units) == 2, "voimassa oleva selite muunnettu (VOOKA)")
+    check(project.meta.map == "Kartta 1 - Yhdyskuntarakenne", "tekstin kartta kirjattu")
+    check(
+        dock.export_stem.text() == "Keskustatoimintojen_alue",
+        "tiedostonimi päivittyy muunnoksen mukaan (P1-08)",
+    )
     for unit in project.units:
         verbal = [r for r in unit.proposal.regulations if r.value and r.value.data_type == "LocalizedText"]
         check("\n\n".join(r.value.text["fin"] for r in verbal) == unit.normalized_text, f"R-19 {unit.id}")
@@ -184,6 +313,47 @@ def run() -> None:
     dock.export_stem.setText("voimassa")
     dock.export()
     check((out / "voimassa.ryhti.json").exists(), "VOOKA-vienti")
+
+    # -- 2b. One pasted marking, map choice and a policy changed from the card ---------------
+    dock.new_conversion()
+    dock.input_kind.setCurrentIndex(dock.input_kind.findData("selite"))
+    dock.text.setPlainText(ONE_MARKING)
+    dock.convert()
+    check(
+        len(dock.project.units) == 1 and dock.project.units[0].letter_code == "c-1",
+        "liitetty teksti, yksi merkintä (P1-05)",
+    )
+    select_question(dock, "K14")
+    check(
+        dock.view.policy_id == "L-06" and dock.view.policy_switchable, "K14: linjaus vaihdettavissa kortista"
+    )
+    dock.policy_switch.setCurrentIndex(dock.policy_switch.findData("katja"))
+    dock.switch_policy()
+    unit = dock.project.units[0]
+    choice = next(c for c in dock.project.policy_choices if c.id == "L-06")
+    check(
+        unit.proposal.letter_code == "cka"
+        and choice.source == "kayttaja"
+        and dock.policy_boxes["L-06"].currentData() == "katja"
+        and "muutettu 1" in dock.policy_toggle.text(),
+        "linjaus vaihdettu kortista: muunnoskohtainen valinta (P1-06)",
+    )
+    dock.policy_boxes["L-06"].setCurrentIndex(dock.policy_boxes["L-06"].findData("alkuperaiset"))
+    dock.text.setPlainText(TWO_MAPS)
+    dock._refresh_maps()
+    check(
+        not dock.map_choice.isHidden()
+        and dock.map_choice.count() == 3
+        and "2 karttaa" in dock.map_help.text(),
+        "useita karttoja: karttavalinta näkyy (P1-02)",
+    )
+    dock.map_choice.setCurrentIndex(dock.map_choice.findData("Kartta 2 - Liikenne"))
+    dock.convert()
+    check(
+        [u.heading for u in dock.project.units] == ["RAITIOTIE"]
+        and dock.project.meta.map == "Kartta 2 - Liikenne",
+        "valittu kartta muunnettu",
+    )
 
     # -- 3. Model path with a test adapter: estimate before the call, no network ------------
     from kaavamaaraysavustaja.core.llm.fake import FakeProvider
