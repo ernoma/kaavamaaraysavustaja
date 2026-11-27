@@ -1,11 +1,11 @@
-# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.1, vaihe 3a)
+# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.2, vaihe 3a)
 
 Ohje on paikkatietoasiantuntijalle. Lisäosa muuntaa sanallisen kaavamääräyksen Katja-asetuksen
 mukaiseksi kaavamääräysryhmäksi QGISissa, ilman Arhoa. Kokeiluversiossa muunnetaan yksi
 määräys kerrallaan (tai lyhyt liitetty teksti). Palaute kirjataan tiedostoon
 [`palaute_vaihe3.md`](palaute_vaihe3.md) (tehtävät T-01 ja T-02,
-[`kayttajan_tehtavat.md`](kayttajan_tehtavat.md)). Versio 0.3.1 korjaa ensimmäisen
-palautekierroksen havainnot P1-01–P1-09.
+[`kayttajan_tehtavat.md`](kayttajan_tehtavat.md)). Versio 0.3.1 korjasi ensimmäisen
+palautekierroksen havainnot P1-01–P1-09 ja versio 0.3.2 toisen kierroksen havainnot P2-01–P2-02.
 
 Ehdotus on aina ehdotus: avustaja perustelee jokaisen valinnan ja kysyy monitulkintaiset kohdat,
 ja sinä päätät. Mitään ei toimiteta Ryhtiin.
@@ -87,8 +87,10 @@ Mitä avustaja tekee laadintatilassa:
 2. Joko **Yksi määräys** (otsikko, tunnus ja teksti omiin kenttiinsä) tai **Liitetty teksti:
    otsikko ja kirjaintunnus tekstissä (yksi tai useampi merkintä)**. Liitetty teksti sopii myös
    yhdelle merkinnälle: otsikko ja tunnus luetaan tekstistä, joten niille ei ole omia kenttiä.
-   Muoto: merkinnän otsikko omalla rivillään ISOIN KIRJAIMIN, kirjaintunnus otsikon alussa
-   ja määräysteksti seuraavilla riveillä. Yksi merkintä:
+   Kummallakin syötteellä on oma tekstinsä: kun vaihdat syötettä, toisen syötteen teksti
+   säilyy tallessa ja palaa, kun vaihdat takaisin. Telakan katkoviivalaatikko on malli, ei
+   syötettä. Muoto: merkinnän otsikko omalla rivillään ISOIN KIRJAIMIN, kirjaintunnus otsikon
+   alussa ja määräysteksti seuraavilla riveillä. Yksi merkintä:
 
    ```text
    c-1 TÄYDENTYVÄ KESKUSTA
@@ -154,6 +156,12 @@ Mitä avustaja tekee laadintatilassa:
   kerrotaan, onko tulkintakysymyksiä avoinna (JSON perustuu silloin avustajan suosituksiin), onko
   sääntövirheitä ja onko tallennettuja ratkaisuja, jotka näkyvät vasta uudelleenajon jälkeen.
   Jos yksikköä ei viedä (esim. ei kaavamääräys), syy kerrotaan.
+- **Onko tulos Ryhti-kelpoinen?** Vain sääntö*virhe* estää Ryhdin hyväksynnän. *Varoitus*
+  kannattaa tarkistaa, ja *huomio* on tiedoksi: sitä ei tarvitse eikä yleensä voi korjata
+  telakassa (esim. huomio siitä, että numeroarvo on sekä tekstissä että suureena; teksti on
+  laatijan). Kun virheitä ei ole, Ryhti-JSON-välilehti sanoo *Avustajan tarkistussäännöt: ei
+  virheitä*. Ryhdin oman tarkistuksen saat kohdassa *3 Vienti → Validoi Syken
+  testiympäristössä* (luku 8).
 - Tekstien tunnisteet näytetään selitettyinä: linjaus nimellään (esim. *linjaus
   Kirjaintunnukset (L-06)*), tulkintakysymys tyypillään (esim. *Kirjaintunnus (tulkintakysymys
   K14)*) ja sääntö sanalla *tarkistussääntö*.
@@ -218,11 +226,12 @@ näet jokaisesta linjauksesta selitteen, valinnan ja sen **vaikutuksen**.
 | `<nimi>.ryhti.json` | Ryhti-JSON: kaavamääräysryhmät ja yleismääräysryhmät (sama kuin *Ryhti-JSON*-välilehti) |
 | `<nimi>.arho.yaml` | valinnainen Arhon kaavamääräysryhmäkirjasto (ryhmät, joissa on sääntövirheitä, jätetään pois, ellei toisin valita) |
 
-Ryhti-skeematarkistus ohitetaan QGISissa, koska `jsonschema`-paketti puuttuu (ilmoitus
-näkyy). **Validoi Syken testiympäristössä** lähettää ryhmät (enintään valittu määrä) Syken
-julkiseen validointirajapintaan synteettisenä testikaavana; kaavatason havainnot suodatetaan
-pois. Havainto näytetään selkokielisenä, ja Ryhdin sääntötunniste on sulkeissa. Tarvitset Syken
-avaimen (luku 2).
+Paikallinen Ryhti-skeematarkistus jää QGISissa tekemättä, koska `jsonschema`-paketti
+puuttuu; tämä ei ole virhe (ks. T-15, jos haluat sen). **Validoi Syken testiympäristössä**
+lähettää ryhmät (enintään valittu määrä) Syken julkiseen validointirajapintaan synteettisenä
+testikaavana; kaavatason havainnot suodatetaan pois. Hyväksytty ryhmä näkyy muodossa *✔ …:
+Ryhti hyväksyi ryhmän, ei havaintoja*. Havainto näytetään selkokielisenä, ja Ryhdin
+sääntötunniste on sulkeissa. Tarvitset Syken avaimen (luku 2).
 
 ## 9 Aiemman muunnoksen jatkaminen
 

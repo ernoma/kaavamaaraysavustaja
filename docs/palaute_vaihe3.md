@@ -49,6 +49,41 @@ latautuu (lisäosa on linkki työhakemistoon). Kirjaa tulos tähän tai kerro se
 | P1-08 | Tiedostonimi ryhmän otsikosta; päivittyy uuden muunnoksen jälkeen, oma nimi säilyy | | |
 | P1-09 | Toinen vienti samaan kansioon: `_2`-nimet; *Korvaa samannimiset tiedostot* kysyy ensin | | |
 
+### Palautekierros 2 (27.11.2026): havainnot
+
+**Yleisarvio:** kokeilu versiolla 0.3.1 meni pääosin hyvin. Kohdat "Syy" ja "Tehty" ovat
+tekoälyn lisäyksiä.
+
+| # | Kohta | Havainto | Syy (versio 0.3.1) | Tehty (0.3.2) |
+|---|---|---|---|---|
+| P2-01 | 1 Syöte: Liitetty teksti | Kun Syöte-kohtaan valitaan *Liitetty teksti*, Kartta-valinnan yläpuolelle jää näkyviin otsikko ja teksti, mahdollisesti aiemmin samalle välilehdelle syötetyt. | Valinnan alla oleva muotoesimerkki (`c-1 TÄYDENTYVÄ KESKUSTA` ja teksti) näytti syötetyltä tiedolta. Lisäksi *Yksi määräys* -syötteeseen kirjoitettu teksti jäi tekstikenttään, vaikka se ei ole liitetyn tekstin muodossa, ja kapeassa telakassa esimerkki levensi välilehteä. | Esimerkki on katkoviivalaatikossa otsikolla "Esimerkki yhdestä merkinnästä (malli, ei syötettä)" ja rivittyy. Kummallakin syötteellä on oma tekstinsä: vaihdettaessa toisen syötteen teksti jää talteen ja palaa takaisin vaihdettaessa. Savutesti tarkistaa tämän. |
+| P2-02 | 2 Ehdotus: Ryhti-kelpoisuus | Laadintaesimerkkiä (Pientalovaltainen asuntoalue, 6 000 k-m², suositellaan) ei saanut korjattua Ehdotus-välilehdellä Ryhti-validiksi: jäi epäselväksi, osasiko korjata vai eikö se ollut mahdollista. | Tulos oli jo Ryhti-kelpoinen: paikallinen skeematarkistus ei virheitä ja Syken testiympäristö OK ilman havaintoja sekä ennen että jälkeen *Määräys vai suositus* -ratkaisun (tarkistettu 27.11.2026). Jäljelle jäi vain huomio R-18 (numeroarvo sekä tekstissä että suureena), joka on tiedoksi eikä korjattavissa telakassa. Telakka ei kertonut tätä selvästi, ja viennin "skeemavalidointi ohitettu" näytti ongelmalta. | Ryhti-JSON-välilehti kertoo *Avustajan tarkistussäännöt: ei virheitä* ja huomioiden ja varoitusten määrän selityksineen sekä ohjaa Syken validointiin. Sääntötarkistus selittää, että vain virhe estää Ryhdin hyväksynnän. Vienti kertoo, ettei puuttuva paikallinen skeematarkistus ole virhe, ja Syken hyväksymä ryhmä näkyy muodossa "Ryhti hyväksyi ryhmän, ei havaintoja". |
+| P2-03 | Kokeiluohjeet | Kaikkia kokeiluohjeita ei ollut helppo ymmärtää. | Edellisen raportin kokeiluaskeleet olivat englanniksi ja tiiviitä. | Kokeiluaskeleet suomeksi alla (palautekierros 3) ja käyttöohjeessa. |
+
+### Palautekierros 3 (versio 0.3.2): kokeiluaskeleet
+
+Käynnistä QGIS uudelleen ja avaa telakka.
+
+1. *1 Syöte*: valitse **Syöte** *Yksi määräys*, kirjoita **Otsikko** "Pientalovaltainen
+   asuntoalue" ja **Määräysteksti** kahtena kappaleena: "Alueelle saa rakentaa enintään 6 000
+   k-m² pientaloja." ja tyhjän rivin jälkeen "Pihoille suositellaan hulevesien viivyttämistä."
+2. Vaihda **Syöte** *Liitetty teksti*: tekstikentän pitäisi olla tyhjä, otsikkokenttiä ei
+   näy, ja esimerkki on katkoviivalaatikossa. Vaihda takaisin *Yksi määräys*: teksti palaa.
+3. Paina **Muunna**. *2 Ehdotus*: valitse kysymys "Määräys vai suositus?", valitse
+   *Kaavasuositus*, **Tallenna ratkaisu** ja **Aja uudelleen ratkaisuin**. Yksikkö saa merkin ✔.
+4. Avaa välilehti **Ryhti-JSON**: sen pitäisi sanoa *Ei avoimia tulkintakysymyksiä* ja
+   *Avustajan tarkistussäännöt: ei virheitä, huomioita 1 (tiedoksi, ei korjattavaa)*. Tulos on
+   tällöin Ryhti-kelpoinen; huomio koskee numeroarvoa, joka on sekä tekstissä että suureena.
+5. *3 Vienti*: paina **Vie** ja halutessasi **Validoi Syken testiympäristössä** (Syken avain
+   tarvitaan): tuloksen pitäisi olla "Ryhti hyväksyi ryhmän, ei havaintoja".
+
+| Askel | Toimiko? (kyllä / ei / osittain) | Huomiot |
+|---|---|---|
+| 1–2 Syötteen vaihto | | |
+| 3 Ratkaisu ja uudelleenajo | | |
+| 4 Ryhti-JSON ja tarkistussäännöt | | |
+| 5 Vienti ja Syke | | |
+
 ## T-01 Kokeilu
 
 ### A. Asennus ja käynnistys
