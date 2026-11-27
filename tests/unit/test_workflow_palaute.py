@@ -43,14 +43,17 @@ def drafting(**kwargs):
 
 
 def unexplained_ids(text: str) -> list[str]:
-    """Identifiers without an explanation such as 'Kirjaintunnukset (L-06)' or 'tarkistussääntö R-19'."""
+    """Identifiers not in an explained form: 'Kirjaintunnukset (L-06)', 'Kirjaintunnus
+    (tulkintakysymys K14)' or 'tarkistussääntö R-19'. ADR and knowledge base ids never."""
     bad = []
     for m in IDS.finditer(text):
-        if m.group().startswith(("ADR-", "TP-")):
-            bad.append(m.group())
-        elif text[m.end() : m.end() + 1] != ")" and not text[: m.start()].lower().endswith(
-            "tarkistussääntö "
-        ):
+        before, after = text[: m.start()], text[m.end() :]
+        explained = (
+            (before.endswith("(") and after.startswith(")"))
+            or before.endswith("(tulkintakysymys ")
+            or before.lower().endswith("tarkistussääntö ")
+        )
+        if m.group().startswith(("ADR-", "TP-")) or not explained:
             bad.append(m.group())
     return bad
 
@@ -99,6 +102,14 @@ def test_p1_01_plain_text_explains_identifiers(kb):
     assert workflow.plain_text("Teksti on tarkistettu. Sääntö R-19 ei huomauta.", g) == (
         "Teksti on tarkistettu. Tarkistussääntö R-19 ei huomauta."
     )
+    assert (
+        workflow.plain_text("avoin tulkintakysymys: K13", g)
+        == "avoin tulkintakysymys: Määräys vai suositus (K13)"
+    )
+    assert workflow.plain_text("1 virhettä; avoin tulkintakysymys: K1, K14", g) == (
+        "1 virhettä; avoimia tulkintakysymyksiä: Aluevaraus vai osa-alue (K1), Kirjaintunnus (K14)"
+    )
+    assert unexplained_ids("(avoin tulkintakysymys: K13)") == ["K13"]  # the check itself is strict
     assert workflow.plain_text("Varmistus vektoriaineistosta (vaihe 4).", g) == (
         "Varmistus vektoriaineistosta (myöhemmässä versiossa)."
     )
@@ -115,13 +126,20 @@ def test_p1_01_plain_text_explains_identifiers(kb):
         "K14: Valittu c-1: L-06: alkuperaiset (suositeltu oletus).",
         "(Katja 2 §; linjaus L-15). Sääntö R-19 ja (R-04).",
         "Katja liite 4 / rivi 6; suunnitelma 6.10 K1",
+        "2 varoitusta; avoin tulkintakysymys: K1, K14",
     ):
         once = workflow.plain_text(text, g)
         assert workflow.plain_text(once, g) == once and unexplained_ids(once) == [], once
 
 
 def test_p1_01_detail_and_questions_have_no_unexplained_ids(kb):
-    for request in (drafting(), workflow.ConversionRequest(text=LEGEND, legend=True)):
+    for request in (
+        drafting(),
+        workflow.ConversionRequest(text=LEGEND, legend=True),
+        workflow.ConversionRequest(
+            text=TWO_MAPS, legend=True, overrides={"L-06": "katja", "L-03": "kappaleittain"}
+        ),
+    ):
         project = workflow.rule_based(kb, request)
         for unit in project.units:
             assert unexplained_ids(workflow.detail_html(kb, unit)) == [], unit.id

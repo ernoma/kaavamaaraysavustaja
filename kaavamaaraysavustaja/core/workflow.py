@@ -379,6 +379,7 @@ _QUESTION = re.compile(
     r"(?:\bsuunnitelma 6\.10 |(?P<word>\b[Tt]ulkintakysymys )|(?<![\w-]))(?P<id>K\d{1,2})\b(?P<colon>:)?"
 )
 _RULE = re.compile(r"(?:\b[Ss]ääntö\s+)?\b(?P<id>R-\d{2})\b")
+_QUESTION_LIST = re.compile(r"\b(?P<word>[Aa]voin tulkintakysymys): (?P<ids>K\d{1,2}(?:, K\d{1,2})*)\b")
 
 
 def _sentence_start(text: str, index: int) -> bool:
@@ -428,7 +429,14 @@ def plain_text(text: str | None, g: Glossary) -> str:
         word = "Tarkistussääntö" if _sentence_start(m.string, m.start()) else "tarkistussääntö"
         return f"{word} {m['id']}"
 
+    def question_list(m: re.Match) -> str:  # "avoin tulkintakysymys: K1, K14" (confidence basis)
+        ids = m["ids"].split(", ")
+        names = ", ".join(f"{g.questions[i]} ({i})" if g.questions.get(i) else i for i in ids)
+        word = m["word"] if len(ids) == 1 else f"{m['word'][0]}voimia tulkintakysymyksiä"
+        return f"{word}: {names}"
+
     text = _POLICY.sub(policy, text)
+    text = _QUESTION_LIST.sub(question_list, text)
     text = _QUESTION.sub(question, text)
     text = _RULE.sub(rule, text)
     values = {v: label for labels in g.option_labels.values() for v, label in labels.items() if "_" in v}
@@ -575,7 +583,8 @@ def request_preview(kb: KnowledgeBase, project: ConversionProject, *, reuse: dic
     builder = RequestBuilder(kb, project, PromptSet.load(kb))
     send = [u for u in plan_units(project)[0] if unit_key(u) not in (reuse or {})]
     parts = [
-        f"# Kielimallille lähetettävä sisältö ({len(send)} kutsua, kehote {builder.prompts.label})",
+        f"# Kielimallille lähetettävä sisältö ({len(send)} kutsua; kielimallin ohjeet eli kehote "
+        f"{builder.prompts.label})",
         "",
         "Vain määräysteksti ja tietopohjasta koottu konteksti; ei PDF:iä, kuvia eikä avaimia.",
         "",
@@ -782,7 +791,7 @@ def syke_validate(
                 unit.id,
                 unit.proposal.title.get("fin", ""),
                 "OK" if result.status == 200 else f"HTTP {result.status}",
-                [f"{f.rule}: {kb.ryhti_message(f.rule) or f.message}" for f in relevant],
+                [f"{kb.ryhti_message(f.rule) or f.message} (Ryhdin sääntö {f.rule})" for f in relevant],
             )
         )
     return lines
@@ -898,6 +907,17 @@ def detail_html(kb: KnowledgeBase, unit: SourceUnit, g: Glossary | None = None) 
 # -- question card (P1-06) -------------------------------------------------------------------
 
 
+RESOLVER_TEXT = {
+    "avoin": "Avoin kysymys",
+    "kayttaja": "Ratkaisija: sinä",
+    "kielimalli": "Ratkaisija: kielimalli",
+    "linjaus": "Ratkaisija: linjaus",
+    "lukittu": "Ratkaisija: lukittu linjaus 🔒",
+    "tila": "Ratkaisija: muunnostila",
+    "muu": "Ratkaistu",
+}
+
+
 @dataclass(frozen=True)
 class QuestionView:
     """A question card: what is asked, who resolved it and how the answer can be changed."""
@@ -965,7 +985,7 @@ def question_view(
             resolver="avoin",
             status="avoin",
             answer="",
-            explanation="Avoin: avustaja ei voinut ratkaista tätä varmasti. Sen suositus on valmiiksi valittuna.",
+            explanation="Avustaja ei voinut ratkaista tätä varmasti. Sen suositus on valmiiksi valittuna.",
             how_to_change=how,
             editable=has_options,
         )
