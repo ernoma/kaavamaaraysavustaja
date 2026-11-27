@@ -98,6 +98,10 @@ def plain_structure(kb: KnowledgeBase | None, proposal: GroupProposal) -> list[s
     return lines
 
 
+def units_of(project: ConversionProject) -> list[SourceUnit]:
+    return [u for u in project.units if u.proposal]
+
+
 def markdown(project: ConversionProject, kb: KnowledgeBase | None = None) -> str:
     meta = project.meta
     s = summary(project)
@@ -131,6 +135,14 @@ def markdown(project: ConversionProject, kb: KnowledgeBase | None = None) -> str
         f"- Avoimet tulkintakysymykset: {', '.join(f'{k} {n}' for k, n in sorted(s['avoimet'].items())) or 'ei'}",
         f"- Linjauksella tai tilalla ratkaistut: {', '.join(f'{k} {n}' for k, n in sorted(s['ratkaistut'].items())) or 'ei'}",
         f"- Sanallisen tekstin poikkeamat lähteestä (R-19 virhe): {s['tekstimuutokset']}",
+        *(
+            [
+                f"- Käyttäjän rakennemuokkaukset (lisätiedot): {len(project.edits)}; muokatut ryhmät "
+                f"{sum(1 for u in units_of(project) if u.proposal.status == 'muokattu')}, perustelut yksiköittäin"
+            ]
+            if project.edits
+            else []
+        ),
         "",
         "| Sääntö | Vakavuus | Kpl |",
         "|---|---|---:|",

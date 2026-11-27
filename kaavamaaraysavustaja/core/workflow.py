@@ -11,6 +11,8 @@ as the command line (``kma convert``):
 * :func:`run_llm` – hybrid step with budget, reuse of earlier answers and cancellation
 * :func:`decision_for` / :func:`add_decision` / :func:`remove_decision` – the user's answer
   to a question (decision log)
+* :func:`edit_view` / :func:`add_info` / :func:`change_item` / :func:`pending_edits` – additional
+  information added or removed by the user (structure edits, ADR-0019)
 * :func:`export` – project, report, Ryhti JSON and optionally the Arho library; existing files
   are kept unless overwriting is chosen; :func:`suggested_stem` – the file name
 * :func:`unit_status` / :func:`detail_html` / :func:`question_view` / :func:`ryhti_view` – what
@@ -30,18 +32,22 @@ from pathlib import Path
 from typing import Any
 
 from kaavamaaraysavustaja.core import decisions as decision_log
+from kaavamaaraysavustaja.core import edits as edit_log
 from kaavamaaraysavustaja.core.convert import convert_units
 from kaavamaaraysavustaja.core.ingest import parse, select_map, single_unit
 from kaavamaaraysavustaja.core.llm.providers import DEFAULT_MODELS, SDK, sdk_available
 from kaavamaaraysavustaja.core.model import (
+    CodeRef,
     ConversionProject,
     Decision,
     InterpretationQuestion,
     SourceDocument,
     SourceUnit,
+    StructureEdit,
 )
 from kaavamaaraysavustaja.core.policy import IMPLEMENTED, PolicyLibrary
 from kaavamaaraysavustaja.knowledge.base import KnowledgeBase
+from kaavamaaraysavustaja.knowledge.codelists import ADDITIONAL_INFO_TYPE
 
 STATUS_ICONS = {
     "valmis": "✔",
@@ -113,6 +119,7 @@ class ConversionRequest:
     plan_level: str = "yleiskaava"
     overrides: dict[str, str] = field(default_factory=dict)  # policy choices L-nn → option
     decisions: list[Decision] = field(default_factory=list)
+    edits: list[StructureEdit] = field(default_factory=list)  # the user's structure edits (ADR-0019)
     name: str | None = None
 
 
@@ -177,6 +184,7 @@ def rule_based(kb: KnowledgeBase, request: ConversionRequest) -> ConversionProje
         source=document,
         map_title=maps[0] if request.legend and len(maps) == 1 else None,
         decisions=request.decisions,
+        edits=request.edits,
     )
     if warnings:
         project.provenance[0].details["jasennyksen_varoitukset"] = warnings
@@ -849,6 +857,13 @@ def detail_html(kb: KnowledgeBase, unit: SourceUnit, g: Glossary | None = None) 
     out.append("<h4>Rakenne</h4><ul>")
     out += [f"<li>{_e(line)}</li>" for line in plain_structure(kb, p)] or ["<li>–</li>"]
     out.append("</ul>")
+    if p.status == "muokattu":
+        out.append(
+            "<p><small>Olet muokannut rakennetta (lisätiedot): ryhmää ei lähetetä kielimallille. "
+            "Muutokset näkyvät perusteluissa ja välilehdellä Lisätiedot.</small></p>"
+        )
+    elif p.kind == "kaavakohde":
+        out.append("<p><small>Lisätietoja voit lisätä tai poistaa välilehdellä Lisätiedot.</small></p>")
     out.append(
         "<h4>Tekninen näkymä</h4><p><small>Koodit ja niiden URIt Ryhdin koodistoissa, samat kuin "
         "Ryhti-JSONissa.</small></p><ul>"
@@ -963,20 +978,22 @@ class CodeChoice:
         return f"{self.name} ({self.value})" + (" – aluevaraus" if self.reservation else "")
 
 
+def _code_choice(kb: KnowledgeBase, code) -> CodeChoice:
+    from kaavamaaraysavustaja.core import match
+
+    return CodeChoice(
+        code.value,
+        code.name.get("fi") or code.value,
+        code.codelist == "RY_Kaavamaarayslaji" and code.in_extension(match.AREA_RESERVATION, kb.valid_on),
+        " ".join(code.description.get("fi", "").split()),
+    )
+
+
 def code_choices(kb: KnowledgeBase, plan_level: str) -> list[CodeChoice]:
     """Regulation types of the national code list the user may choose for a group."""
-    from kaavamaaraysavustaja.core import match
     from kaavamaaraysavustaja.core.convert import choosable_codes
 
-    out = [
-        CodeChoice(
-            code.value,
-            code.name.get("fi") or code.value,
-            code.in_extension(match.AREA_RESERVATION, kb.valid_on),
-            " ".join(code.description.get("fi", "").split()),
-        )
-        for code in choosable_codes(kb, plan_level)
-    ]
+    out = [_code_choice(kb, code) for code in choosable_codes(kb, plan_level)]
     return sorted(out, key=lambda c: c.name.casefold())
 
 
@@ -993,6 +1010,347 @@ def _option_text(kb: KnowledgeBase, described: dict[str, str], option: str | Non
         code = kb.index.get("RY_Kaavamaarayslaji", value)
         return f"Oma valinta koodistosta: {code.name.get('fi', value) if code else value} ({value})"
     return described.get(option, option)
+
+
+# -- additional information added or removed by the user (ADR-0019, feedback P3-01) ----------
+
+VALUE_KIND = {"RY_Kaavamaarayslaji": "kaavamääräyslaji"}
+ITEM_STATE = {
+    "nykyinen": "",
+    "lisataan": "⏳ lisätään, kun ajat uudelleen",
+    "poistetaan": "⏳ poistetaan, kun ajat uudelleen",
+    "poistettu": "poistit (ei ryhmässä)",
+    "palautetaan": "⏳ palautetaan, kun ajat uudelleen",
+}
+ITEM_BUTTON = {
+    "nykyinen": "Poista lisätieto",
+    "lisataan": "Peru lisäys",
+    "poistetaan": "Peru poisto",
+    "poistettu": "Palauta lisätieto",
+    "palautetaan": "Peru palautus",
+}
+
+
+@dataclass(frozen=True)
+class InfoChoice:
+    """An additional information type the user may add."""
+
+    value: str
+    name: str
+    description: str
+    value_codelist: str | None  # the information takes a code of this code list as its value
+
+    @property
+    def value_kind(self) -> str:
+        return VALUE_KIND.get(self.value_codelist or "", self.value_codelist or "")
+
+    @property
+    def label(self) -> str:
+        return f"{self.name} ({self.value})" + (f" – arvona {self.value_kind}" if self.value_codelist else "")
+
+
+def info_choices(kb: KnowledgeBase, plan_level: str) -> list[InfoChoice]:
+    """Additional information types of the plan level (no header-level codes, ADR-0019)."""
+    out = [
+        InfoChoice(
+            code.value,
+            code.name.get("fi") or code.value,
+            " ".join(code.description.get("fi", "").split()),
+            edit_log.value_codelist(kb, code.value),
+        )
+        for code in edit_log.choosable_infos(kb, plan_level)
+    ]
+    return sorted(out, key=lambda c: c.name.casefold())
+
+
+def value_choices(kb: KnowledgeBase, plan_level: str, info: str) -> list[CodeChoice]:
+    """Codes for the value of ``info`` ([] = the information has no value)."""
+    out = [_code_choice(kb, code) for code in edit_log.choosable_values(kb, plan_level, info)]
+    return sorted(out, key=lambda c: c.name.casefold())
+
+
+@dataclass(frozen=True)
+class InfoItem:
+    """One additional information of a regulation as the dock lists it."""
+
+    info: CodeRef
+    value: CodeRef | None
+    name: str
+    value_name: str
+    origin: str  # avustaja | kayttaja
+    state: str  # nykyinen | lisataan | poistetaan | poistettu | palautetaan
+    description: str
+
+    @property
+    def label(self) -> str:
+        text = self.name + (f" → {self.value_name}" if self.value is not None else "")
+        who = "lisäsit" if self.origin == "kayttaja" else "avustajan ehdotus"
+        state = ITEM_STATE[self.state]
+        return f"{text} – {state}" if state else f"{text} ({who})"
+
+    @property
+    def action(self) -> str:
+        """poista = the change removes it (or cancels an addition), palauta = adds it back."""
+        return "poista" if self.state in ("nykyinen", "lisataan", "palautetaan") else "palauta"
+
+    @property
+    def button(self) -> str:
+        return ITEM_BUTTON[self.state]
+
+    @property
+    def tooltip(self) -> str:
+        code = f"{self.info.value}" + (f" = {self.value.value}" if self.value is not None else "")
+        return f"{self.description} (koodi {code})".strip()
+
+
+@dataclass(frozen=True)
+class EditTarget:
+    """A regulation the user can add additional information to."""
+
+    regulation: CodeRef | None  # None = the main regulation of the group
+    label: str
+    items: tuple[InfoItem, ...]
+
+    def has(self, info: str, value: str | None = None) -> bool:
+        return any(
+            i.info.value == info
+            and (i.value.value if i.value is not None else None) == (value or None)
+            and i.state in ("nykyinen", "lisataan", "palautetaan")
+            for i in self.items
+        )
+
+
+@dataclass(frozen=True)
+class EditView:
+    available: bool
+    message: str  # the help, or why additional information cannot be added
+    targets: tuple[EditTarget, ...] = ()
+    pending: str = ""  # changes saved but not yet applied
+    edited: bool = False  # the proposal is the user's (not sent to the language model)
+
+
+EDIT_HELP = (
+    "Lisätiedot täydentävät kaavamääräystä, esimerkiksi ”ympäristö asettaa toiminnan laadulle "
+    "erityisiä vaatimuksia”. Hae lisätiedon laji kansallisesta koodistosta ja paina Lisää lisätieto; jos "
+    "lisätiedolla on arvo (esim. käyttötarkoituskohdistus), valitse myös arvo. Voit poistaa myös avustajan "
+    "ehdottaman lisätiedon. Muutos koskee vain tätä merkintää ja näkyy, kun ajat muunnoksen uudelleen. "
+    "Avustaja tarkistaa tuloksen tarkistussäännöillä. Ryhmää, jonka rakennetta olet muokannut, ei lähetetä "
+    "kielimallille."
+)
+
+
+def edit_for(
+    unit: SourceUnit,
+    action: str,
+    info: CodeRef,
+    *,
+    value: CodeRef | None = None,
+    regulation: CodeRef | None = None,
+    basis: str = "",
+) -> StructureEdit:
+    """A change of the user; the unit is identified by heading and letter code for re-runs."""
+    if action not in edit_log.ACTIONS:
+        raise ValueError(f"tuntematon muutos {action!r}")
+    return StructureEdit(
+        action=action,
+        info=info,
+        unit_id=unit.id,
+        value=value,
+        regulation=regulation,
+        heading=unit.heading or "",
+        letter_code=unit.letter_code,
+        by=USER,
+        at=edit_log.now(),
+        basis=basis,
+    )
+
+
+def _toggle(edits: list[StructureEdit], edit: StructureEdit) -> list[StructureEdit]:
+    """The opposite saved change is cancelled (add after remove = restore); else ``edit`` is saved."""
+    existing = next((e for e in edits if edit_log.key(e) == edit_log.key(edit)), None)
+    if existing is not None and existing.action != edit.action:
+        return [e for e in edits if e is not existing]
+    return edit_log.merge(edits, [edit])
+
+
+def add_info(
+    kb: KnowledgeBase,
+    plan_level: str,
+    edits: list[StructureEdit],
+    unit: SourceUnit,
+    info: str,
+    *,
+    value: str | None = None,
+    target: EditTarget | None = None,
+    basis: str = "",
+) -> list[StructureEdit]:
+    """Add the information ``info`` (with the code ``value``) to the target regulation."""
+    choice = next((c for c in info_choices(kb, plan_level) if c.value == info), None)
+    if choice is None:
+        raise InputError("Valitse lisätiedon laji listasta.")
+    value_ref = None
+    if choice.value_codelist:
+        if not value:
+            raise InputError(f"Valitse lisätiedolle ”{choice.name}” arvo ({choice.value_kind}) listasta.")
+        if value not in {c.value for c in value_choices(kb, plan_level, info)}:
+            raise InputError(f"Valitse arvo ({choice.value_kind}) listasta.")
+        value_ref = edit_log.ref(kb, choice.value_codelist, value)
+    elif value:
+        raise InputError(f"Lisätiedolle ”{choice.name}” ei anneta arvoa.")
+    if target is not None and target.has(info, value):
+        raise InputError(f"Lisätieto ”{choice.name}” on jo määräyksessä.")
+    edit = edit_for(
+        unit,
+        edit_log.ADD,
+        edit_log.ref(kb, ADDITIONAL_INFO_TYPE, info),
+        value=value_ref,
+        regulation=target.regulation if target else None,
+        basis=basis,
+    )
+    return _toggle(edits, edit)
+
+
+def change_item(
+    edits: list[StructureEdit], unit: SourceUnit, target: EditTarget, item: InfoItem, *, basis: str = ""
+) -> list[StructureEdit]:
+    """The button of a listed information: remove it, cancel a change or restore it."""
+    action = edit_log.REMOVE if item.action == "poista" else edit_log.ADD
+    edit = edit_for(unit, action, item.info, value=item.value, regulation=target.regulation, basis=basis)
+    return _toggle(edits, edit)
+
+
+def pending_edits(
+    project: ConversionProject, edits: Iterable[StructureEdit], unit: SourceUnit | None = None
+) -> int:
+    """Saved or cancelled changes that the project does not show yet (needs a re-run)."""
+    applied_edits, wanted_edits = list(project.edits), list(edits)
+    if unit is not None:
+        applied_edits, wanted_edits = (
+            edit_log.for_unit(applied_edits, unit),
+            edit_log.for_unit(wanted_edits, unit),
+        )
+    applied = {edit_log.key(e): e.action for e in applied_edits}
+    wanted = {edit_log.key(e): e.action for e in wanted_edits}
+    changed = sum(1 for k, action in wanted.items() if applied.get(k) != action)
+    return changed + sum(1 for k in applied if k not in wanted)
+
+
+def _same(edit: StructureEdit, info: CodeRef, value: CodeRef | None) -> bool:
+    return edit.info.uri == info.uri and (edit.value.uri if edit.value else None) == (
+        value.uri if value else None
+    )
+
+
+def _target_label(kb: KnowledgeBase, key: str | None, regulation) -> str:
+    code = kb.index.by_uri(regulation.type.uri)
+    name = (code.name.get("fi") if code else None) or regulation.type.value
+    if key is None:
+        return f"Päämääräys: {name} ({regulation.type.value})"
+    kind = "Suure" if edit_log.is_quantity(kb, regulation) else "Määräys"
+    return f"{kind}: {name} ({regulation.type.value})"
+
+
+def edit_view(
+    kb: KnowledgeBase, project: ConversionProject, unit: SourceUnit, edits: Iterable[StructureEdit] = ()
+) -> EditView:
+    """The additional information of the unit's regulations and the user's changes (ADR-0019)."""
+    p = unit.proposal
+    wanted = edit_log.for_unit(edits, unit)
+    applied = edit_log.for_unit(project.edits, unit)
+    waiting = pending_edits(project, edits, unit)
+    pending = (
+        f"⏳ Tallennettuja muutoksia {waiting}: ne näkyvät ehdotuksessa ja Ryhti-JSONissa, kun painat Aja uudelleen."
+        if waiting
+        else ""
+    )
+    if p is None:
+        return EditView(False, "Muunna ensin määräys.")
+    if p.kind == "ei_maarays":
+        return EditView(
+            False,
+            "Avustajan mukaan tämä ei ole kaavamääräys. Jos se on määräys, ratkaise tulkintakysymys ja aja "
+            "muunnos uudelleen; sen jälkeen voit lisätä lisätietoja.",
+            pending=pending,
+        )
+    if p.kind != "kaavakohde":
+        return EditView(
+            False,
+            "Yleismääräysryhmän määräykset ovat sanallisia, eikä niihin lisätä lisätietoja tässä versiossa.",
+            pending=pending,
+        )
+    found = edit_log.targets_of(kb, p.regulations)
+    if not found:
+        return EditView(
+            False,
+            "Ryhmässä on vain sanallinen määräys, joten lisätiedolle ei ole kaavamääräystä. Valitse ensin "
+            "kaavamääräyslaji tulkintakysymyksessä ”Ei sopivaa Katja-koodia” ja aja muunnos uudelleen.",
+            pending=pending,
+            edited=p.status == "muokattu",
+        )
+
+    def description(ref: CodeRef) -> str:
+        code = kb.index.by_uri(ref.uri)
+        return " ".join(code.description.get("fi", "").split()) if code else ""
+
+    targets = []
+    for key, regulation in found:
+        here = lambda e, key=key: (e.regulation.value if e.regulation else None) == key  # noqa: E731
+        wanted_here = [e for e in wanted if here(e)]
+        applied_here = [e for e in applied if here(e)]
+        items: list[InfoItem] = []
+        present = []
+        for info in regulation.additional_infos:
+            value = info.value.code if info.value and info.value.code else None
+            present.append((info.type.uri, value.uri if value else None))
+            own = any(e.action == edit_log.ADD and _same(e, info.type, value) for e in applied_here)
+            own_wanted = any(e.action == edit_log.ADD and _same(e, info.type, value) for e in wanted_here)
+            removing = any(e.action == edit_log.REMOVE and _same(e, info.type, value) for e in wanted_here)
+            state = "poistetaan" if removing or (own and not own_wanted) else "nykyinen"
+            items.append(
+                InfoItem(
+                    info.type,
+                    value,
+                    edit_log.code_name(kb, info.type),
+                    edit_log.code_name(kb, value),
+                    "kayttaja" if own else "avustaja",
+                    state,
+                    description(info.type),
+                )
+            )
+        for e in wanted_here:
+            if e.action == edit_log.ADD and (e.info.uri, e.value.uri if e.value else None) not in present:
+                items.append(
+                    InfoItem(
+                        e.info,
+                        e.value,
+                        edit_log.code_name(kb, e.info),
+                        edit_log.code_name(kb, e.value),
+                        "kayttaja",
+                        "lisataan",
+                        description(e.info),
+                    )
+                )
+        for e in applied_here:
+            if e.action == edit_log.REMOVE and (e.info.uri, e.value.uri if e.value else None) not in present:
+                still = any(w.action == edit_log.REMOVE and _same(w, e.info, e.value) for w in wanted_here)
+                items.append(
+                    InfoItem(
+                        e.info,
+                        e.value,
+                        edit_log.code_name(kb, e.info),
+                        edit_log.code_name(kb, e.value),
+                        "avustaja",
+                        "poistettu" if still else "palautetaan",
+                        description(e.info),
+                    )
+                )
+        targets.append(
+            EditTarget(
+                None if key is None else regulation.type, _target_label(kb, key, regulation), tuple(items)
+            )
+        )
+    message = EDIT_HELP + (" Sanallinen teksti säilyy ennallaan." if project.meta.mode == "vooka" else "")
+    return EditView(True, message, tuple(targets), pending, p.status == "muokattu")
 
 
 def question_view(
@@ -1204,7 +1562,11 @@ def _not_exported(unit: SourceUnit) -> str:
 
 
 def ryhti_view(
-    project: ConversionProject, unit_id: str | None = None, *, decisions: Iterable[Decision] | None = None
+    project: ConversionProject,
+    unit_id: str | None = None,
+    *,
+    decisions: Iterable[Decision] | None = None,
+    edits: Iterable[StructureEdit] | None = None,
 ) -> RyhtiView:
     """The Ryhti JSON of one unit or of the whole conversion, made by the exporter (P1-07)."""
     units = project.units if unit_id is None else [project.unit(unit_id)]
@@ -1238,6 +1600,12 @@ def ryhti_view(
         if waiting:
             notes.append(
                 f"Tallennettuja ratkaisuja, jotka eivät vielä näy JSONissa: {waiting}. Paina Aja uudelleen ratkaisuin."
+            )
+    if edits is not None:
+        changes = pending_edits(project, edits)
+        if changes:
+            notes.append(
+                f"Tallennettuja lisätietojen muutoksia, jotka eivät vielä näy JSONissa: {changes}. Paina Aja uudelleen."
             )
     text = ryhti_text(project)
     if unit_id is None:

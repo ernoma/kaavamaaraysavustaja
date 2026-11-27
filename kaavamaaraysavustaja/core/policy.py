@@ -185,6 +185,7 @@ def load_settings(path: Path) -> dict[str, Any]:
         "kartta",
         "nimi",
         "ratkaisut",
+        "muokkaukset",
         "kielimalli",
         "malli",
         "budjetti",
@@ -197,6 +198,7 @@ def load_settings(path: Path) -> dict[str, Any]:
     if not isinstance(policies, dict):
         raise PolicyError("Asetustiedoston 'linjaukset' on muotoa {L-03: vaihtoehto}")
     data["linjaukset"] = {str(k).upper(): str(v) for k, v in policies.items()}
-    if data.get("ratkaisut") is not None and not isinstance(data["ratkaisut"], list):
-        raise PolicyError("Asetustiedoston 'ratkaisut' on lista")
+    for name in ("ratkaisut", "muokkaukset"):
+        if data.get(name) is not None and not isinstance(data[name], list):
+            raise PolicyError(f"Asetustiedoston '{name}' on lista")
     return data

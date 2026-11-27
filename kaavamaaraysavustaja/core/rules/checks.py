@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from kaavamaaraysavustaja.core import match
+from kaavamaaraysavustaja.core.edits import value_codelist
 from kaavamaaraysavustaja.core.ingest import normalization_preserves_content
 from kaavamaaraysavustaja.core.model import CodeRef, GroupProposal, Regulation, SourceUnit
 from kaavamaaraysavustaja.knowledge.base import KnowledgeBase
@@ -20,7 +21,6 @@ VERBAL_PARENT = "sanallinenMaarays"
 MAIN_USE = "paakayttotarkoitus"
 SUB_AREA = "osaAlue"
 QUANTITY_INFOS = {"ehdottomastiNoudatettava", "kayttotarkoituskohdistus"}
-USE_CLASS_INFOS = {"kayttotarkoituskohdistus", "poisluettavaKayttotarkoitus"}
 TEMPORARY_TYPES = {"maaraAikainenRakentamisrajoitus", "maaraAikainenKieltoRakennuksenRakentamiseksi"}
 COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
@@ -175,9 +175,10 @@ def quantity_additional_infos(ctx: CheckContext) -> Iterator[Finding]:
 
 @check
 def use_class_target_values(ctx: CheckContext) -> Iterator[Finding]:
+    """Information types whose value is a regulation type (data: ``lisatietojen_arvot``)."""
     for n, reg in enumerate(ctx.proposal.regulations):
         for m, info in enumerate(reg.additional_infos):
-            if info.type.value in USE_CLASS_INFOS:
+            if value_codelist(ctx.kb, info.type.value) == REGULATION_TYPE:
                 code = info.value.code if info.value else None
                 if code is None or code.codelist != REGULATION_TYPE:
                     yield Finding(

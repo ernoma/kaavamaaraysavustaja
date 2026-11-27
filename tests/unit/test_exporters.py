@@ -168,7 +168,7 @@ def test_project_json_is_written_and_read(tmp_path, project):
     path = tmp_path / "p.kma.json"
     project.save(path)
     assert ConversionProject.load(path) == project
-    assert json.loads(path.read_text(encoding="utf-8"))["format_version"] == 1
+    assert json.loads(path.read_text(encoding="utf-8"))["format_version"] == 2  # 2: structure edits
 
 
 @pytest.mark.live

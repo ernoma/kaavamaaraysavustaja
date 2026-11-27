@@ -16,6 +16,7 @@ from typing import Any
 
 from kaavamaaraysavustaja import __version__ as ASSISTANT_VERSION
 from kaavamaaraysavustaja.core import decisions as decision_log
+from kaavamaaraysavustaja.core import edits as edit_log
 from kaavamaaraysavustaja.core import match
 from kaavamaaraysavustaja.core.ingest import is_upper_heading
 from kaavamaaraysavustaja.core.model import (
@@ -34,6 +35,7 @@ from kaavamaaraysavustaja.core.model import (
     Regulation,
     SourceDocument,
     SourceUnit,
+    StructureEdit,
     Value,
 )
 from kaavamaaraysavustaja.core.policy import describe_choice
@@ -77,6 +79,8 @@ class Context:
     keys: dict[str, int] = field(default_factory=dict)
     answers: dict[tuple[str, str], str] = field(default_factory=dict)  # (unit id, K-type) -> user option
     proposals: dict[str, GroupProposal] = field(default_factory=dict)  # unit id -> proposal (sub-areas)
+    edits: dict[str, list[StructureEdit]] = field(default_factory=dict)  # unit id -> the user's changes
+    edit_results: dict[str, list[edit_log.Applied]] = field(default_factory=dict)  # unit id -> applied
 
     def answer(self, unit: SourceUnit, kind: str) -> str | None:
         return self.answers.get((unit.id, kind))
@@ -710,6 +714,62 @@ def k5_question(
     )
 
 
+def apply_user_edits(ctx: Context, unit: SourceUnit, structure: Structure) -> None:
+    """The user's changes on top of the structure (ADR-0019), before the letter code and title.
+
+    If the changed combination of codes is an annex 4 row, its letter code is used; otherwise
+    the letter code of the row the structure came from, with a note to check it.
+    """
+    user_edits = ctx.edits.get(unit.id)
+    if not user_edits:
+        return
+    base = structure.annex_row
+    if base is None and structure.method in ("koodisto", "saanto"):
+        base = letter_code_by_signature(ctx, structure.regulations)
+    applied = edit_log.apply(ctx.kb, structure.regulations, user_edits)
+    ctx.edit_results[unit.id] = applied
+    # A change without its regulation yet (e.g. a quantity added by the text) waits for finish().
+    structure.rationale += edit_log.rationale(ctx.kb, [a for a in applied if a.result != edit_log.NO_TARGET])
+    if not edit_log.changed(applied):
+        return
+    row = letter_code_by_signature(ctx, structure.regulations)
+    if row is not None:
+        structure.annex_row, structure.letter_code = row, row["kirjaintunnus"]
+        if row is not base:
+            structure.rationale.append(
+                Rationale(
+                    f"Muokattu koodiyhdistelmä vastaa liitteen 4 riviä {row['rivi']} "
+                    f"({row['kirjaintunnus']} {row['otsikko']}).",
+                    "vakioluettelo",
+                    "korkea",
+                    reference=f"Katja liite 4 / rivi {row['rivi']}",
+                )
+            )
+    elif base is not None and base.get("kirjaintunnus"):
+        structure.annex_row, structure.letter_code = base, base["kirjaintunnus"]
+        structure.rationale.append(
+            Rationale(
+                "Muokattu koodiyhdistelmä ei vastaa mitään liitteen 4 riviä. Liitteen 4 kirjaintunnus "
+                f"{base['kirjaintunnus']} on rivin {base['rivi']} ({base['otsikko']}) rakenteesta, josta "
+                "muokkaus alkoi: tarkista tunnus.",
+                "vakioluettelo",
+                "keskitaso",
+                reference=f"Katja liite 4 / rivi {base['rivi']}",
+            )
+        )
+
+
+def apply_late_edits(ctx: Context, unit: SourceUnit, proposal: GroupProposal) -> None:
+    """Changes to a group that has no structure step (general regulation, not a regulation)."""
+    user_edits = ctx.edits.get(unit.id)
+    if not user_edits or unit.id in ctx.edit_results:
+        return
+    applied = edit_log.apply(ctx.kb, proposal.regulations, user_edits)
+    ctx.edit_results[unit.id] = applied
+    proposal.rationale += edit_log.rationale(ctx.kb, applied)
+    proposal.status = "muokattu"
+
+
 def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
     heading = unit.heading or ""
     questions: list[InterpretationQuestion] = []
@@ -791,6 +851,7 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
             )
         questions.append(k5_question(ctx, unit, heading))
 
+    apply_user_edits(ctx, unit, structure)
     proposal.regulations = list(structure.regulations)
     rationale += structure.rationale
     proposal.geometry_types = structure.geometry or ([unit.geometry_hint] if unit.geometry_hint else [])
@@ -857,6 +918,14 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
     finish(
         ctx, unit, proposal, structure.confidence, questions, rationale, start_index=len(proposal.regulations)
     )
+    if unit.id in ctx.edit_results:
+        applied = ctx.edit_results[unit.id]
+        waiting = [a.edit for a in applied if a.result == edit_log.NO_TARGET]
+        if waiting:  # e.g. the quantity of the text exists only now
+            later = edit_log.apply(ctx.kb, proposal.regulations, waiting)
+            proposal.rationale += edit_log.rationale(ctx.kb, later)
+            ctx.edit_results[unit.id] = [a for a in applied if a.result != edit_log.NO_TARGET] + later
+        proposal.status = "muokattu"  # the user's structure: not sent to the language model
     return proposal
 
 
@@ -1355,6 +1424,7 @@ def _keep_run(
 
 def propose(ctx: Context, unit: SourceUnit) -> GroupProposal:
     proposal = propose_general(ctx, unit) if unit.kind == "yleismaarays" else propose_marking(ctx, unit)
+    apply_late_edits(ctx, unit, proposal)
     ctx.proposals[unit.id] = proposal
     return proposal
 
@@ -1386,12 +1456,23 @@ def apply_targeted_additions(ctx: Context, units: list[SourceUnit]) -> None:
                         continue
                     value = addition["arvo"]
                     uri = f"{URI_PREFIX}{value['koodisto']}/code/{value['koodi']}"
-                    main.additional_infos.append(
-                        AdditionalInfo(
-                            ctx.ref(ADDITIONAL_INFO_TYPE, addition["lisatieto"]),
-                            Value("Code", code=CodeRef(uri, ctx.kb.codelist_version(value["koodisto"]))),
-                        )
+                    info = AdditionalInfo(
+                        ctx.ref(ADDITIONAL_INFO_TYPE, addition["lisatieto"]),
+                        Value("Code", code=CodeRef(uri, ctx.kb.codelist_version(value["koodisto"]))),
                     )
+                    if edit_log.removes(ctx.edits.get(target.id, []), info):
+                        target.proposal.rationale.append(
+                            Rationale(
+                                f"Yleismääräyksen kohdistusta {addition['lisatieto']} ei lisätty, koska käyttäjä "
+                                f"on poistanut sen ({ctx.describe('L-05')}).",
+                                "kayttaja",
+                                "korkea",
+                                quote=hint.sentence,
+                                reference=f"yksikkö {unit.id}",
+                            )
+                        )
+                        continue
+                    main.additional_infos.append(info)
                     main.rationale.append(
                         Rationale(
                             f"Yleismääräyksen kohdistus: {addition['lisatieto']} = {value['koodisto']} {value['koodi']} "
@@ -1419,13 +1500,16 @@ def convert_units(
     source: SourceDocument | None = None,
     map_title: str | None = None,
     decisions: list[Decision] | None = None,
+    edits: list[StructureEdit] | None = None,
 ) -> ConversionProject:
     from kaavamaaraysavustaja.core import decisions as decision_log
     from kaavamaaraysavustaja.core.rules import RuleEngine
 
     decisions = list(decisions or [])
+    edits = list(edits or [])
     ctx = Context(kb, plan_level, mode, {c.id: c for c in choices}, name)
     ctx.answers = decision_log.apply_input_hints(kb, decisions, units)
+    ctx.edits = edit_log.by_unit(edits, units)
     engine = RuleEngine(kb)
     for unit in units:
         unit.proposal = propose(ctx, unit)
@@ -1464,6 +1548,7 @@ def convert_units(
     )
     warnings = decision_log.apply_answers(kb, project, decisions)
     decision_log.record(project, decisions)
+    project.edits = edit_log.record(edits, units)
     for unit in units:
         apply_recommendations(ctx, unit)
         engine.apply(unit, plan_level=plan_level, mode=mode)
@@ -1473,6 +1558,17 @@ def convert_units(
         provenance.details["ratkaisujen_varoitukset"] = warnings + [
             f"ratkaisulle {d.question_id} ({d.heading or d.unit_id}) ei löytynyt yksikköä"
             for d in decision_log.unmatched(decisions, units)
+        ]
+    if edits:
+        provenance.details["muokkauksia"] = len(edits)
+        provenance.details["muokkausten_varoitukset"] = [
+            f"{unit_id}: lisätietoa {a.edit.info.value} ei voitu käsitellä (ei kohdemääräystä)"
+            for unit_id, results in ctx.edit_results.items()
+            for a in results
+            if a.result == edit_log.NO_TARGET
+        ] + [
+            f"muokkaukselle {e.info.value} ({e.heading or e.unit_id}) ei löytynyt yksikköä"
+            for e in edit_log.unmatched(edits, units)
         ]
     return project
 

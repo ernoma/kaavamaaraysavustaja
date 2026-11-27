@@ -29,6 +29,7 @@ from typing import Any
 
 from kaavamaaraysavustaja import __version__ as ASSISTANT_VERSION
 from kaavamaaraysavustaja.core import decisions as decision_log
+from kaavamaaraysavustaja.core import edits as edit_log
 from kaavamaaraysavustaja.core import match
 from kaavamaaraysavustaja.core.convert import (
     VERBAL_TYPES,
@@ -75,13 +76,22 @@ QUOTE_STRIP = " \t\n\"'“”„«»…."
 def needs_model(unit: SourceUnit) -> bool:
     """Units the rule-based step did not settle with high confidence (informative markings stay with the user).
 
-    A group whose regulation type the user chose from the code list (K5 ``koodi:…``) is the
-    user's structure, so the model does not replace it.
+    A group whose regulation type the user chose from the code list (K5 ``koodi:…``) or whose
+    structure the user edited (``status = "muokattu"``, ADR-0019) is the user's structure, so
+    it is not sent to the model.
     """
     proposal = unit.proposal
-    if proposal and any(q.kind == "K5" and decision_log.chosen_code(q.answer) for q in proposal.questions):
+    if proposal and (user_code(unit) or proposal.status == "muokattu"):
         return False
     return bool(proposal and proposal.kind != "ei_maarays" and proposal.confidence != "korkea")
+
+
+def user_code(unit: SourceUnit) -> bool:
+    """The user chose the regulation type of the group from the code list (K5)."""
+    proposal = unit.proposal
+    return bool(
+        proposal and any(q.kind == "K5" and decision_log.chosen_code(q.answer) for q in proposal.questions)
+    )
 
 
 def unit_key(unit: SourceUnit) -> str:
@@ -652,6 +662,7 @@ def run_hybrid(
         {c.id: c for c in project.policy_choices},
         project.meta.title,
     )
+    ctx.edits = edit_log.by_unit(project.edits, project.units)
     engine = RuleEngine(kb)
     send, duplicates = plan_units(project)
     responses: dict[str, tuple[dict[str, Any], UnitOutcome]] = {}
@@ -725,6 +736,25 @@ def run_hybrid(
         _apply(ctx, engine, unit, outcome, prompts, project)
         report.outcomes.append(outcome)
 
+    # A group the user edited is never sent, but an earlier answer (same content) is reused
+    # and the user's changes are made on top of it: the user edited the structure they saw.
+    for unit in project.units:
+        if unit.id not in ctx.edits or user_code(unit) or unit_key(unit) not in settings.reuse:
+            continue
+        entry = settings.reuse[unit_key(unit)]
+        outcome = UnitOutcome(
+            unit.id,
+            unit_key(unit),
+            "uudelleenkaytetty",
+            response=entry["vastaus"],
+            model=entry.get("malli", ""),
+            message="käyttäjän muokkaama ryhmä: aiempi vastaus, ei uutta kutsua",
+        )
+        _apply(ctx, engine, unit, outcome, prompts, project)
+        _apply_edits(ctx, engine, unit, project)
+        report.outcomes.append(outcome)
+        say(f"{unit.id} {unit.heading}: käyttäjän muokkaama, aiempi vastaus käytetty uudelleen")
+
     totals = report.totals()
     project.provenance.append(
         Provenance(
@@ -787,6 +817,16 @@ def _apply(ctx: Context, engine, unit: SourceUnit, outcome: UnitOutcome, prompts
     engine.apply(unit, plan_level=project.meta.plan_level, mode=project.meta.mode)
     _confidence(unit)
     proposal.status = "ehdotus"
+
+
+def _apply_edits(ctx: Context, engine, unit: SourceUnit, project) -> None:
+    """The user's changes (ADR-0019) on top of a reused model proposal."""
+    proposal = unit.proposal
+    applied = edit_log.apply(ctx.kb, proposal.regulations, ctx.edits.get(unit.id, []))
+    proposal.rationale += edit_log.rationale(ctx.kb, applied)
+    proposal.status = "muokattu"
+    engine.apply(unit, plan_level=project.meta.plan_level, mode=project.meta.mode)
+    _confidence(unit)
 
 
 def _confidence(unit: SourceUnit) -> None:

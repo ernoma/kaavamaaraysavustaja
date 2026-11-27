@@ -22,3 +22,5 @@ Lyhyet päätöskirjaukset: tausta, päätös, seuraukset. Tila: *ehdotettu*, *h
 | [0015](0015-otsikkolinjaus-l15-ja-l04-r12.md) | Otsikkolinjaus L-15 sekä L-04:n ja R-12:n suhde | hyväksytty |
 | [0016](0016-kokeiltava-kayttoliittyma-ja-uudet-maaraykset-ensin.md) | Kokeiltava käyttöliittymä ja uusien määräysten muunnos ensin | hyväksytty |
 | [0017](0017-telakka-laadintatila-ja-kehote-v3.md) | Kokeiltava telakka, laadintatilan käsittely ja kehote v3 | hyväksytty |
+| [0018](0018-palautekierros-1-selkokieli-ja-linjauksen-vaihto.md) | Palautekierros 1: selkokieli, linjauksen vaihto kortista ja vienti ilman korvaamista | hyväksytty |
+| [0019](0019-lisatietojen-valinta-ja-rakennemuokkaukset.md) | Lisätietojen valinta käsin: rakennemuokkausten luettelo muunnosprojektissa | hyväksytty |

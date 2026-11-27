@@ -81,7 +81,7 @@ tiedostot:
   prompts/v3/konteksti.md: 16a0eaa3be27c829580216921a0231dd8764ace3b3ede6fc1dbe8863450c0dc1
   prompts/v3/kysymystyypit.yaml: a24737760b4b559de10cec41ebb0c9b89d07e57aa3e489518f9e1330dac0a6ab
   prompts/v3/laadintaohje.md: 766a94e6288018d5d4c500c6c6c8db8fed4641c508489deb5cf488ef7bb79764
-  rules/rules_v1.yaml: 244876341a3c5b0ccde51aff3cbca7cae8d7ebac871733ccf72ee120c665ba1b
+  rules/rules_v1.yaml: 34e7d362e8d80e6152f7de29a3d66322142c8ea7cf47aff298afbf48fa524a62
   rules/sanasto_v1.yaml: b7b079c8e763928c73f23dcbf300e8303a4f65c6ccd6f8a66a0c589fb1a41445
   ryhti/schema_2026-release-11.json: f248f923465916b08190b53b57512ecdc5d3dfe6d69cc230d86c0b0694c3589d
   ryhti/validation_messages.csv: 65a2c282ab237ef1183505776e6229a547882f297d15b0d10506d8cf8abec237

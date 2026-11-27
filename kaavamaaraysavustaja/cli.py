@@ -50,6 +50,7 @@ def _utf8_stdout() -> None:
 
 def cmd_convert(args: argparse.Namespace) -> int:
     from kaavamaaraysavustaja.core import decisions as decision_log
+    from kaavamaaraysavustaja.core import edits as edit_log
     from kaavamaaraysavustaja.core.convert import convert_units
     from kaavamaaraysavustaja.core.ingest import parse, select_map
     from kaavamaaraysavustaja.core.policy import (
@@ -80,11 +81,17 @@ def cmd_convert(args: argparse.Namespace) -> int:
         decisions = decision_log.merge_decisions(
             previous.decisions if previous else [], decision_log.parse_decisions(settings.get("ratkaisut"))
         )
+        edits = edit_log.merge(
+            previous.edits if previous else [], edit_log.parse_edits(kb, settings.get("muokkaukset"))
+        )
     except PolicyError as error:
         _print(f"Virhe linjausvalinnoissa: {error}")
         return EXIT_USAGE
     except decision_log.DecisionError as error:
         _print(f"Virhe ratkaisuissa: {error}")
+        return EXIT_USAGE
+    except edit_log.EditError as error:
+        _print(f"Virhe muokkauksissa: {error}")
         return EXIT_USAGE
     llm_name = args.kielimalli or settings.get("kielimalli") or "ei"
     if llm_name not in ("ei", "claude", "mistral"):
@@ -120,6 +127,7 @@ def cmd_convert(args: argparse.Namespace) -> int:
         source=document,
         map_title=map_title,
         decisions=decisions,
+        edits=edits,
     )
     hybrid_report = None
     if llm_name != "ei":
@@ -164,6 +172,10 @@ def cmd_convert(args: argparse.Namespace) -> int:
         _print(f"Käyttäjän ratkaisuja {len(project.decisions)} (tallennettu projektiin).")
         for warning in project.provenance[0].details.get("ratkaisujen_varoitukset", []):
             _print(f"  ratkaisu: {warning}")
+    if project.edits:
+        _print(f"Käyttäjän rakennemuokkauksia {len(project.edits)} (tallennettu projektiin).")
+        for warning in project.provenance[0].details.get("muokkausten_varoitukset", []):
+            _print(f"  muokkaus: {warning}")
     if hybrid_report is not None:
         t = hybrid_report.totals()
         _print(

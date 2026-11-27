@@ -12,10 +12,31 @@
 #   tilat       muunnostilat (vooka, laadinta), joilla sääntö on voimassa
 #   tarkistus   tarkistusfunktion nimi
 #   voimassa    { alkaen, paattyen }
+#
+# Versio 2 (27.11.2026): lisätietojen arvot (lisatietojen_arvot), säännöt ennallaan.
 
-versio: 1
-paivitetty: 2026-11-22
+versio: 2
+paivitetty: 2026-11-27
 opas: "luonnos 16.2.2026"
+
+# Lisätiedon lajit, joille annetaan arvo (koodin kuvaus koodistossa
+# RY_Kaavamaarayksen_Lisatiedonlaji; Ryhti quality/req-codelist-additionalinfotype-allowed-datatypes).
+#   arvo      koodi (koodiarvo koodistosta) | muu (luku, arvoväli tai aikaväli)
+#   koodisto  arvon koodisto, kun arvo on koodi
+# R-06 tarkistaa lajit, joiden arvo on kaavamääräyslaji. Telakan lisätietovalinta (ADR-0019)
+# tarjoaa koodiarvot tietopohjan koodistosta; lajeja, joiden arvo on muu tai joiden koodisto ei
+# ole tietopohjassa, ei vielä tarjota. Muilla lisätiedon lajeilla ei ole arvoa.
+lisatietojen_arvot:
+  kayttotarkoituskohdistus: { arvo: koodi, koodisto: RY_Kaavamaarayslaji }
+  poisluettavaKayttotarkoitus: { arvo: koodi, koodisto: RY_Kaavamaarayslaji }
+  rakennusluvanPeruste: { arvo: koodi, koodisto: oikeusvaik_YK }
+  valiaikainenMaarays: { arvo: muu, kuvaus: "aikaväli (alkamis- ja loppumispäivä)" }
+  kerroksetJotaMaaraysKoskee: { arvo: muu, kuvaus: "arvoväli (kerrokset)" }
+  kayttotarkoituksenOsuusKerrosalastaK-m2: { arvo: muu, kuvaus: "positiivinen kokonaisluku (k-m²)" }
+  kayttotarkoituksenOsuusKerrosalastaPros: { arvo: muu, kuvaus: "positiivinen kokonaisluku (%)" }
+  kayttotarkoituksenOsuusRakennustilavuudestaK-m3: { arvo: muu, kuvaus: "positiivinen kokonaisluku (k-m³)" }
+  kayttotarkoituksenOsuusRakennustilavuudestaPros: { arvo: muu, kuvaus: "positiivinen kokonaisluku (%)" }
+  kayttotarkoituksenOsuusMaapintaAlasta: { arvo: muu, kuvaus: "positiivinen kokonaisluku (%)" }
 
 saannot:
 

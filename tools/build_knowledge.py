@@ -661,6 +661,11 @@ def check_hand_maintained(relative: str, data: Any) -> None:
         for rule in data["saannot"]:
             if rule.get("vakavuus") not in ("virhe", "varoitus", "huomio") or not rule.get("tarkistus"):
                 fail(f"{rule.get('tunnus')}: vakavuus tai tarkistus puuttuu")
+        for info, value in (data.get("lisatietojen_arvot") or {}).items():
+            if not isinstance(value, dict) or value.get("arvo") not in ("koodi", "muu"):
+                fail(f"lisatietojen_arvot.{info}: arvo on koodi tai muu")
+            if value["arvo"] == "koodi" and not value.get("koodisto"):
+                fail(f"lisatietojen_arvot.{info}: koodiarvolle tarvitaan koodisto")
     elif relative == POLICY_FILE:
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))

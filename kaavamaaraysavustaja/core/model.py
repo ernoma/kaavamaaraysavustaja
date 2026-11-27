@@ -17,7 +17,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-FORMAT_VERSION = 1
+# 2 (version 0.3.4): the user's structure edits (``edits``, ADR-0019). Version 1 files load
+# unchanged (no edits).
+FORMAT_VERSION = 2
 PROJECT_SUFFIX = ".kma.json"
 
 # Enumerations are plain strings (Finnish, as shown to the user) to keep the JSON readable.
@@ -37,8 +39,9 @@ METHODS = (
     "kielimalli",
     "kayttaja",
 )
-STATUSES = ("ehdotus", "muokattu", "hyvaksytty", "hylatty")
+STATUSES = ("ehdotus", "muokattu", "hyvaksytty", "hylatty")  # muokattu = the user edited the structure
 SEVERITIES = ("virhe", "varoitus", "huomio")
+EDIT_ACTIONS = ("lisaa_lisatieto", "poista_lisatieto")
 
 
 @dataclass(frozen=True)
@@ -268,6 +271,29 @@ class Decision:
 
 
 @dataclass
+class StructureEdit:
+    """The user's change to the structure of a group (ADR-0019, feedback P3-01).
+
+    ``lisaa_lisatieto`` adds the additional information ``info`` (with the code ``value`` when
+    the information type takes one, e.g. kayttotarkoituskohdistus → a regulation type) to the
+    regulation ``regulation`` of the group (None = the group's main regulation);
+    ``poista_lisatieto`` removes it. Codes are URIs with the code list version. ``heading``
+    and ``letter_code`` identify the unit on re-runs, as in :class:`Decision`.
+    """
+
+    action: str  # lisaa_lisatieto | poista_lisatieto
+    info: CodeRef
+    unit_id: str
+    value: CodeRef | None = None
+    regulation: CodeRef | None = None  # None = the main regulation of the group
+    heading: str | None = None
+    letter_code: str | None = None
+    by: str | None = None
+    at: str | None = None
+    basis: str = ""
+
+
+@dataclass
 class Provenance:
     step: str  # e.g. saantopohjainen, kielimalli
     tool_version: str
@@ -298,6 +324,7 @@ class ConversionProject:
     units: list[SourceUnit] = field(default_factory=list)
     policy_choices: list[PolicyChoice] = field(default_factory=list)
     decisions: list[Decision] = field(default_factory=list)
+    edits: list[StructureEdit] = field(default_factory=list)
     provenance: list[Provenance] = field(default_factory=list)
     format_version: int = FORMAT_VERSION
 
