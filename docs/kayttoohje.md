@@ -1,4 +1,4 @@
-# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.3, vaihe 3a)
+# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.4, vaihe 3a)
 
 Ohje on paikkatietoasiantuntijalle. Lisäosa muuntaa sanallisen kaavamääräyksen Katja-asetuksen
 mukaiseksi kaavamääräysryhmäksi QGISissa, ilman Arhoa. Kokeiluversiossa muunnetaan yksi
@@ -6,7 +6,7 @@ määräys kerrallaan (tai lyhyt liitetty teksti). Palaute kirjataan tiedostoon
 [`palaute_vaihe3.md`](palaute_vaihe3.md) (tehtävät T-01 ja T-02,
 [`kayttajan_tehtavat.md`](kayttajan_tehtavat.md)). Versio 0.3.1 korjasi ensimmäisen
 palautekierroksen havainnot P1-01–P1-09, versio 0.3.2 toisen kierroksen havainnot P2-01–P2-03
-ja versio 0.3.3 havainnon P3-01 (kaavamääräyslajin valinta koodistosta).
+ja versiot 0.3.3–0.3.4 havainnon P3-01 (kaavamääräyslajin ja lisätietojen valinta koodistosta).
 
 Ehdotus on aina ehdotus: avustaja perustelee jokaisen valinnan ja kysyy monitulkintaiset kohdat,
 ja sinä päätät. Mitään ei toimiteta Ryhtiin.
@@ -155,8 +155,10 @@ Mitä avustaja tekee laadintatilassa:
 - **Ryhti-JSON**-välilehti näyttää valitun yksikön tai koko muunnoksen (*Näytä*) Ryhti-JSONin
   täsmälleen sellaisena kuin vienti kirjoittaa sen; *Kopioi* vie sen leikepöydälle. Yläpuolella
   kerrotaan, onko tulkintakysymyksiä avoinna (JSON perustuu silloin avustajan suosituksiin), onko
-  sääntövirheitä ja onko tallennettuja ratkaisuja, jotka näkyvät vasta uudelleenajon jälkeen.
-  Jos yksikköä ei viedä (esim. ei kaavamääräys), syy kerrotaan.
+  sääntövirheitä ja onko tallennettuja ratkaisuja tai lisätietojen muutoksia, jotka näkyvät vasta
+  uudelleenajon jälkeen. Jos yksikköä ei viedä (esim. ei kaavamääräys), syy kerrotaan.
+- **Lisätiedot**-välilehdellä lisäät ja poistat valitun yksikön lisätietoja (luku 7,
+  *Lisätietojen lisäys ja poisto*).
 - **Onko tulos Ryhti-kelpoinen?** Vain sääntö*virhe* estää Ryhdin hyväksynnän. *Varoitus*
   kannattaa tarkistaa, ja *huomio* on tiedoksi: sitä ei tarvitse eikä yleensä voi korjata
   telakassa (esim. huomio siitä, että numeroarvo on sekä tekstissä että suureena; teksti on
@@ -192,8 +194,8 @@ Mitä avustaja tekee laadintatilassa:
    liitteestä 4, jos sillä on siellä rivi (esim. *Työpaikkojen alue* → TP). Sanallinen teksti
    säilyy ennallaan. Lista sisältää kaavatason kaavamääräyslajit ilman otsikkotason koodeja,
    sanallisia määräyksiä ja suureita. Ryhmää, jonka koodin valitsit itse, ei lähetetä
-   kielimallille. Lisätietoja (esim. *ympäristö asettaa toiminnan laadulle erityisiä
-   vaatimuksia*) ei vielä voi valita.
+   kielimallille. Lisätiedot (esim. *ympäristö asettaa toiminnan laadulle erityisiä
+   vaatimuksia*) valitaan sen jälkeen Lisätiedot-välilehdellä (alla).
 3. **Laajuus**: *Vain tämä merkintä* tai *Kaikki samankaltaiset tässä muunnoksessa* (sama
    tunnuksen perusosa, esim. c-1…c-4, sama otsikko ilman määreitä tai sama teksti). Kirjoita
    halutessasi perustelu ja paina **Tallenna ratkaisu**. Ratkaisu menee päätöslokiin, ja kortti
@@ -202,6 +204,53 @@ Mitä avustaja tekee laadintatilassa:
    suositus* → kaavasuositus, *Aluevaraus vai osa-alue* → osa-alue, *Geometriatyyppi* →
    geometria) ja säilyy jokaisessa uudelleenajossa. Aiemmat kielimallivastaukset käytetään
    uudelleen ilman kustannusta, kun kielimalli on edelleen valittuna.
+
+### Lisätietojen lisäys ja poisto
+
+Lisätiedot täydentävät kaavamääräystä (koodisto RY_Kaavamaarayksen_Lisatiedonlaji), esim.
+*pääkäyttötarkoitus*, *uusi* tai *ympäristö asettaa toiminnan laadulle erityisiä vaatimuksia*.
+Avustaja ehdottaa lisätiedot liitteestä 4, koodistosta tai sanastosta; voit lisätä niitä ja
+poistaa minkä tahansa, myös avustajan ehdottaman. Rakenne voi tulla mistä tahansa (liite 4,
+koodin nimi, sanasto tai oma kaavamääräyslajin valinta).
+
+1. Valitse yksikkö ja avaa *2 Ehdotus* → **Lisätiedot**.
+2. Ylhäällä näkyy **päämääräys** (ryhmän ensimmäinen muu kuin sanallinen määräys, esim.
+   *Työpaikkojen alue*). Jos ryhmässä on muitakin ei-sanallisia määräyksiä (esim. suure
+   *Sallittu kerrosala*), valitse kohde kohdasta **Määräys**. Jos ryhmässä on vain sanallinen
+   määräys, valitse ensin kaavamääräyslaji (*Ei sopivaa Katja-koodia*) ja aja muunnos uudelleen.
+3. Luettelo näyttää kohteen lisätiedot: *(avustajan ehdotus)*, *(lisäsit)* tai muutoksen tila
+   (⏳ *lisätään*, *poistetaan* tai *palautetaan, kun ajat uudelleen*; *poistit*).
+4. **Lisää**: kirjoita hakusana kenttään *Lisää lisätieto* (esim. "ympäristö"), valitse listasta
+   (kuvaus näkyy alla) ja paina **Lisää lisätieto**. Jos lisätiedolla on arvo (esim.
+   *käyttötarkoituskohdistus*, *poisluettava käyttötarkoitus*), valitse arvoksi kaavamääräyslaji
+   kentästä *Arvo*. Perustelu on valinnainen ja näkyy perusteluissa ja raportissa.
+5. **Poista**: valitse lisätieto luettelosta ja paina **Poista lisätieto**. Samasta painikkeesta
+   voit perua tallennetun muutoksen (*Peru lisäys*, *Peru poisto*) tai palauttaa poistamasi
+   (*Palauta lisätieto*).
+6. Paina **Aja uudelleen muutoksin** (tai *Aja uudelleen ratkaisuin*). Muutos näkyy rakenteessa,
+   perusteluissa (*Käyttäjä lisäsi lisätiedon …*), raportissa ja Ryhti-JSONissa.
+
+Huomaa:
+
+- Valittavissa ovat kaavatason voimassa olevat lisätiedon lajit ilman otsikkotason koodeja.
+  Lajit, joiden arvo on luku, arvoväli tai aikaväli (esim. *käyttötarkoituksen osuus
+  kerrosalasta*, *väliaikainen määräys*) tai jonka koodisto ei ole tietopohjassa (*rakennusluvan
+  peruste*), eivät vielä ole valittavissa.
+- Muutos koskee vain tätä merkintää. Se säilyy uudelleenajoissa ja tallentuu muunnosprojektiin,
+  ja se palautuu, kun avaat aiemman muunnoksen. Päämääräykseen tehty muutos säilyy, vaikka
+  vaihtaisit kaavamääräyslajia. Numeroidut alakohdat (esim. *1. HERVANNAN ALUE*) saavat
+  yläkohdan rakenteen muutoksineen; perustelu kertoo sen, ja alakohdan lisätietoja voi muuttaa
+  erikseen.
+- Tarkistussäännöt tarkistavat tuloksen, eikä avustaja estä ristiriitaista muutosta. Esimerkiksi
+  aluevarauksen pääkäyttötarkoituksen poisto antaa virheen (tarkistussääntö R-08), ja suureeseen
+  sallitaan vain *ehdottomasti noudatettava* ja *käyttötarkoituskohdistus* (R-05). Korjaa
+  poistamalla tai palauttamalla.
+- Kirjaintunnus: jos muokattu koodiyhdistelmä vastaa liitteen 4 riviä, tunnus otetaan siltä
+  riviltä (esim. *Teollisuusalue* + *ympäristö asettaa …* → TY). Muuten käytetään sen rivin
+  tunnusta, josta rakenne tuli (esim. TP), ja perustelu kehottaa tarkistamaan sen.
+- **Muokattua ryhmää ei lähetetä kielimallille.** Jos ryhmälle on aiempi kielimallin vastaus, se
+  käytetään uudelleen ilman kustannusta ja muutokset tehdään sen päälle. Voimassa olevan
+  määräyksen sanallinen teksti säilyy aina ennallaan.
 
 ### Linjausvalinnat
 
@@ -246,18 +295,38 @@ sääntötunniste on sulkeissa. Tarvitset Syken avaimen (luku 2).
 
 ## 9 Aiemman muunnoksen jatkaminen
 
-*1 Syöte → Avaa aiempi muunnos (*.kma.json)*: projekti avautuu ratkaisuineen ja
-linjausvalintoineen. Yhden määräyksen syöte palautuu kenttiin; liitetty teksti liitetään
-uudelleen. *Muunna* tai *Aja uudelleen ratkaisuin* säilyttää ratkaisut ja käyttää aiemmat
-kielimallivastaukset. *Uusi muunnos* tyhjentää syötteen, ratkaisut ja tuloksen.
+*1 Syöte → Avaa aiempi muunnos (*.kma.json)*: projekti avautuu ratkaisuineen,
+lisätietojen muutoksineen ja linjausvalintoineen. Yhden määräyksen syöte palautuu kenttiin;
+liitetty teksti liitetään uudelleen. *Muunna* tai *Aja uudelleen ratkaisuin* säilyttää
+ratkaisut ja muutokset ja käyttää aiemmat kielimallivastaukset. *Uusi muunnos* tyhjentää
+syötteen, ratkaisut, muutokset ja tuloksen. Version 0.3.4 projekteja ei voi avata vanhemmilla
+versioilla (projektin muoto 2); vanhemmat projektit avautuvat.
+
+Komentorivillä `kma convert … --projekti aiempi.kma.json` käyttää aiemman projektin ratkaisut ja
+muutokset. Asetustiedostoon voi kirjoittaa muutokset kenttään `muokkaukset`, esim.
+
+```yaml
+muokkaukset:
+  - otsikko: "TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA"
+    lisaa: ymparistoAsettaaToiminnanLaadulleErityisiaVaatimuksia
+    perustelu: vrt. liitteen 4 rivi TY
+  - otsikko: "PIENTALOVALTAINEN ASUNTOALUE"
+    lisaa: kayttotarkoituskohdistus
+    arvo: asuinpientaloalue
+    maarays: sallittuKerrosala   # oletus: päämääräys
+```
+
+(`poista: <laji>` poistaa lisätiedon; `tunnus` tunnistaa merkinnän otsikon lisäksi.)
 
 ## 10 Tunnetut rajoitukset
 
-- Yksi määräys tai lyhyt liitetty teksti kerrallaan; koko koosteen eräkäsittely,
-  jäsennystaulukko ja rakenteen muokkaus koodivalitsimilla tulevat palautteen mukaan.
-- Ehdotusta ei voi muokata käsin telakassa: rakenteeseen vaikutetaan ratkaisuilla,
-  linjausvalinnoilla ja (kun sopivaa Katja-koodia ei ole) kaavamääräyslajin valinnalla
-  koodistosta. Lisätietoja ei vielä voi valita käsin.
+- Yksi määräys tai lyhyt liitetty teksti kerrallaan; koko koosteen eräkäsittely ja
+  jäsennystaulukko tulevat palautteen mukaan.
+- Rakenteeseen vaikutetaan ratkaisuilla, linjausvalinnoilla, kaavamääräyslajin valinnalla
+  koodistosta (kun sopivaa Katja-koodia ei ole) ja lisätietojen lisäyksellä ja poistolla.
+  Useamman kaavamääräyslajin valinta, otsikon, kirjaintunnuksen ja geometrian muokkaus sekä
+  lisätiedot, joiden arvo on luku tai väli, puuttuvat vielä. Lisätietojen muutos koskee vain
+  yhtä merkintää (ei laajuutta *kaikki samankaltaiset*).
 - Laadintatilan muotoiluehdotuksia ei ole.
 - Välityspalvelinta ei ole testattu (tällä työasemalla sitä ei tarvita).
 - Käyttöliittymä on vain suomeksi.

@@ -59,7 +59,8 @@ VOOKA-pyynnön on pysyttävä merkki merkiltä samana (ADR-0017), joten niitä e
   (`hybrid.needs_model`), jotta malli ei korvaa käyttäjän rakennetta. Ilman tällaista ratkaisua
   K5-kysymys ja kielimallin pyyntö ovat ennallaan.
 - Lisätietojen ja useamman koodin valinta käsin puuttuu vielä; ne kuuluvat rakenteen
-  muokkaukseen koodivalitsimilla, jonka tarve selviää palautteesta.
+  muokkaukseen koodivalitsimilla, jonka tarve selviää palautteesta. Lisätietojen valinta tehtiin
+  versioon 0.3.4 (ADR-0019).
 
 ## Seuraukset
 

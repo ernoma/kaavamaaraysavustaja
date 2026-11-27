@@ -36,7 +36,9 @@ Tallennusmuodolle oli kaksi vaihtoehtoa:
   (`decisions.targets`), joten muokkaus säilyy uudelleenajossa ja aiempaa muunnosta avattaessa.
   Lisäksi tallentuvat tekijä, aika ja valinnainen perustelu.
 - **Muokkaus koskee vain merkintää, jolle se tehtiin.** Laajuutta *kaikki samankaltaiset* ei
-  ole; tarve selviää palautteesta.
+  ole; tarve selviää palautteesta. Numeroidut alakohdat (K9) saavat yläkohdan rakenteen, joten
+  ne perivät myös sen muutokset; perustelu kertoo sen, ja alakohdan lisätietoja voi muuttaa
+  erikseen.
 - **Päämääräys** on ryhmän ensimmäinen muu kuin sanallinen tai suureellinen määräys. Muut ei-
   sanalliset määräykset (esim. suure) voi valita kohteeksi erikseen; niihin muokkaus kohdistuu
   kaavamääräyslajin perusteella. Koska päämääräykseen kohdistuva muokkaus ei sido koodia, se

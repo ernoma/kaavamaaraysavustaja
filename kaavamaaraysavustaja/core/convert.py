@@ -956,6 +956,25 @@ def structure_from_parent(ctx: Context, unit: SourceUnit) -> Structure | None:
             reference=f"yksikkö {unit.parent_id}",
         )
     ]
+    inherited = [
+        a
+        for a in ctx.edit_results.get(unit.parent_id or "", [])
+        if a.result in (edit_log.ADDED, edit_log.REMOVED)
+    ]
+    if inherited:  # ADR-0019: the user's changes of the parent come with its structure
+        rationale.append(
+            Rationale(
+                "Yläkohtaan tehdyt käyttäjän muutokset periytyvät: "
+                + "; ".join(
+                    f"{'lisätty' if a.result == edit_log.ADDED else 'poistettu'} {edit_log.info_text(ctx.kb, a.edit)}"
+                    for a in inherited
+                )
+                + ". Voit muuttaa niitä tämän alakohdan lisätiedoissa.",
+                "kayttaja",
+                "korkea",
+                reference=f"yksikkö {unit.parent_id}",
+            )
+        )
     return Structure(regulations, rationale, list(parent.geometry_types), None, None, "keskitaso", "saanto")
 
 

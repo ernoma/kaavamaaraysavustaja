@@ -268,6 +268,25 @@ def test_edits_are_kept_in_the_project_and_on_reopening(kb, tmp_path):
     assert ConversionProject.from_dict(data).edits == []
 
 
+def test_numbered_sub_areas_inherit_the_parents_changes(kb):
+    text = (
+        "TYÖPAIKKA-ALUE\nAlue varataan työpaikoille.\n1. HERVANNAN ALUE\nAlueelle saa sijoittaa toimistoja.\n"
+    )
+    request = workflow.ConversionRequest(text=text, legend=True)
+    project = workflow.rule_based(kb, request)
+    parent, child = project.units
+    assert child.parent_id == parent.id
+    target = workflow.edit_view(kb, project, parent).targets[0]
+    request.edits = workflow.add_info(kb, "yleiskaava", [], parent, "uusi", target=target)
+    parent, child = workflow.rule_based(kb, request).units
+    assert ("uusi", None) in main_infos(parent.proposal) and ("uusi", None) in main_infos(child.proposal)
+    assert parent.proposal.status == "muokattu" and child.proposal.status == "ehdotus"
+    assert any(
+        r.claim.startswith("Yläkohtaan tehdyt käyttäjän muutokset periytyvät: lisätty ”Uusi” (uusi)")
+        for r in child.proposal.rationale
+    )
+
+
 def test_edit_follows_the_main_regulation_when_the_code_changes(kb):
     request, project = with_code(kb)
     unit = project.units[0]

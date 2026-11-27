@@ -115,7 +115,8 @@ Katja-asetuksen liite 4 koneluettavana (`knowledge/katja/annex4_*.yaml`).
    tai skeemaa ei kovakoodata. Ne luetaan tietopohjasta. Tallenna aina koodin URI ja
    koodistoversio.
 4. **Tietopohja rakennetaan työkalulla.** `knowledge/` on generoitua paitsi käsin ylläpidettävät
-   `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto),
+   `katja/annex4_corrections.yaml`, `rules/rules_v1.yaml` (sääntöjen metatieto ja lisätietojen
+   arvot),
    `rules/sanasto_v1.yaml` (täsmäyksen sanasto), `org/tampere/linjaukset.yaml` (linjaukset,
    ADR-0008, ADR-0010), `org/tampere/hyvaksytyt.yaml` (hyväksytyt muunnokset),
    `prompts/v1/`–`prompts/v3/` (kehotteet, aktiivinen v3: `kehote.yaml`, `jarjestelmaohje.md`,

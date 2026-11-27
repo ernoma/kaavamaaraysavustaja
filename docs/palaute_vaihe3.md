@@ -91,7 +91,7 @@ mukaan 1–6, jossa QGISin käynnistys oli oma askeleensa).
 
 | # | Kohta | Havainto | Syy (versio 0.3.2) | Tehty (0.3.3) |
 |---|---|---|---|---|
-| P3-01 | 2 Ehdotus: Ei sopivaa Katja-koodia | Voimassa olevan määräyksen *TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA* sääntöpohjaisessa muunnoksessa kysymystä "Ei sopivaa Katja-koodia" ei pystynyt ratkaisemaan. Käyttäjän pitäisi voida halutessaan valita sopiva koodi kansallisesta kaavamääräyslaji-koodistosta. | Otsikolle ei löytynyt vastinetta liitteestä 4, koodien nimistä eikä sanastosta (lähin olisi liitteen 4 rivi TY *Teollisuusalue, jolla ympäristö asettaa…*), joten ryhmään tuli vain sanallinen määräys ja sääntövirhe R-09. Kysymyksen vaihtoehdot olivat yleisiä ("lähin perusteltu koodi"), eikä niiden valinta muuttanut rakennetta, koska konkreettista koodia ei ollut. | Kortissa on haettava lista kaavatason kaavamääräyslajeista (ei otsikkotason, sanallisia eikä suureita) ja painike *Tallenna koodi ratkaisuksi*. Ratkaisu `koodi:<arvo>` tekee uudelleenajossa ryhmän rakenteen valitusta koodista: esim. *Työpaikkojen alue* → tyopaikkojenAlue + pääkäyttötarkoitus, kirjaintunnus TP liitteestä 4, sääntövirhe poistuu, teksti säilyy. Ryhmää ei lähetetä kielimallille. Ratkaisu on muutettavissa ja poistettavissa. Lisätietojen valinta (esim. *ympäristö asettaa toiminnan laadulle erityisiä vaatimuksia*) puuttuu vielä (ADR-0018, täydennys). |
+| P3-01 | 2 Ehdotus: Ei sopivaa Katja-koodia | Voimassa olevan määräyksen *TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA* sääntöpohjaisessa muunnoksessa kysymystä "Ei sopivaa Katja-koodia" ei pystynyt ratkaisemaan. Käyttäjän pitäisi voida halutessaan valita sopiva koodi kansallisesta kaavamääräyslaji-koodistosta. | Otsikolle ei löytynyt vastinetta liitteestä 4, koodien nimistä eikä sanastosta (lähin olisi liitteen 4 rivi TY *Teollisuusalue, jolla ympäristö asettaa…*), joten ryhmään tuli vain sanallinen määräys ja sääntövirhe R-09. Kysymyksen vaihtoehdot olivat yleisiä ("lähin perusteltu koodi"), eikä niiden valinta muuttanut rakennetta, koska konkreettista koodia ei ollut. | Kortissa on haettava lista kaavatason kaavamääräyslajeista (ei otsikkotason, sanallisia eikä suureita) ja painike *Tallenna koodi ratkaisuksi*. Ratkaisu `koodi:<arvo>` tekee uudelleenajossa ryhmän rakenteen valitusta koodista: esim. *Työpaikkojen alue* → tyopaikkojenAlue + pääkäyttötarkoitus, kirjaintunnus TP liitteestä 4, sääntövirhe poistuu, teksti säilyy. Ryhmää ei lähetetä kielimallille. Ratkaisu on muutettavissa ja poistettavissa. Lisätietojen valinta (esim. *ympäristö asettaa toiminnan laadulle erityisiä vaatimuksia*) tehtiin versioon 0.3.4 (alla, ADR-0019). |
 
 Kokeile (versio 0.3.3): muunna sama määräys (Tila *Voimassa oleva määräys*, Syöte *Yksi
 määräys*), valitse kysymys "Ei sopivaa Katja-koodia", kirjoita kenttään *Tai valitse
@@ -101,6 +101,70 @@ ratkaisuksi** ja **Aja uudelleen ratkaisuin**. Rakenne-osassa pitäisi näkyä *
 
 Tulos (27.11.2026, versio 0.3.3): kokeilija vahvisti, että koodin valinta toimii. Lisäksi
 kielimalli (Claude) ja Syken testiympäristön validointi toimivat telakasta.
+
+### P3-01 jatko (versio 0.3.4): lisätietojen valinta käsin
+
+Tehty 27.11.2026 ([ADR-0019](adr/0019-lisatietojen-valinta-ja-rakennemuokkaukset.md)):
+
+- *2 Ehdotus* → uusi välilehti **Lisätiedot**: valitun yksikön päämääräys (tai muu ei-sanallinen
+  määräys, esim. suure), sen lisätiedot alkuperineen (*avustajan ehdotus*, *lisäsit*) ja
+  muutoksen tila (⏳). Lisätiedon laji haetaan kansallisesta koodistosta kuvauksineen kuten
+  K5:n koodivalinnassa. Arvollisille lisätiedoille (käyttötarkoituskohdistus, poisluettava
+  käyttötarkoitus) arvo valitaan kaavamääräyslajeista. Lisätiedon voi poistaa, myös avustajan
+  ehdottaman, ja poistetun voi palauttaa. Muutos odottaa uudelleenajoa (⏳), ja *Aja uudelleen
+  muutoksin* tekee sen.
+- Muutos toimii rakenteelle, joka tuli liitteestä 4, koodin nimestä, sanastosta tai K5:n
+  koodivalinnasta. Se tallentuu muunnosprojektiin omana luettelonaan (ei päätöslokiin) ja
+  säilyy uudelleenajoissa, aiempaa muunnosta avattaessa ja komentorivillä (`--projekti`,
+  asetustiedoston `muokkaukset`).
+- Tarkistussäännöt tarkistavat tuloksen (esim. pääkäyttötarkoituksen poisto → R-08, väärä
+  lisätieto suureelle → R-05), ja virhe näkyy selkokielisenä. Perustelu *Käyttäjä lisäsi
+  lisätiedon …* näkyy Perustelut-osassa ja raportissa.
+- Muokattua ryhmää ei lähetetä kielimallille; aiempi vastaus käytetään uudelleen ilman
+  kustannusta. Muiden ryhmien kielimallipyyntö ei muuttunut (testattu).
+- Kirjaintunnus: muokatun yhdistelmän liitteen 4 rivi, jos sellainen on (esim. *Teollisuusalue*
+  + *ympäristö asettaa …* → TY), muuten rakenteen alkuperäinen rivi (esim. TP) ja kehotus
+  tarkistaa tunnus.
+- Kapea telakka: Vienti-välilehden valintaruutujen tekstit rivittyvät ja kysymyskortin painikkeet
+  ovat kahdella rivillä, joten telakan voi kaventaa noin 320 pikseliin eikä kortti leikkaudu
+  (tekoäly tarkisti kuvakaappauksista ilman näkyvää ikkunaa).
+
+Kokeile (versio 0.3.4), käynnistä ensin QGIS uudelleen:
+
+1. *1 Syöte*: **Tila** *Voimassa oleva määräys (VOOKA)*, **Syöte** *Yksi määräys*, **Kielimalli**
+   *Ei kielimallia*. **Otsikko**: *TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA
+   TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA* ja **Määräysteksti** lähteen mukaan. Paina
+   **Muunna**.
+2. *2 Ehdotus*: valitse kysymys *Ei sopivaa Katja-koodia*, kirjoita kenttään *Tai valitse
+   kaavamääräyslaji…* "työpaikka", valitse *Työpaikkojen alue*, paina **Tallenna koodi
+   ratkaisuksi** ja **Aja uudelleen ratkaisuin** (kuten versiossa 0.3.3).
+3. Avaa yksikkönäkymän välilehti **Lisätiedot**. Siinä pitäisi näkyä *Päämääräys: Työpaikkojen
+   alue* ja luettelossa *Pääkäyttötarkoitus (avustajan ehdotus)*.
+4. Kirjoita kenttään *Lisää lisätieto* "ympäristö", valitse *Ympäristö asettaa toiminnan
+   laadulle erityisiä vaatimuksia* (kuvaus näkyy alla) ja paina **Lisää lisätieto**. Luetteloon
+   tulee rivi, jossa on ⏳.
+5. Paina **Aja uudelleen muutoksin**. Rivin pitäisi olla nyt *(lisäsit)*, yksikössä merkki ✔ ja
+   *Ehdotus*-välilehden rakenteessa *Työpaikkojen alue (Pääkäyttötarkoitus; Ympäristö asettaa
+   toiminnan laadulle erityisiä vaatimuksia)*. Perusteluissa lukee *Käyttäjä lisäsi lisätiedon …*,
+   ja kirjaintunnus on TP (perustelu kehottaa tarkistamaan sen, koska liitteessä 4 ei ole tätä
+   yhdistelmää). *Ryhti-JSON*-välilehdellä on lisätieto
+   `…/RY_Kaavamaarayksen_Lisatiedonlaji/code/ymparistoAsettaaToiminnanLaadulleErityisiaVaatimuksia`.
+6. Halutessasi: valitse *Pääkäyttötarkoitus*, paina **Poista lisätieto** ja aja uudelleen.
+   Yksikkö saa merkin ✖ ja sääntövirheen (tarkistussääntö R-08). Valitse rivi *Pääkäyttötarkoitus
+   – poistit*, paina **Palauta lisätieto** ja aja uudelleen.
+7. Halutessasi: lisää *Käyttötarkoituskohdistus* ja valitse arvo kentästä *Arvo* (esim.
+   *Teollisuusalue*).
+8. *3 Vienti*: vie muunnosprojekti ja raportti. Avaa projekti *Uusi muunnos* → *Avaa aiempi
+   muunnos*: muutokset palautuvat ilman ⏳-merkkiä.
+9. Kavenna telakkaa: tekstien pitäisi rivittyä, eikä mikään saisi leikkautua oikeasta reunasta.
+
+| Askel | Toimiko? (kyllä / ei / osittain) | Huomiot |
+|---|---|---|
+| 1–3 Koodi ja Lisätiedot-välilehti | | |
+| 4–5 Lisätiedon lisäys ja uudelleenajo | | |
+| 6–7 Poisto, palautus ja arvo | | |
+| 8 Tallennus ja avaus | | |
+| 9 Kapea telakka | | |
 
 ## T-01 Kokeilu
 

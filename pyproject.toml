@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kaavamaaraysavustaja"
-version = "0.3.3"
+version = "0.3.4"
 description = "Sanallisten kaava- ja yleismääräysten muuntaminen Katja-asetuksen mukaiseen rakenteiseen muotoon (Ryhti-JSON, Arho-kirjasto)"
 readme = "README.md"
 license = "GPL-2.0-or-later"
