@@ -168,7 +168,9 @@ def test_llm_availability_without_sdk_or_key(monkeypatch):
 
 def test_export_all_formats(kb, tmp_path):
     project = workflow.rule_based(kb, single())
-    paths = workflow.export(kb, project, tmp_path, "uusi", ["projekti", "markdown", "html", "ryhti", "arho"])
+    paths = workflow.export(
+        kb, project, tmp_path, "uusi", ["projekti", "markdown", "html", "ryhti", "arho"]
+    ).paths
     assert set(paths) == {"projekti", "markdown", "html", "ryhti", "arho"}
     assert ConversionProject.load(paths["projekti"]).units[0].heading == "Pientalovaltainen asuntoalue"
     ryhti = json.loads(paths["ryhti"].read_text(encoding="utf-8"))

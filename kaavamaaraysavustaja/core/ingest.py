@@ -683,6 +683,8 @@ def select_map(result: ParseResult, wanted: str | None) -> list[SourceUnit]:
     """Units of one map: ``wanted`` is a map id (``1``, ``1a``) or a part of its title."""
     if not wanted:
         return result.units
+    if wanted.strip() in result.maps:  # exact title, e.g. chosen from the dock's map list
+        return [unit for unit in result.units if unit.map == wanted.strip()]
     key = wanted.strip().lower().removeprefix("kartta").strip()
     titles = [title for title, mid in result.maps.items() if mid.lower() == key]
     if not titles:
