@@ -20,6 +20,18 @@ from kaavamaaraysavustaja.core import match
 from kaavamaaraysavustaja.core.model import ConversionProject, Decision, InterpretationQuestion, SourceUnit
 
 SCOPES = ("merkinta", "projekti")
+# K5 (no suitable Katja code) answered with a regulation type the user chose from the national
+# code list RY_Kaavamaarayslaji, e.g. "koodi:tyopaikkojenAlue" (feedback P3-01).
+CODE_OPTION = "koodi:"
+
+
+def chosen_code(option: str | None) -> str | None:
+    """``koodi:tyopaikkojenAlue`` → ``tyopaikkojenAlue``; None for other answers."""
+    if option and option.startswith(CODE_OPTION):
+        return option[len(CODE_OPTION) :].strip() or None
+    return None
+
+
 FIELDS = {
     "kysymys",
     "yksikko",

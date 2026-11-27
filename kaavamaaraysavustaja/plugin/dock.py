@@ -24,6 +24,7 @@ from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QCheckBox,
     QComboBox,
+    QCompleter,
     QDialog,
     QDockWidget,
     QDoubleSpinBox,
@@ -760,6 +761,34 @@ class AvustajaDock(QDockWidget):
         self.policy_switch_button.clicked.connect(self.switch_policy)
         switch.addWidget(self.policy_switch_button)
         qlayout.addWidget(self.policy_switch_row)
+        # K5: a regulation type chosen by the user from the national code list (P3-01).
+        self.code_row = QWidget()
+        code = QVBoxLayout(self.code_row)
+        code.setContentsMargins(0, 4, 0, 0)
+        code.addWidget(
+            _wrapped(
+                "<i>Tai valitse kaavamääräyslaji itse kansallisesta koodistosta (RY_Kaavamaarayslaji):</i>"
+            )
+        )
+        self.code_search = _narrow(QComboBox())
+        self.code_search.setEditable(True)
+        self.code_search.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.code_search.completer().setFilterMode(Qt.MatchFlag.MatchContains)
+        self.code_search.completer().setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        self.code_search.lineEdit().setPlaceholderText("hae nimellä, esim. työpaikka")
+        self.code_search.currentIndexChanged.connect(self._code_selected)
+        code.addWidget(self.code_search)
+        self.code_info = _wrapped()
+        code.addWidget(self.code_info)
+        self.code_button = QPushButton("Tallenna koodi ratkaisuksi")
+        self.code_button.setToolTip(
+            "Ryhmän rakenne tehdään valitusta kaavamääräyslajista, kun ajat muunnoksen uudelleen. "
+            "Laajuus ja perustelu otetaan alta."
+        )
+        self.code_button.clicked.connect(self.save_code_decision)
+        code.addWidget(self.code_button)
+        self._codes_level: str | None = None
+        qlayout.addWidget(self.code_row)
         form = QFormLayout()
         self.scope = QComboBox()
         for value, text in SCOPES:
@@ -870,6 +899,7 @@ class AvustajaDock(QDockWidget):
             self.question_text.setText("Ei tulkintakysymyksiä." if unit is not None else "")
             self.resolution.setText("")
             self.policy_switch_row.setVisible(False)
+            self.code_row.setVisible(False)
             self.remove_answer.setEnabled(False)
             self._set_options(None)
             return
@@ -889,6 +919,7 @@ class AvustajaDock(QDockWidget):
         if q is None:
             self.view = None
             self._set_options(None)
+            self.code_row.setVisible(False)
             return
         view = self._question_view(unit, q)
         self.view = view
@@ -910,6 +941,58 @@ class AvustajaDock(QDockWidget):
                 self.policy_switch.addItem(_capital(label), value)
             self.policy_switch.setCurrentIndex(max(0, self.policy_switch.findData(view.policy_value)))
         self.remove_answer.setEnabled(view.own_decision)
+        self.code_row.setVisible(view.code_choice)
+        if view.code_choice:
+            self._fill_codes(self.project.meta.plan_level)
+            index = self.code_search.findData(view.chosen_code) if view.chosen_code else -1
+            self.code_search.setCurrentIndex(index)
+            if index < 0:
+                self.code_search.setEditText("")
+            self._code_selected()
+
+    def _fill_codes(self, plan_level: str) -> None:
+        if self._codes_level == plan_level:
+            return
+        self.code_search.blockSignals(True)
+        self.code_search.clear()
+        for choice in workflow.code_choices(self.kb, plan_level):
+            self.code_search.addItem(choice.label, choice.value)
+            self.code_search.setItemData(
+                self.code_search.count() - 1, choice.description, Qt.ItemDataRole.ToolTipRole
+            )
+        self.code_search.blockSignals(False)
+        self._codes_level = plan_level
+
+    def _code_selected(self, *_args) -> None:
+        index = self.code_search.currentIndex()
+        if index < 0:
+            self.code_info.setText("")
+            return
+        description = self.code_search.itemData(index, Qt.ItemDataRole.ToolTipRole) or ""
+        reservation = self.code_search.itemText(index).endswith("– aluevaraus")
+        self.code_info.setText(
+            f"<small>{_e(description)}"
+            + (" Aluevarauksena ryhmä saa lisätiedon pääkäyttötarkoitus." if reservation else "")
+            + "</small>"
+        )
+
+    def save_code_decision(self) -> None:
+        unit, q = self.current_question()
+        index = self.code_search.findText(self.code_search.currentText())
+        if q is None or index < 0:
+            self.notify("Valitse kaavamääräyslaji listasta.", warning=True)
+            return
+        option = workflow.code_option(self.code_search.itemData(index))
+        decision = workflow.decision_for(
+            unit, q, option, scope=self.scope.currentData(), basis=self.basis.text().strip()
+        )
+        self.decisions = workflow.add_decision(self.decisions, decision)
+        self.basis.clear()
+        self.decision_count.setText(
+            f"Ratkaisuja päätöslokissa: {len(self.decisions)}. Aja uudelleen, jotta koodi vaikuttaa rakenteeseen."
+        )
+        self._question_selected()
+        self._show_json()
 
     def _set_options(self, q, editable: bool = True) -> None:
         while self.options_box.count():

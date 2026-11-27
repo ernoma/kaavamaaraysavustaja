@@ -472,6 +472,75 @@ def test_p1_09_only_the_chosen_formats_count(kb, tmp_path):
         workflow.export(kb, project, tmp_path, "uusi", [])
 
 
+# -- Feedback round 3: a regulation type from the code list (K5) ----------------------------
+
+NO_CODE = workflow.ConversionRequest(
+    heading="TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA \nYMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE \nERITYISIÄ VAATIMUKSIA",
+    text="Alue varataan toimisto- ja työpaikkatiloille, ympäris-\ntöön soveltuville teollisuus- ja varastotiloille. "
+    "Alueelle ei tule sijoittaa sellaisia toimintoja, jotka häiriintyvät raskaasta liikenteestä, melusta ja tärinästä.",
+    mode="vooka",
+)
+
+
+def test_p3_01_plan_reference_in_k5_basis_is_plain(kb):
+    g = workflow.glossary(kb)
+    text = "Suunnitelma 6.10 K5: lähin perusteltu koodi; tapaus Katja-puutelistaan."
+    assert workflow.plain_text(text, g) == (
+        "Ei sopivaa Katja-koodia (tulkintakysymys K5): lähin perusteltu koodi; tapaus Katja-puutelistaan."
+    )
+
+
+def test_p3_01_code_choices(kb):
+    choices = {c.value: c for c in workflow.code_choices(kb, "yleiskaava")}
+    assert choices["tyopaikkojenAlue"].reservation and choices["tyopaikkojenAlue"].name == "Työpaikkojen alue"
+    assert "teollisuusalue" in choices and "kehittamisvyohyke" in choices
+    assert "sanallinenMaarays" not in choices and "sallittuKerrosala" not in choices  # verbal, quantity
+    assert choices["tyopaikkojenAlue"].label == "Työpaikkojen alue (tyopaikkojenAlue) – aluevaraus"
+
+
+def test_p3_01_k5_answered_with_a_code_from_the_code_list(kb):
+    request = dataclasses.replace(NO_CODE)
+    project = workflow.rule_based(kb, request)
+    unit = project.units[0]
+    assert workflow.unit_status(unit) == "virhe"  # only a verbal regulation: R-09
+    k5 = question(unit, "K5")
+    view = workflow.question_view(kb, project, unit, k5)
+    assert view.code_choice and view.chosen_code is None
+    request.decisions = [workflow.decision_for(unit, k5, workflow.code_option("tyopaikkojenAlue"))]
+    pending = workflow.question_view(kb, project, unit, k5, decisions=request.decisions)
+    assert "Oma valinta koodistosta: Työpaikkojen alue (tyopaikkojenAlue)" in pending.pending
+    again = workflow.rule_based(kb, request)
+    unit = again.units[0]
+    p = unit.proposal
+    main = p.regulations[0]
+    assert main.type.value == "tyopaikkojenAlue"
+    assert [i.type.value for i in main.additional_infos] == ["paakayttotarkoitus"]
+    assert p.letter_code == "TP"  # from Katja annex 4 (TP Työpaikka-alue)
+    assert not p.results("virhe") and workflow.schema_problems(kb, again) == {}
+    verbal = [r for r in p.regulations if r.value and r.value.data_type == "LocalizedText"]
+    assert verbal[0].value.text["fin"] == unit.normalized_text  # VOOKA: the text is untouched
+    k5 = question(unit, "K5")
+    assert k5.answer == "koodi:tyopaikkojenAlue" and k5.resolved_by == "kayttaja"
+    view = workflow.question_view(kb, again, unit, k5, decisions=request.decisions)
+    assert view.resolver == "kayttaja" and view.code_choice and view.chosen_code == "tyopaikkojenAlue"
+    assert view.answer == "Oma valinta koodistosta: Työpaikkojen alue (tyopaikkojenAlue)"
+    assert any("Käyttäjä valitsi kaavamääräyslajin tyopaikkojenAlue" in r.claim for r in p.rationale)
+    assert unexplained_ids(workflow.detail_html(kb, unit)) == []
+    # The user's structure is not sent to the language model.
+    assert workflow.llm_plan(kb, again, "claude").estimate.units == 0
+
+
+def test_p3_01_unknown_code_leaves_the_question_open(kb):
+    request = dataclasses.replace(NO_CODE)
+    unit = workflow.rule_based(kb, request).units[0]
+    request.decisions = [
+        workflow.decision_for(unit, question(unit, "K5"), workflow.code_option("eiOleKoodi"))
+    ]
+    again = workflow.rule_based(kb, request)
+    assert question(again.units[0], "K5").is_open
+    assert any("eiOleKoodi" in w for w in again.provenance[0].details["ratkaisujen_varoitukset"])
+
+
 # -- Feedback round 2 -------------------------------------------------------------------------
 
 

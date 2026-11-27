@@ -24,7 +24,7 @@ import html
 import json
 import re
 from collections.abc import Callable, Iterable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
@@ -376,7 +376,7 @@ _EMPTY_PARENS = re.compile(r"\s*\(\s*\)")
 _PHASE = re.compile(r"\(vaihe \d+[a-z]?\)")
 _POLICY = re.compile(r"(?P<word>\b[Ll]injaus\s+)?\b(?P<id>L-\d{2})\b(?P<option>:\s*(?P<value>[A-Za-z_]+)\b)?")
 _QUESTION = re.compile(
-    r"(?:\bsuunnitelma 6\.10 |(?P<word>\b[Tt]ulkintakysymys )|(?<![\w-]))(?P<id>K\d{1,2})\b(?P<colon>:)?"
+    r"(?:\b[Ss]uunnitelma 6\.10 |(?P<word>\b[Tt]ulkintakysymys )|(?<![\w-]))(?P<id>K\d{1,2})\b(?P<colon>:)?"
 )
 _RULE = re.compile(r"(?:\b[Ss]ääntö\s+)?\b(?P<id>R-\d{2})\b")
 _QUESTION_LIST = re.compile(r"\b(?P<word>[Aa]voin tulkintakysymys): (?P<ids>K\d{1,2}(?:, K\d{1,2})*)\b")
@@ -415,11 +415,13 @@ def plain_text(text: str | None, g: Glossary) -> str:
 
     def question(m: re.Match) -> str:
         name = g.questions.get(m["id"])
-        prefixed = m.group().startswith(("suunnitelma", "tulkintakysymys", "Tulkintakysymys"))
+        plan = m.group().lower().startswith("suunnitelma")  # internal plan reference: dropped
+        prefixed = plan or m.group().startswith(("tulkintakysymys", "Tulkintakysymys"))
         if not name or not (m["colon"] or prefixed) or m.string[: m.start()].endswith(f"{name} ("):
             return m.group()  # e.g. a letter code K1: only known forms are explained, once
         if m["colon"]:
-            return f"{m.group()[: -len(m['id']) - 1]}{name} (tulkintakysymys {m['id']}):"
+            lead = "" if plan else m.group()[: -len(m["id"]) - 1]
+            return f"{lead}{name} (tulkintakysymys {m['id']}):"
         word = "Tulkintakysymys" if (m["word"] or "").startswith("T") else "tulkintakysymys"
         return f"{word} {name} ({m['id']})"
 
@@ -942,6 +944,55 @@ class QuestionView:
     policy_value: str | None = None
     own_decision: bool = False  # the user's answer for this unit exists (can be removed)
     pending: str = ""  # a saved answer that a re-run has not applied yet
+    code_choice: bool = False  # the answer can be a regulation type from the code list (K5)
+    chosen_code: str | None = None  # the code chosen by the user, if any
+
+
+# -- regulation type from the code list (K5, feedback P3-01) ------------------------------
+
+
+@dataclass(frozen=True)
+class CodeChoice:
+    value: str
+    name: str
+    reservation: bool  # Aluevaraus hierarchy: the group gets pääkäyttötarkoitus
+    description: str
+
+    @property
+    def label(self) -> str:
+        return f"{self.name} ({self.value})" + (" – aluevaraus" if self.reservation else "")
+
+
+def code_choices(kb: KnowledgeBase, plan_level: str) -> list[CodeChoice]:
+    """Regulation types of the national code list the user may choose for a group."""
+    from kaavamaaraysavustaja.core import match
+    from kaavamaaraysavustaja.core.convert import choosable_codes
+
+    out = [
+        CodeChoice(
+            code.value,
+            code.name.get("fi") or code.value,
+            code.in_extension(match.AREA_RESERVATION, kb.valid_on),
+            " ".join(code.description.get("fi", "").split()),
+        )
+        for code in choosable_codes(kb, plan_level)
+    ]
+    return sorted(out, key=lambda c: c.name.casefold())
+
+
+def code_option(value: str) -> str:
+    """The K5 answer for a chosen code, e.g. ``koodi:tyopaikkojenAlue``."""
+    return f"{decision_log.CODE_OPTION}{value}"
+
+
+def _option_text(kb: KnowledgeBase, described: dict[str, str], option: str | None) -> str:
+    if not option:
+        return ""
+    value = decision_log.chosen_code(option)
+    if value and option not in described:
+        code = kb.index.get("RY_Kaavamaarayslaji", value)
+        return f"Oma valinta koodistosta: {code.name.get('fi', value) if code else value} ({value})"
+    return described.get(option, option)
 
 
 def question_view(
@@ -954,17 +1005,36 @@ def question_view(
     options: list[PolicyOption] | None = None,
     g: Glossary | None = None,
 ) -> QuestionView:
+    decisions = list(decisions)
+    view = _question_view(kb, project, unit, q, decisions=decisions, options=options, g=g)
+    if q.kind == "K5" and view.editable:
+        own = find_decision(decisions, unit, q.kind)
+        current = decision_log.chosen_code(own.option if own else q.answer)
+        view = replace(view, code_choice=True, chosen_code=current)
+    return view
+
+
+def _question_view(
+    kb: KnowledgeBase,
+    project: ConversionProject,
+    unit: SourceUnit,
+    q: InterpretationQuestion,
+    *,
+    decisions: list[Decision],
+    options: list[PolicyOption] | None,
+    g: Glossary | None,
+) -> QuestionView:
     g = g or glossary(kb)
     name = g.questions.get(q.kind, "")
     tooltip = f"Tulkintakysymys {q.kind}" + (f" – {name}" if name else "")
     if g.question_help.get(q.kind):
         tooltip += f": {plain_text(g.question_help[q.kind], g)}"
     described = {o.id: o.description for o in q.options}
-    answer = described.get(q.answer or "", q.answer or "")
-    own = find_decision(list(decisions), unit, q.kind)
+    answer = _option_text(kb, described, q.answer)
+    own = find_decision(decisions, unit, q.kind)
     pending = ""
     if own is not None and own.option != q.answer:
-        pending = f"Tallennettu ratkaisu {described.get(own.option, own.option)} näkyy, kun ajat muunnoksen uudelleen."
+        pending = f"Tallennettu ratkaisu {_option_text(kb, described, own.option)} näkyy, kun ajat muunnoksen uudelleen."
     base = dict(
         id=q.id,
         kind=q.kind,

@@ -42,6 +42,13 @@ c-1 TÄYDENTYVÄ KESKUSTA
 Aluetta kehitetään täydennettävänä keskustatoimintojen alueena.
 """
 ONE_MARKING = "c-1 TÄYDENTYVÄ KESKUSTA\nAluetta kehitetään täydennettävänä keskustatoimintojen alueena.\n"
+NO_CODE_HEADING = (
+    "TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA"
+)
+NO_CODE_TEXT = (
+    "Alue varataan toimisto- ja työpaikkatiloille. Alueelle ei tule sijoittaa sellaisia toimintoja, "
+    "jotka häiriintyvät raskaasta liikenteestä, melusta ja tärinästä."
+)
 TWO_MAPS = """\
 @kartta Kartta 1 - Yhdyskuntarakenne
 KESKUSTATOIMINTOJEN ALUE
@@ -370,6 +377,33 @@ def run() -> None:
         [u.heading for u in dock.project.units] == ["RAITIOTIE"]
         and dock.project.meta.map == "Kartta 2 - Liikenne",
         "valittu kartta muunnettu",
+    )
+
+    # -- 2c. No suitable Katja code: the user chooses one from the code list (P3-01) ----------
+    dock.new_conversion()
+    dock.input_kind.setCurrentIndex(dock.input_kind.findData("yksi"))
+    dock.heading.setText(NO_CODE_HEADING)
+    dock.text.setPlainText(NO_CODE_TEXT)
+    dock.convert()
+    check(dock.project.units[0].proposal.results("virhe"), "ei koodia: vain sanallinen määräys (R-09)")
+    select_question(dock, "K5")
+    check(not dock.code_row.isHidden() and dock.code_search.count() > 100, "K5: koodivalinta näkyy")
+    dock.code_search.setCurrentIndex(dock.code_search.findData("tyopaikkojenAlue"))
+    check("pääkäyttötarkoitus" in dock.code_info.text(), "koodin kuvaus näkyy")
+    dock.save_code_decision()
+    check("⏳" in dock.resolution.text(), "koodiratkaisu odottaa uudelleenajoa")
+    dock.convert()
+    p = dock.project.units[0].proposal
+    check(
+        p.regulations[0].type.value == "tyopaikkojenAlue"
+        and p.letter_code == "TP"
+        and not p.results("virhe"),
+        "rakenne valitusta koodista (P3-01)",
+    )
+    select_question(dock, "K5")
+    check(
+        dock.view.resolver == "kayttaja" and dock.code_search.currentData() == "tyopaikkojenAlue",
+        "kortti: oma koodiratkaisu muutettavissa",
     )
 
     # -- 3. Model path with a test adapter: estimate before the call, no network ------------

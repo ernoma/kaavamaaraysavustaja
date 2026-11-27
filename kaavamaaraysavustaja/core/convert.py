@@ -15,6 +15,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from kaavamaaraysavustaja import __version__ as ASSISTANT_VERSION
+from kaavamaaraysavustaja.core import decisions as decision_log
 from kaavamaaraysavustaja.core import match
 from kaavamaaraysavustaja.core.ingest import is_upper_heading
 from kaavamaaraysavustaja.core.model import (
@@ -42,6 +43,7 @@ from kaavamaaraysavustaja.knowledge.codelists import (
     REGULATION_TYPE,
     URI_PREFIX,
     VERBAL_REGULATION_TYPE,
+    Code,
 )
 
 KEY_NAMESPACE = uuid.UUID("7d0d6a2e-5a55-4a5e-9d6e-6b6d61000001")
@@ -634,6 +636,80 @@ def letter_code_for(
     return chosen
 
 
+def choosable_codes(kb: KnowledgeBase, plan_level: str) -> list[Code]:
+    """Regulation types the user may choose for a group (K5): valid codes of the plan level,
+    not header-level, not verbal and not quantities (those are added by the text)."""
+    return [
+        code
+        for code in kb.index.usable_codes(REGULATION_TYPE, plan_level, kb.valid_on)
+        if code.value not in VERBAL_TYPES
+        and code.parent not in VERBAL_TYPES
+        and not code.in_extension(match.QUANTITY, kb.valid_on)
+    ]
+
+
+def user_code_choice(ctx: Context, unit: SourceUnit) -> Code | None:
+    """The code of a K5 answer ``koodi:…``, if it is choosable on this plan level."""
+    value = decision_log.chosen_code(ctx.answer(unit, "K5"))
+    if not value:
+        return None
+    return next((c for c in choosable_codes(ctx.kb, ctx.plan_level) if c.value == value), None)
+
+
+def structure_from_user_code(ctx: Context, unit: SourceUnit, code: Code) -> Structure:
+    """The structure of a code chosen by the user, built as for a code found by its name."""
+    structure = structure_from_code(ctx, unit, match.CodeMatch(code, 1.0, "kayttaja"))
+    reservation = code.in_extension(match.AREA_RESERVATION, ctx.kb.valid_on)
+    structure.rationale[0] = Rationale(
+        f'Käyttäjä valitsi kaavamääräyslajin {code.value} ("{code.name.get("fi")}") koodistosta '
+        "(tulkintakysymys K5)"
+        + (
+            ". Koodi kuuluu Aluevaraus-hierarkiaan, joten lisätieto on pääkäyttötarkoitus."
+            if reservation
+            else "."
+        ),
+        "kayttaja",
+        "korkea",
+        reference=f"Koodin kuvaus: {code.value}",
+    )
+    structure.confidence = "korkea"
+    return structure
+
+
+def k5_question(
+    ctx: Context, unit: SourceUnit, heading: str, chosen: Code | None = None
+) -> InterpretationQuestion:
+    options = [
+        (
+            "lahin_koodi",
+            "Lähin perusteltu koodi ja sanallinen määräys",
+            "Tapaus kirjataan Katja-puutelistaan.",
+        ),
+        (
+            "kehittamisvyohyke",
+            "Kehittämisvyöhyke ja käyttötarkoituskohdistus",
+            "Osa-alue aluevarauksen päällä.",
+        ),
+    ]
+    if chosen is not None:
+        options.append(
+            (
+                f"{decision_log.CODE_OPTION}{chosen.value}",
+                f"Oma valinta koodistosta: {chosen.name.get('fi', chosen.value)} ({chosen.value})",
+                "Ryhmän rakenne tehdään tästä kaavamääräyslajista.",
+            )
+        )
+    return question(
+        ctx,
+        unit,
+        "K5",
+        f"Ei sopivaa Katja-koodia – {heading}",
+        options,
+        "lahin_koodi",
+        "Suunnitelma 6.10 K5: lähin perusteltu koodi; tapaus Katja-puutelistaan.",
+    )
+
+
 def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
     heading = unit.heading or ""
     questions: list[InterpretationQuestion] = []
@@ -667,7 +743,11 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
         return proposal
 
     structure: Structure | None = None
-    approved = match.find_approved(ctx.kb, heading, unit.letter_code)
+    user_code = user_code_choice(ctx, unit)
+    if user_code is not None:  # K5 answered with a code from the code list: the user's structure
+        structure = structure_from_user_code(ctx, unit, user_code)
+        questions.append(k5_question(ctx, unit, heading, user_code))
+    approved = None if structure else match.find_approved(ctx.kb, heading, unit.letter_code)
     if approved:
         structure = structure_from_approved(ctx, unit, approved)
     if structure is None:
@@ -709,28 +789,7 @@ def propose_marking(ctx: Context, unit: SourceUnit) -> GroupProposal:
                     )
                 ]
             )
-        questions.append(
-            question(
-                ctx,
-                unit,
-                "K5",
-                f"Ei sopivaa Katja-koodia – {heading}",
-                [
-                    (
-                        "lahin_koodi",
-                        "Lähin perusteltu koodi ja sanallinen määräys",
-                        "Tapaus kirjataan Katja-puutelistaan.",
-                    ),
-                    (
-                        "kehittamisvyohyke",
-                        "Kehittämisvyöhyke ja käyttötarkoituskohdistus",
-                        "Osa-alue aluevarauksen päällä.",
-                    ),
-                ],
-                "lahin_koodi",
-                "Suunnitelma 6.10 K5: lähin perusteltu koodi; tapaus Katja-puutelistaan.",
-            )
-        )
+        questions.append(k5_question(ctx, unit, heading))
 
     proposal.regulations = list(structure.regulations)
     rationale += structure.rationale

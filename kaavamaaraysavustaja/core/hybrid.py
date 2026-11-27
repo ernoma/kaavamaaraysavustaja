@@ -73,8 +73,14 @@ QUOTE_STRIP = " \t\n\"'“”„«»…."
 
 
 def needs_model(unit: SourceUnit) -> bool:
-    """Units the rule-based step did not settle with high confidence (informative markings stay with the user)."""
+    """Units the rule-based step did not settle with high confidence (informative markings stay with the user).
+
+    A group whose regulation type the user chose from the code list (K5 ``koodi:…``) is the
+    user's structure, so the model does not replace it.
+    """
     proposal = unit.proposal
+    if proposal and any(q.kind == "K5" and decision_log.chosen_code(q.answer) for q in proposal.questions):
+        return False
     return bool(proposal and proposal.kind != "ei_maarays" and proposal.confidence != "korkea")
 
 
