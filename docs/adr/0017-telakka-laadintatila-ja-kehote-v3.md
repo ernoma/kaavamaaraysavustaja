@@ -1,6 +1,7 @@
 # ADR-0017 Kokeiltava telakka, laadintatilan käsittely ja kehote v3
 
-- Tila: hyväksytty 26.11.2026 (vaihe 3a)
+- Tila: hyväksytty 26.11.2026 (vaihe 3a); täydennetty ADR-0018:lla 27.11.2026 (linjauksen
+  vaihto kysymyskortista, selkokieli, vienti ilman korvaamista)
 - Lähde: ADR-0016; toteutussuunnitelma luvut 5 (UC1, UC2), 6.3, 6.9, 6.13 ja 7; ADR-0002,
   ADR-0004, ADR-0013, ADR-0014
 
