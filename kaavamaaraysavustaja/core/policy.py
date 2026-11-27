@@ -7,7 +7,7 @@ options or a settings file; a locked policy cannot be overridden.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -45,6 +45,10 @@ class Policy:
     decision: dict[str, Any] | None
     version: int
     question_types: tuple[str, ...]
+    # Plain-language texts for the user (dock, P1-01/P1-04); never sent to the model.
+    explanation: str = ""  # what the policy decides
+    labels: dict[str, str] = field(default_factory=dict)  # value -> short plain name
+    effects: dict[str, str] = field(default_factory=dict)  # value -> what choosing it does
 
 
 @dataclass(frozen=True)
@@ -79,6 +83,15 @@ class PolicyLibrary:
                 decision=raw.get("paatos"),
                 version=int(raw["versio"]),
                 question_types=tuple(raw.get("tulkintakysymykset") or ()),
+                explanation=_plain(raw.get("selite")),
+                labels={
+                    opt["arvo"]: _plain(opt.get("nimi")) for opt in raw["vaihtoehdot"] if opt.get("nimi")
+                },
+                effects={
+                    opt["arvo"]: _plain(opt.get("vaikutus"))
+                    for opt in raw["vaihtoehdot"]
+                    if opt.get("vaikutus")
+                },
             )
         return cls(int(data["versio"]), data.get("organisaatio", ""), policies)
 
@@ -126,6 +139,10 @@ class PolicyLibrary:
                 )
             )
         return choices
+
+
+def _plain(value: Any) -> str:
+    return " ".join(str(value or "").split())
 
 
 def describe_decision(decision: dict[str, Any] | None) -> str:

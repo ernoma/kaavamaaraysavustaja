@@ -9,17 +9,24 @@
 #   tunnus        L-01 …
 #   otsikko       lyhyt nimi
 #   kysymys       mitä linjataan
-#   vaihtoehdot   arvo (koneluettava) ja kuvaus (käyttäjälle)
+#   selite        telakassa näytettävä selkokielinen kuvaus: mitä linjaus ratkaisee
+#   vaihtoehdot   arvo (koneluettava), kuvaus (kielimallin kontekstiin), nimi (lyhyt
+#                 selkokielinen nimi telakkaan) ja vaikutus (mitä valinta tekee, telakkaan)
 #   oletus        suositeltu vaihtoehto
 #   peruste       miksi oletus on tämä (suunnitelman luku 14 ADR-0007:n valossa)
 #   lukittu       true = valintaa ei voi muuttaa
 #   paatos        lukittaessa: { perustelu, paivamaara, hyvaksyja }
 #   versio        linjauksen versio
 #   tulkintakysymykset  tulkintakysymystyypit (K1–K15), jotka linjaus ratkaisee
+#
+# Kentät selite, nimi ja vaikutus ovat vain käyttäjälle näytettäviä tekstejä (palaute
+# P1-01, P1-04). Niitä ei lähetetä kielimallille, eivätkä ne muuta linjausta, joten niiden
+# muutos kasvattaa vain tiedoston versiota. Kentän kuvaus muutos muuttaa kielimallin
+# pyyntöä (kehote, ADR-0013).
 
-versio: 2
+versio: 3
 organisaatio: Tampere
-paivitetty: 2026-11-22
+paivitetty: 2026-11-27
 lahde: "Toteutussuunnitelma luku 14; ADR-0007; ADR-0008; ADR-0015"
 
 linjaukset:
@@ -27,11 +34,22 @@ linjaukset:
   - tunnus: L-01
     otsikko: Muunnoksen yksikkö
     kysymys: Muunnetaanko kooste yhtenä kirjastona vai jokainen lähdekaava erikseen?
+    selite: >
+      Tuleeko koko koosteesta yksi kaavamääräysryhmien kirjasto, vai kohdistetaanko jokainen
+      merkintä omaan lähdekaavaansa. Vaikuttaa vain, kun tekstissä on useita lähdekaavoja.
     vaihtoehdot:
       - arvo: kooste
         kuvaus: Yksi kirjasto koosteesta; samat merkinnät yhdistetään, lähdekaavat kirjataan tietoina.
+        nimi: yksi kirjasto koosteesta
+        vaikutus: >
+          Samat merkinnät yhdistetään yhdeksi ryhmäksi, ja lähdekaavat kirjataan merkinnän
+          tietoihin.
       - arvo: lahdekaava
         kuvaus: Jokainen merkintä kohdistetaan lähdekaavaansa (tulkintakysymys K15).
+        nimi: lähdekaavoittain
+        vaikutus: >
+          Jokainen merkintä kohdistetaan lähdekaavaansa. Jos merkintä voi kuulua useaan
+          kaavaan, avustaja kysyy, mihin.
     oletus: kooste
     peruste: >
       ADR-0007: tuotos on uusien yleiskaavojen pohjaksi tehtävä Arhon kirjasto, ei
@@ -44,11 +62,20 @@ linjaukset:
   - tunnus: L-02
     otsikko: Rakenteistamisen laajuus
     kysymys: Kuinka pitkälle voimassa olevat määräykset rakenteistetaan?
+    selite: >
+      Tehdäänkö pelkät kaavamääräysryhmät vai myös kaavakohteet kartta-aineistosta.
     vaihtoehdot:
       - arvo: maaraystaso
         kuvaus: Kaavamääräysryhmät ilman kaavakohteita (kirjasto ja määräystason Ryhti-tarkistus).
+        nimi: kaavamääräysryhmät
+        vaikutus: >
+          Tuloksena ovat kaavamääräysryhmät ilman kaavakohteita: kirjasto ja määräysten
+          Ryhti-tarkistus.
       - arvo: koko_kaava
         kuvaus: Lisäksi kaavakohteet vektoriaineistosta (vaihe 4).
+        nimi: myös kaavakohteet
+        vaikutus: >
+          Lisäksi kaavakohteet muodostetaan kartta-aineistosta. Ei vielä käytettävissä.
     oletus: maaraystaso
     peruste: >
       ADR-0007: VOOKA-minimi ei ole ajankohtainen, koska aineistoa ei toimiteta Ryhtiin.
@@ -61,13 +88,27 @@ linjaukset:
   - tunnus: L-03
     otsikko: Sanallisen tekstin pilkkominen
     kysymys: Jaetaanko merkinnän määräysteksti useaksi sanalliseksi määräykseksi?
+    selite: >
+      Tuleeko merkinnän koko määräystekstistä yksi sanallinen määräys, vai jaetaanko se
+      useaksi määräykseksi.
     vaihtoehdot:
       - arvo: ei_pilkota
         kuvaus: Koko teksti yhtenä sanallisena määräyksenä, jolla voi olla useita lajeja.
+        nimi: koko teksti yhtenä määräyksenä
+        vaikutus: >
+          Teksti säilyy yhtenä sanallisena määräyksenä, ja sen aiheet merkitään sanallisen
+          määräyksen lajeina. Uuden kaavan laatija voi jakaa tekstin myöhemmin itse.
       - arvo: kappaleittain
         kuvaus: Yksi sanallinen määräys kappaletta kohden (kappaleraja = tyhjä rivi syötteessä).
+        nimi: kappaleittain
+        vaikutus: >
+          Jokaisesta kappaleesta tulee oma sanallinen määräys. Tyhjä rivi erottaa kappaleet.
       - arvo: aiheittain
         kuvaus: Teksti jaetaan aiheittain (vaatii kielimallin, vaihe 2).
+        nimi: aiheittain
+        vaikutus: >
+          Teksti jaetaan aiheittain. Vaatii kielimallin, joten ei vielä käytettävissä
+          sääntöpohjaisessa muunnoksessa.
     oletus: ei_pilkota
     peruste: >
       Lähdeuskollisuus (P2, ADR-0007): teksti siirtyy kokonaisena, ja uuden kaavan laatija
@@ -80,15 +121,30 @@ linjaukset:
   - tunnus: L-04
     otsikko: Sanallisen määräyksen tyyppi yleiskaavassa
     kysymys: Käytetäänkö sanallisessa määräyksessä yläkoodia vai alakoodeja?
+    selite: >
+      Mikä kaavamääräyslaji sanalliselle määräykselle annetaan yleiskaavassa: yleinen
+      Sanallinen määräys vai tarkempi suunnittelu-, rakentamis- tai suojelumääräys.
     vaihtoehdot:
       - arvo: sanallinenMaarays
         kuvaus: Aina yläkoodi Sanallinen määräys.
+        nimi: aina Sanallinen määräys
+        vaikutus: >
+          Jokainen sanallinen määräys saa yleisen lajin Sanallinen määräys. Valinta kestää
+          tulevan Katja-muutoksen, jossa tarkemmat lajit on ehdotettu poistettaviksi.
       - arvo: alakoodit
         kuvaus: Suunnittelu-, rakentamis- tai suojelumääräys sanaston perusteella, muuten yläkoodi.
+        nimi: tarkempi laji sanojen perusteella
+        vaikutus: >
+          Suunnittelu-, rakentamis- tai suojelumääräys valitaan tekstin sanojen perusteella;
+          muuten Sanallinen määräys.
       - arvo: kehittamisvyohyke_suunnittelumaarays
         kuvaus: >
           Yläkoodi, paitsi kehittämisvyöhykkeen sanallinen määräys on aina suunnittelumääräys
           (opas 3.3.3.1, sääntö R-12).
+        nimi: kehittämisvyöhykkeellä suunnittelumääräys
+        vaikutus: >
+          Kehittämisvyöhykkeen sanallinen määräys on suunnittelumääräys, kuten kaavatietomallin
+          opas edellyttää; muut ovat Sanallinen määräys.
     oletus: sanallinenMaarays
     peruste: >
       Opas 3.2: yleiskaavassa alakoodien käyttö on harkinnanvaraista. YM:n muistio 16.2.2026
@@ -105,13 +161,28 @@ linjaukset:
   - tunnus: L-05
     otsikko: Tiettyjä alueita koskevat yleismääräykset
     kysymys: Miten käsitellään yleismääräys, joka koskee vain osaa merkinnöistä (esim. "RA ja R -alueilla")?
+    selite: >
+      Miten käsitellään yleismääräys, joka koskee vain osaa merkinnöistä (esim. ”RA ja R
+      -alueilla”).
     vaihtoehdot:
       - arvo: sailytys
         kuvaus: Teksti säilyy yleismääräyksenä; kohdistus näytetään huomiona.
+        nimi: säilytetään yleismääräyksenä
+        vaikutus: >
+          Teksti säilyy yleismääräyksenä, ja avustaja näyttää huomiona, mihin merkintöihin se
+          kohdistuu.
       - arvo: sailytys_ja_rakenteinen_lisays
         kuvaus: Teksti säilyy, ja kohdemerkintöjen ryhmiin lisätään sanaston mukainen rakenteinen tieto.
+        nimi: säilytetään ja lisätään tieto kohteisiin
+        vaikutus: >
+          Teksti säilyy yleismääräyksenä, ja kohdemerkintöjen ryhmiin lisätään sanaston mukainen
+          rakenteinen tieto.
       - arvo: siirto
         kuvaus: Kappale siirretään kohdemerkintöjen sanalliseksi määräykseksi (vaatii kappalejaon, vaihe 2).
+        nimi: siirretään kohdemerkinnöille
+        vaikutus: >
+          Kappale siirretään kohdemerkintöjen sanalliseksi määräykseksi. Ei vielä
+          käytettävissä.
     oletus: sailytys
     peruste: >
       Suunnitelman VOOKA-suositus oli säilytys ja rakenteinen lisäys. ADR-0007:n mukaan
@@ -126,11 +197,22 @@ linjaukset:
   - tunnus: L-06
     otsikko: Kirjaintunnukset
     kysymys: Käytetäänkö lähteen kirjaintunnuksia vai Katjan liitteen 4 tunnuksia?
+    selite: >
+      Mikä kirjaintunnus ryhmälle annetaan, kun lähteen tunnus puuttuu tai poikkeaa
+      Katja-asetuksen liitteen 4 tunnuksesta.
     vaihtoehdot:
       - arvo: alkuperaiset
         kuvaus: Lähteen tunnus (esim. c-1); puuttuva tunnus otetaan liitteestä 4.
+        nimi: lähteen tunnus
+        vaikutus: >
+          Lähteen tunnus säilyy (esim. c-1), joten ryhmän voi jäljittää voimassa olevaan
+          kaavaan. Jos lähteessä ei ole tunnusta, käytetään liitteen 4 tunnusta.
       - arvo: katja
         kuvaus: Liitteen 4 tunnus, kun ryhmä vastaa liitteen riviä; muuten lähteen tunnus.
+        nimi: liitteen 4 tunnus
+        vaikutus: >
+          Kun ryhmä vastaa liitteen 4 vakiomääräystä, käytetään liitteen tunnusta; muuten
+          lähteen tunnusta.
     oletus: alkuperaiset
     peruste: >
       Katja 2 §:n mukaan tunnukseen saa lisätä numeroindeksin. Alkuperäinen tunnus pitää
@@ -143,11 +225,20 @@ linjaukset:
   - tunnus: L-07
     otsikko: Paikkasidonnaiset numeroarvot
     kysymys: Annetaanko tiettyä paikkaa koskeva numeroarvo (esim. "Kalevassa 70 000 k-m²") rakenteisena?
+    selite: >
+      Annetaanko vain tiettyä paikkaa koskeva numeroarvo (esim. ”Kalevassa 70 000 k-m²”)
+      rakenteisena arvona.
     vaihtoehdot:
       - arvo: sanallisena
         kuvaus: Arvo jää sanalliseen määräykseen; huomio näytetään.
+        nimi: arvo jää tekstiin
+        vaikutus: >
+          Arvo jää sanalliseen määräykseen, ja avustaja näyttää siitä huomion.
       - arvo: omat_kohteet
         kuvaus: Erillinen ryhmä suureella ja kohdistuksella (vaatii jaon, vaihe 2).
+        nimi: oma ryhmä paikalle
+        vaikutus: >
+          Paikalle tehdään oma ryhmä, jossa arvo on rakenteisena. Ei vielä käytettävissä.
     oletus: sanallisena
     peruste: >
       ADR-0007: uuden kaavan kohteet piirretään erikseen, joten kirjastossa arvo voi olla
@@ -163,14 +254,25 @@ linjaukset:
       Käytetäänkö lähteen otsikkoa vai liitteen 4 otsikkoa, kun ryhmän koodiyhdistelmä vastaa
       liitteen 4 vakiomääräystä mutta lähteen otsikko on toinen (esim. c-1 Täydentyvä keskusta ↔
       Keskustatoimintojen kehittämisvyöhyke)?
+    selite: >
+      Kumpaa otsikkoa ryhmä käyttää, kun sen koodit vastaavat Katja-asetuksen liitteen 4
+      vakiomääräystä mutta lähteen otsikko on toinen (esim. Täydentyvä keskusta ↔
+      Keskustatoimintojen kehittämisvyöhyke).
     vaihtoehdot:
       - arvo: lahde
         kuvaus: >
           Lähteen otsikko säilyy (Katja 2 §: otsikko saa poiketa liitteestä, jos tietosisältö on
           laajempi); R-15 antaa huomion ja liitteen otsikko näkyy perusteluissa.
+        nimi: lähteen otsikko
+        vaikutus: >
+          Lähteen otsikko säilyy, ja liitteen 4 otsikko näkyy perusteluissa. Katja-asetus
+          sallii oman otsikon, kun tietosisältö on laajempi kuin vakiomääräyksessä.
       - arvo: katja
         kuvaus: >
           Liitteen 4 otsikko (opas 3.1.1); lähteen otsikko jää perusteluihin ja raporttiin.
+        nimi: liitteen 4 otsikko
+        vaikutus: >
+          Ryhmä saa liitteen 4 otsikon; lähteen otsikko jää perusteluihin ja raporttiin.
     oletus: lahde
     peruste: >
       Lähdeuskollisuus ja jäljitettävyys (P2, ADR-0007): kirjasto on uuden kaavan pohja, ja

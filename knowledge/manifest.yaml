@@ -63,7 +63,7 @@ tiedostot:
   katja/annex4_katja-ii_393-2025.yaml: 6b57c742b8064459a12bc2e1141e49ceb3d0bb936543337ff889323e5ee2499e
   llm/hinnasto.yaml: 7c0866c7c9098e063429bbfb7c551c75e1b6b2265d6cd735643f5d7439cf55f2
   org/tampere/hyvaksytyt.yaml: 36b363fee5d8c40e8cc3dcc9a6b68d703f53a30f37c092549a6ac605ae338905
-  org/tampere/linjaukset.yaml: a50236570735c7dda70d65b0729d749b652e02731f89cd29b8ac39e858a85169
+  org/tampere/linjaukset.yaml: 902f37b7f9c4f0f88a7a2b2a8df3e101c6aff5964b9a127a5302e8c11491baa8
   prompts/v1/esimerkit.yaml: c6b373e5064de1aeda21acde35515c21fea40f148fb555c410abc357d2a9c5b2
   prompts/v1/jarjestelmaohje.md: 99f1e6113fb8a0414424fb89bddf6a81ecd431c4896a30bb51799542d1bdfdac
   prompts/v1/kehote.yaml: 1bf2bcfb46894bf98330877737c4abad25794888cb2dd40218f93f855d60f4c0
