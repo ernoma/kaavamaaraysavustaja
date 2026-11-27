@@ -11,7 +11,10 @@ legend), an interpretation question answered and re-run, export, the model path 
 adapter (cost estimate before the call, no network) and one real ``QgsTask`` run. Feedback
 round 1 (0.3.1): plain-language header and policy choices, map choice only for a text with
 several maps, one pasted marking, who resolved a question and the policy switch in the card,
-the Ryhti JSON view, the file name suggestion and export without overwriting.
+the Ryhti JSON view, the file name suggestion and export without overwriting. Round 3
+(0.3.3–0.3.4): a regulation type from the code list (K5) and additional information added,
+given a value, removed and restored on the Lisätiedot tab, kept in the project and on
+reopening; screenshots of the narrow dock drawn off screen (no window is shown).
 No API key is used; settings go to a separate organisation (``KMA-savutesti``).
 """
 
@@ -29,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 
 from qgis.core import QgsApplication  # noqa: E402
 from qgis.PyQt.QtCore import QCoreApplication  # noqa: E402
-from qgis.PyQt.QtWidgets import QMainWindow  # noqa: E402
+from qgis.PyQt.QtWidgets import QMainWindow, QWidget  # noqa: E402
 
 NEW_TEXT = (
     "Alueelle saa rakentaa enintään 6 000 k-m² pientaloja.\n\nPihoille suositellaan hulevesien viivyttämistä."
@@ -49,6 +52,7 @@ NO_CODE_TEXT = (
     "Alue varataan toimisto- ja työpaikkatiloille. Alueelle ei tule sijoittaa sellaisia toimintoja, "
     "jotka häiriintyvät raskaasta liikenteestä, melusta ja tärinästä."
 )
+QUALITY = "ymparistoAsettaaToiminnanLaadulleErityisiaVaatimuksia"
 TWO_MAPS = """\
 @kartta Kartta 1 - Yhdyskuntarakenne
 KESKUSTATOIMINTOJEN ALUE
@@ -105,6 +109,51 @@ def check(condition, message):
     if not condition:
         raise AssertionError(message)
     print(f"  ok: {message}")
+
+
+def infos_of(proposal):
+    return [
+        (i.type.value, i.value.code.value if i.value and i.value.code else None)
+        for i in proposal.regulations[0].additional_infos
+    ]
+
+
+def show_offscreen(dock, width: int = 360, height: int = 1000) -> None:
+    """A narrow floating dock that Qt lays out and draws, but not on the screen."""
+    from qgis.PyQt.QtCore import Qt
+
+    dock.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    dock.setFloating(True)
+    dock.resize(width, height)
+    dock.show()
+    QCoreApplication.processEvents()
+
+
+def hide_offscreen(dock) -> None:
+    dock.hide()
+    dock.setFloating(False)
+    QCoreApplication.processEvents()
+
+
+def screenshot(dock, out: Path, name: str) -> Path:
+    """The dock and the Lisätiedot page at full height (layout check of the narrow dock)."""
+    for _ in range(5):  # layout requests cascade: label → page → scroll area
+        QCoreApplication.processEvents()
+        time.sleep(0.02)
+    path = out / f"{name}.png"
+    dock.grab().save(str(path))
+    scroll = dock.detail_tabs.widget(2)
+    page = scroll.widget()
+    page.grab().save(str(out / f"{name}_sivu.png"))
+    wide = [w for w in page.findChildren(QWidget) if w.isVisible() and w.width() > page.width() + 1]
+    check(
+        not wide and dock.width() <= 370 and page.width() <= scroll.viewport().width(),
+        f"kapea telakka ({name}, {dock.width()} px): mikään ei levennä sivua",
+    )
+    card = dock.question.parentWidget()  # the question card in its own scroll area
+    check(card.width() <= card.parentWidget().width(), f"kapea telakka ({name}): kysymyskortti ei leikkaudu")
+    print(f"  kuvakaappaus: {path}")
+    return path
 
 
 def select_question(dock, kind: str) -> None:
@@ -405,6 +454,97 @@ def run() -> None:
         dock.view.resolver == "kayttaja" and dock.code_search.currentData() == "tyopaikkojenAlue",
         "kortti: oma koodiratkaisu muutettavissa",
     )
+
+    # -- 2d. Additional information added and removed by the user (P3-01, ADR-0019) ----------
+    show_offscreen(dock)
+    dock.tabs.setCurrentIndex(1)
+    dock.detail_tabs.setCurrentIndex(2)
+    check(
+        dock.detail_tabs.tabText(2) == "Lisätiedot" and not dock.add_box.isHidden(),
+        "Lisätiedot-välilehti: lisäys mahdollinen",
+    )
+    check(
+        "Päämääräys: Työpaikkojen alue" in dock.edit_main.text()
+        and dock.info_list.item(0).text() == "Pääkäyttötarkoitus (avustajan ehdotus)",
+        "päämääräys ja avustajan lisätieto",
+    )
+    check("välilehdellä Lisätiedot" in dock.detail.toHtml(), "ehdotus ohjaa Lisätiedot-välilehdelle")
+    dock.info_search.setCurrentIndex(dock.info_search.findData(QUALITY))
+    check(
+        "kaavamääräyksellä määrätään" in dock.info_desc.text() and dock.value_row.isHidden(),
+        "lisätiedon kuvaus näkyy, ei arvoa",
+    )
+    dock.add_info()
+    check(
+        "⏳" in dock.edit_pending.text() and "⏳" in dock.info_list.item(1).text(),
+        "lisäys odottaa uudelleenajoa",
+    )
+    check("lisätietojen muutoksia" in dock.json_notes.text(), "Ryhti-JSON kertoo odottavasta muutoksesta")
+    screenshot(dock, out, "lisatiedot_1_lisays")
+    dock.convert()
+    p = dock.project.units[0].proposal
+    check(
+        infos_of(p) == [("paakayttotarkoitus", None), (QUALITY, None)]
+        and p.letter_code == "TP"
+        and not p.results("virhe")
+        and p.status == "muokattu",
+        "lisätieto rakenteessa (P3-01)",
+    )
+    check(dock.detail_tabs.currentIndex() == 2, "Lisätiedot-välilehti pysyy auki uudelleenajossa")
+    check(
+        dock.info_list.item(1).text().endswith("(lisäsit)") and dock.edit_pending.isHidden(),
+        "lisäys tehty, ei odottavia",
+    )
+    check("Käyttäjä lisäsi lisätiedon" in dock.detail.toHtml(), "perustelu Perustelut-osassa")
+    check(QUALITY in dock.json_view.toPlainText(), "Ryhti-JSON näyttää lisätiedon")
+    dock.info_search.setCurrentIndex(dock.info_search.findData("kayttotarkoituskohdistus"))
+    check(not dock.value_row.isHidden() and dock.value_search.count() > 100, "arvo valitaan koodistosta")
+    dock.value_search.setCurrentIndex(dock.value_search.findData("teollisuusalue"))
+    check("Teollisuusalue" in dock.value_search.currentText(), "arvo valittu")
+    screenshot(dock, out, "lisatiedot_2_arvo")
+    dock.add_info()
+    dock.info_list.setCurrentRow(0)
+    check(dock.info_item_button.text() == "Poista lisätieto", "poistopainike avustajan lisätiedolle")
+    dock.change_info_item()
+    check("poistetaan" in dock.info_list.item(0).text(), "poisto odottaa uudelleenajoa")
+    dock.convert()
+    p = dock.project.units[0].proposal
+    check(
+        ("kayttotarkoituskohdistus", "teollisuusalue") in infos_of(p)
+        and "paakayttotarkoitus" not in [i for i, _ in infos_of(p)],
+        "arvollinen lisätieto lisätty, pääkäyttötarkoitus poistettu",
+    )
+    check(
+        [r.rule_id for r in p.results("virhe")] == ["R-08"] and dock.units.item(0).text().startswith("✖"),
+        "poiston seuraus näkyy sääntövirheenä",
+    )
+    check("tarkistussääntö R-08" in dock.detail.toHtml(), "virhe selkokielisenä")
+    removed = next(i for i in range(dock.info_list.count()) if "poistit" in dock.info_list.item(i).text())
+    dock.info_list.setCurrentRow(removed)
+    check(dock.info_item_button.text() == "Palauta lisätieto", "poistetun voi palauttaa")
+    screenshot(dock, out, "lisatiedot_3_poistettu")
+    dock.change_info_item()
+    dock.convert()
+    p = dock.project.units[0].proposal
+    check("paakayttotarkoitus" in [i for i, _ in infos_of(p)] and not p.results("virhe"), "palautettu")
+    dock.export_dir.setText(str(out))
+    dock.export_stem.setText("lisatiedot")
+    dock.export()
+    saved = ConversionProject.load(out / "lisatiedot.kma.json")
+    check(
+        sorted(e.info.value for e in saved.edits) == ["kayttotarkoituskohdistus", QUALITY],
+        "muokkaukset tallessa projektissa",
+    )
+    report = (out / "lisatiedot_raportti.md").read_text(encoding="utf-8")
+    check("Käyttäjä lisäsi lisätiedon" in report, "perustelu raportissa")
+    dock.new_conversion()
+    check(dock.edits == [] and dock.info_list.isHidden(), "uusi muunnos tyhjentää muokkaukset")
+    dock.load_project(saved)
+    check(len(dock.edits) == 2 and dock.edit_pending.isHidden(), "aiempi muunnos: muokkaukset palautuvat")
+    dock.convert()
+    check(infos_of(dock.project.units[0].proposal) == infos_of(p), "uudelleenajo avatusta muunnoksesta")
+    dock.detail_tabs.setCurrentIndex(0)
+    hide_offscreen(dock)
 
     # -- 3. Model path with a test adapter: estimate before the call, no network ------------
     from kaavamaaraysavustaja.core.llm.fake import FakeProvider

@@ -1130,12 +1130,10 @@ class EditView:
 
 
 EDIT_HELP = (
-    "Lisätiedot täydentävät kaavamääräystä, esimerkiksi ”ympäristö asettaa toiminnan laadulle "
-    "erityisiä vaatimuksia”. Hae lisätiedon laji kansallisesta koodistosta ja paina Lisää lisätieto; jos "
-    "lisätiedolla on arvo (esim. käyttötarkoituskohdistus), valitse myös arvo. Voit poistaa myös avustajan "
-    "ehdottaman lisätiedon. Muutos koskee vain tätä merkintää ja näkyy, kun ajat muunnoksen uudelleen. "
-    "Avustaja tarkistaa tuloksen tarkistussäännöillä. Ryhmää, jonka rakennetta olet muokannut, ei lähetetä "
-    "kielimallille."
+    "Lisätiedot täydentävät kaavamääräystä, esim. ”ympäristö asettaa toiminnan laadulle erityisiä "
+    "vaatimuksia”. Voit lisätä lisätiedon koodistosta ja poistaa minkä tahansa lisätiedon. Muutos koskee "
+    "vain tätä merkintää ja näkyy, kun ajat muunnoksen uudelleen; tarkistussäännöt tarkistavat tuloksen. "
+    "Muokattua ryhmää ei lähetetä kielimallille."
 )
 
 
