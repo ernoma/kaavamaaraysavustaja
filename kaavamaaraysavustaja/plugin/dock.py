@@ -84,7 +84,7 @@ LEGEND_HELP = (
     "Liitä teksti, jossa merkinnän otsikko on omalla rivillään ISOIN KIRJAIMIN ja kirjaintunnus "
     "otsikon alussa; määräysteksti seuraa otsikkoa. Sopii yhdelle tai usealle merkinnälle: otsikko ja "
     "tunnus luetaan tekstistä, joten niille ei ole omia kenttiä. Yleismääräykset kirjoitetaan otsikon "
-    "YLEISMÄÄRÄYKSET alle. Esimerkki yhdestä merkinnästä:"
+    "YLEISMÄÄRÄYKSET alle."
 )
 SINGLE_PLACEHOLDER = (
     "Kirjoita tai liitä määräyksen teksti. Voimassa olevan määräyksen teksti siirtyy merkki merkiltä; "
@@ -160,6 +160,8 @@ class AvustajaDock(QDockWidget):
         self.last_export: workflow.ExportResult | None = None
         self._confirmed_budget = 2.0
         self._stem_suggestion: str | None = None
+        self._texts: dict[str, str] = {}  # input type -> its text while the other type is shown
+        self._shown_kind = INPUT_KINDS[0][0]
         self.run_synchronously = False  # tests: run tasks in the calling thread
         self._map_timer = QTimer(self)
         self._map_timer.setSingleShot(True)
@@ -237,6 +239,14 @@ class AvustajaDock(QDockWidget):
         self.input_help = _wrapped()
         self.input_help.setTextFormat(Qt.TextFormat.RichText)
         form.addRow(self.input_help)
+        # The format example in a marked box so that it is not mistaken for input (P2-01).
+        lines = "<br>".join(_e(line) for line in workflow.LEGEND_EXAMPLE.splitlines())
+        self.legend_example = _wrapped(
+            f"<i>Esimerkki yhdestä merkinnästä (malli, ei syötettä):</i><br><tt>{lines}</tt>"
+        )
+        self.legend_example.setTextFormat(Qt.TextFormat.RichText)
+        self.legend_example.setStyleSheet("QLabel { border: 1px dashed gray; padding: 4px; }")
+        form.addRow(self.legend_example)
         self.group_kind = QComboBox()
         self.group_kind.addItem("Kaavakohteen määräys (merkintä)", "merkinta")
         self.group_kind.addItem("Yleismääräys (koko kaava-alue)", "yleismaarays")
@@ -311,15 +321,21 @@ class AvustajaDock(QDockWidget):
         field.setVisible(visible)
 
     def _update_input_fields(self) -> None:
-        single = self.input_kind.currentData() == "yksi"
+        kind = self.input_kind.currentData()
+        single = kind == "yksi"
+        if kind != self._shown_kind:  # each input type keeps its own text (P2-01)
+            self._texts[self._shown_kind] = self.text.toPlainText()
+            self.text.setPlainText(self._texts.get(kind, ""))
+            self._shown_kind = kind
         for widget in (self.group_kind, self.heading, self.letter_code):
             self._set_row_visible(widget, single)
+        self.legend_example.setVisible(not single)
         if single:
             self.input_help.setText(_e(SINGLE_HELP))
             self.text.setPlaceholderText(SINGLE_PLACEHOLDER)
         else:
-            self.input_help.setText(f"{_e(LEGEND_HELP)}<pre>{_e(workflow.LEGEND_EXAMPLE)}</pre>")
-            self.text.setPlaceholderText(workflow.LEGEND_EXAMPLE)
+            self.input_help.setText(_e(LEGEND_HELP))
+            self.text.setPlaceholderText("Liitä teksti tähän. Muoto: ks. esimerkki yllä.")
         self._refresh_maps()
 
     def _text_changed(self) -> None:
@@ -488,6 +504,7 @@ class AvustajaDock(QDockWidget):
         self.heading.clear()
         self.letter_code.clear()
         self.text.clear()
+        self._texts = {}
         self.units.clear()
         self.detail.clear()
         self._show_questions(None)
@@ -1122,8 +1139,9 @@ class AvustajaDock(QDockWidget):
             lines.append("<p>Ryhti-skeema: ei virheitä.</p>")
         elif "skeema" in problems:
             lines.append(
-                f"<p>Ryhti-skeema: {_e(problems['skeema'][0])}. Voit asentaa jsonschema-paketin kma_deps-kansioon "
-                "tai validoida Syken testiympäristössä.</p>"
+                "<p>Ryhti-skeema: paikallista skeematarkistusta ei tehty, koska QGISista puuttuu "
+                "jsonschema-paketti. Tämä ei ole virhe. Ryhdin oman tarkistuksen saat painikkeella "
+                f"<i>Validoi Syken testiympäristössä</i>.<br><small>{_e(problems['skeema'][0])}</small></p>"
             )
         else:
             lines.append(
@@ -1160,6 +1178,11 @@ class AvustajaDock(QDockWidget):
             return
         lines = ["<b>Syke (testiympäristö):</b><ul>"]
         for line in task.result:
+            if line.status == "OK" and not line.findings:
+                lines.append(
+                    f"<li>✔ {_e(line.title or line.unit_id)}: Ryhti hyväksyi ryhmän, ei havaintoja.</li>"
+                )
+                continue
             found = "".join(f"<li>{_e(f)}</li>" for f in line.findings)
             lines.append(
                 f"<li>{_e(line.title or line.unit_id)}: {_e(line.status)}, määräystason havaintoja {len(line.findings)}"

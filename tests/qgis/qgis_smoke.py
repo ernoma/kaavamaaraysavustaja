@@ -167,6 +167,16 @@ def run() -> None:
     )
     dock.heading.setText("Pientalovaltainen asuntoalue")
     dock.text.setPlainText(NEW_TEXT)
+    dock.input_kind.setCurrentIndex(dock.input_kind.findData("selite"))
+    check(
+        dock.text.toPlainText() == "" and not dock.legend_example.isHidden() and dock.heading.isHidden(),
+        "liitetty teksti: oma tyhjä teksti, esimerkki merkittynä mallina (P2-01)",
+    )
+    dock.input_kind.setCurrentIndex(dock.input_kind.findData("yksi"))
+    check(
+        dock.text.toPlainText() == NEW_TEXT and dock.legend_example.isHidden(),
+        "yksi määräys: oma teksti palaa",
+    )
     dock.convert()
     project = dock.project
     check(project is not None and project.meta.mode == "laadinta", "uusi määräys muunnettu (laadinta)")
@@ -234,7 +244,14 @@ def run() -> None:
     saved = ConversionProject.load(out / "uusi.kma.json")
     check([d.kind for d in saved.decisions] == ["K13"], "päätösloki tallessa projektissa")
     result = dock.export_result.toHtml()
-    check("Ryhti-skeema: ei virheitä" in result or "skeemavalidointi ohitettu" in result, "Ryhti-skeema")
+    check(
+        "Ryhti-skeema: ei virheitä" in result or "paikallista skeematarkistusta ei tehty" in result,
+        "Ryhti-skeema",
+    )
+    check(
+        "Avustajan tarkistussäännöt: ei virheitä" in dock.json_notes.text(),
+        "Ryhti-JSON: ei estäviä virheitä (P2-02)",
+    )
     check(
         not json.loads((out / "uusi.ryhti.json").read_text(encoding="utf-8")).get("plan"), "Ryhti-fragmentit"
     )

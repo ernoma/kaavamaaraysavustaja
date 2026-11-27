@@ -879,7 +879,10 @@ def detail_html(kb: KnowledgeBase, unit: SourceUnit, g: Glossary | None = None) 
         )
         out.append(f"<li>{_e(plain_text(r.claim, g))} <small>({_e(source)})</small>{quote}</li>")
     out.append("</ul>" if rationale else "<li>–</li></ul>")
-    out.append("<h4>Sääntötarkistus</h4><ul>")
+    out.append(
+        "<h4>Sääntötarkistus</h4><p><small>Virhe estää Ryhdin hyväksynnän, varoitus kannattaa "
+        "tarkistaa, huomio on tiedoksi.</small></p><ul>"
+    )
     for r in p.rule_results:
         title = g.rules.get(r.rule_id, "")
         name = f"{title} (tarkistussääntö {r.rule_id})" if title else f"tarkistussääntö {r.rule_id}"
@@ -1150,6 +1153,15 @@ def ryhti_view(
     if errors:
         notes.append(
             f"Sääntövirheitä {errors}: Ryhti hylkää ryhmän todennäköisesti, kunnes virhe on korjattu."
+        )
+    else:  # P2-02: say plainly that nothing blocks Ryhti, and what notes and warnings mean
+        warnings = sum(len(u.proposal.results("varoitus")) for u in units if u.proposal)
+        remarks = sum(len(u.proposal.results("huomio")) for u in units if u.proposal)
+        extra = [f"varoituksia {warnings} (kannattaa tarkistaa)"] if warnings else []
+        extra += [f"huomioita {remarks} (tiedoksi, ei korjattavaa)"] if remarks else []
+        notes.append(
+            "Avustajan tarkistussäännöt: ei virheitä" + (", " + ", ".join(extra) if extra else "") + ". "
+            "Ryhdin oman tarkistuksen voit tehdä kohdassa 3 Vienti → Validoi Syken testiympäristössä."
         )
     if decisions is not None:
         waiting = pending_decisions(project, decisions)

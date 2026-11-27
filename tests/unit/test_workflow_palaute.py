@@ -470,3 +470,22 @@ def test_p1_09_only_the_chosen_formats_count(kb, tmp_path):
     assert workflow.export(kb, project, tmp_path, "uusi", ["ryhti"]).stem == "uusi"
     with pytest.raises(workflow.InputError):
         workflow.export(kb, project, tmp_path, "uusi", [])
+
+
+# -- Feedback round 2 -------------------------------------------------------------------------
+
+
+def test_p2_02_ryhti_view_says_nothing_blocks_ryhti(kb):
+    request = drafting()
+    project = workflow.rule_based(kb, request)
+    unit = project.units[0]
+    request.decisions = [workflow.decision_for(unit, question(unit, "K13"), "suositus")]
+    again = workflow.rule_based(kb, request)
+    notes = " ".join(workflow.ryhti_view(again, again.units[0].id, decisions=request.decisions).notes)
+    # The only finding is the R-18 note on the number in the text: nothing to fix.
+    assert "Avustajan tarkistussäännöt: ei virheitä, huomioita 1 (tiedoksi, ei korjattavaa)" in notes
+    assert "Validoi Syken testiympäristössä" in notes
+    assert "huomio on tiedoksi" in workflow.detail_html(kb, again.units[0])
+    two = workflow.rule_based(kb, workflow.ConversionRequest(text=TWO_MAPS, legend=True))
+    first = " ".join(workflow.ryhti_view(two, two.units[0].id).notes)
+    assert "Sääntövirheitä 1" in first and "ei virheitä" not in first
