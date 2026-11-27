@@ -6,9 +6,32 @@ tähän API-avaimia tai henkilötietoja; säilö on julkinen. Jos esimerkkitekst
 merkitse se, niin kehittäjä tekee siitä synteettisen vastineen.
 
 - Kokeilija: paikkatietoasiantuntija
-- Päivämäärä:
-- QGIS-versio ja työasema:
+- Päivämäärä: 27.11.2026 (ensimmäinen palautekierros)
+- QGIS-versio ja työasema: QGIS 3.44, Windows-kehityskone
 - Kielimalli käytössä (ei / Claude / Mistral), kokonaiskustannus noin:
+
+## Palautekierros 1 (27.11.2026): havainnot
+
+Kokeiltu [`vaihe3a_raportti.md`](vaihe3a_raportti.md):n kokeiluaskelten mukaan. Kokeilija
+antoi palautteen keskustelussa, ja tekoäly kirjasi sen tähän. Kokeilijan havainnot ovat
+kohdissa "Havainto". Kohdat "Syy" ja "Korjaussuunta" ovat tekoälyn lisäyksiä, jotka se on
+tarkistanut koodista (`plugin/dock.py`, `core/workflow.py`). Lopulliset ratkaisut tehdään
+korjaussessiossa.
+
+**Yleisarvio:** käyttöliittymä vaikuttaa kehityskelpoiselta.
+
+| # | Kohta | Havainto | Syy (versio 0.3.0) | Korjaussuunta |
+|---|---|---|---|---|
+| P1-01 | Koko telakka | Käyttöliittymässä näkyy paljon tunnisteita ja lyhenteitä, kuten ADR-0009, L-06, K14 ja 11-3. Käyttäjä ei tiedä, mitä ne tarkoittavat, eikä hänen pitäisi joutua etsimään niitä dokumentaatiosta, joka ei välttämättä ole edes hänen saatavillaan. Jos tunnisteet ovat toteutukselle tarpeellisia, ne saavat näkyä, mutta käyttäjä on silti huomioitava. | Tunnisteita näkyy suoraan useassa kohdassa: syötevalinnassa ("ADR-0009"), linjausvalinnoissa ("L-06 …"), kysymysluettelossa ("K14 …") ja otsakkeessa (tietopohjan versio "TP-2026.11-3" ja kehoteversio "prompts/v3 v3"). | Ensisijaisesti selkokielinen teksti. Tunniste joko poistetaan tai näytetään toissijaisena, ja siihen liitetään lyhyt selitys (työkaluvihje tai sulkeissa). Esimerkiksi "Tietopohja TP-2026.11-3" voisi olla "Koodistot ja säännöt: marraskuu 2026", ja tarkempi tieto näkyisi työkaluvihjeessä. ADR-viitteitä ei näytetä käyttäjälle. |
+| P1-02 | 1 Syöte: Kartta | Käyttäjälle ei selviä, miksi Kartta-kenttään kannattaisi kirjoittaa jotain. | Kenttä vain välitetään muunnokselle. Selite-syötteessä sen arvosta tulee projektin nimi ja kartan otsikko. | Kenttä selitetään (mihin arvo päätyy ja mihin sitä käytetään), tai se poistetaan tai siirretään lisäasetuksiin, jos sillä ei ole käyttäjälle merkitystä. |
+| P1-03 | 1 Syöte: Kartta | Käyttäjä ihmettelee, miksi Kartta-kenttää ei voi täyttää, kun hän syöttää uutta määräystä. | `_update_input_fields` poistaa kentän käytöstä *Yksi määräys* -syötteessä. Kenttä on käytössä vain *Liitetty selite* -syötteessä. | Käyttäytyminen yhtenäistetään (kenttä joko käytössä molemmissa tai piilotettu), tai syy kerrotaan näkyvästi. |
+| P1-04 | 1 Syöte: Linjausvalinnat | Käyttäjälle ei selviä, miten Linjausvalinnat-laatikko vaikuttaa muunnokseen. | Laatikko on oletuksena kiinni. Kunkin rivin otsikko on muotoa "L-nn otsikko", ja selitys näkyy vain työkaluvihjeessä. | Laatikkoon lisätään lyhyt johdanto (mitä linjaus on ja milloin sitä muutetaan). Kunkin valinnan vaikutus kerrotaan selkokielellä näkyvissä, ei vain työkaluvihjeessä. Lukitulle linjaukselle kerrotaan, miksi se on lukittu. |
+| P1-05 | 1 Syöte: Liitetty selite | Jos käyttäjä valitsee *Liitetty selite*, jotta otsikkoa ja kirjaintunnusta ei tarvitse kirjoittaa erikseen vaan ne tulevat tekstin mukana, voiko silti syöttää vain yhden merkinnän? | Voi, sillä selitteen jäsennin hyväksyy myös yhden merkinnän. Valinnan teksti "(useita merkintöjä, ADR-0009)" antaa kuitenkin ymmärtää muuta. | Valinnan nimi ja ohje muotoillaan uudelleen, esimerkiksi "Liitetty teksti, jossa otsikko ja kirjaintunnus ovat mukana (yksi tai useampi merkintä)". Lyhyt esimerkki muodosta lisätään. Toimivuus varmistetaan testillä. |
+| P1-06 | 2 Ehdotus: ratkaisut | Käyttäjä ihmettelee, miksi osaa tekemistään ratkaisuista ei voi muuttaa ja osaa voi. | Linjauksella ratkaistu kysymys näytetään vain luku -tilassa (`resolved_by` alkaa "linjaus…"), ja ohje on vain pienellä kursiivilla. Ratkaisu muuttuu Syöte-välilehden linjausvalinnalla. Lukittua linjausta ei voi muuttaa lainkaan. | Ero näytetään selkeästi: kuka ratkaisi kysymyksen (käyttäjä, linjaus tai lukittu linjaus) ja miten sitä voi muuttaa. Linjauksen voisi vaihtaa suoraan kysymyskortista, jolloin ratkaisu kirjataan muunnoskohtaisena valintana. Käyttäjän omat ratkaisut ovat aina muutettavissa. |
+| P1-07 | 2 Ehdotus: Ryhti-JSON | Viimeistään silloin, kun kaikki tulkintakysymykset on ratkaistu, käyttäjän pitäisi voida tarkastella syntyvää Ryhti-JSONia suoraan käyttöliittymässä. | Ryhti-JSON näkyy vasta viedyssä tiedostossa. *Tekninen näkymä* on HTML-tiivistelmä. | Lisätään näkymä, joka näyttää valitun yksikön Ryhti-JSONin (luettava, kopioitava). Lisäksi kerrotaan, onko kysymyksiä vielä avoinna. |
+| P1-08 | 3 Vienti: tiedostonimi | Tiedostonimen alun ehdotus tulee ilmeisesti Syöte-välilehden Otsikko-kentästä, vaikka siihen ei olisi syötetty mitään. Ainakaan *Liitetty selite* -syötteessä sitä ei pitäisi käyttää. Ehdotuksen pitäisi tulla Ehdotus-välilehden kaavamääräysryhmän otsikosta. | `set_project` asettaa nimen vain, jos kenttä on tyhjä. Nimi tulee projektin nimestä, joka on Otsikko-kenttä, selitteellä Kartta-kenttä tai "Telakan muunnos". Uusi muunnos ei päivitä vanhaa ehdotusta. | Ehdotus muodostetaan ehdotuksen ensimmäisen kaavamääräysryhmän otsikosta (tai kirjaintunnuksesta), ja se päivitetään jokaisen muunnoksen jälkeen, ellei käyttäjä ole muuttanut nimeä itse. |
+| P1-09 | 3 Vienti: ylikirjoitus | *Vie*-painike tallentaa kansiossa jo olevien tiedostojen päälle kysymättä, saako niin tehdä vai pitäisikö nimen loppuun lisätä esimerkiksi juokseva numero. | `workflow.export` kirjoittaa tiedostot tarkistamatta, ovatko ne jo olemassa. | Ennen vientiä tarkistetaan olemassa olevat tiedostot ja kysytään: korvaa tai lisää juokseva numero (oletus). Logiikka sijoitetaan `core/workflow.py`:hin testattavaksi. |
+
 
 ## T-01 Kokeilu
 
