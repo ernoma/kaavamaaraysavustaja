@@ -99,7 +99,8 @@ kaavamääräyslaji…* esim. "työpaikka", valitse *Työpaikkojen alue*, paina 
 ratkaisuksi** ja **Aja uudelleen ratkaisuin**. Rakenne-osassa pitäisi näkyä *Työpaikkojen alue
 (Pääkäyttötarkoitus)* ja yksikössä merkki ✔.
 
-Tulos (27.11.2026, versio 0.3.3): kokeilija vahvisti, että koodin valinta toimii.
+Tulos (27.11.2026, versio 0.3.3): kokeilija vahvisti, että koodin valinta toimii. Lisäksi
+kielimalli (Claude) ja Syken testiympäristön validointi toimivat telakasta.
 
 ## T-01 Kokeilu
 
