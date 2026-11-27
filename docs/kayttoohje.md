@@ -20,8 +20,11 @@ Edellytykset: QGIS 3.40–3.44 (testattu 3.44.7, OSGeo4W). Arhoa ei tarvita.
    New-Item -ItemType Junction -Path "$env:APPDATA\QGIS\QGIS3\profiles\default\python\plugins\kaavamaaraysavustaja" -Target (Resolve-Path .\kaavamaaraysavustaja)
    ```
 
-   Linkki osoittaa säilöön, joten `git pull` päivittää lisäosan. Käynnistä QGIS uudelleen
-   päivityksen jälkeen (tai käytä Plugin Reloader -lisäosaa).
+   Linkki osoittaa suoraan säilön työhakemistoon, joten QGIS käyttää aina sitä koodia, joka
+   kansiossa on: muutokset näkyvät QGISissa ilman erillistä asennusta tai `git pull`ia
+   (`git pull` tarvitaan vain, jos koodia on muutettu toisessa kloonissa tai koneella).
+   Jos QGIS oli auki muutosten aikana, käynnistä se uudelleen (tai käytä Plugin Reloader
+   -lisäosaa), jotta uusi koodi latautuu.
 2. **Ota käyttöön**: *Lisäosat → Hallitse ja asenna lisäosia → Asennetut* → rasti
    *Kaavamääräysavustaja* (kokeelliset lisäosat on sallittava *Asetukset*-välilehdellä).
 3. **Kielimallin SDK** (valinnainen; ilman sitä muunnos on sääntöpohjainen). Asennettu tälle

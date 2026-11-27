@@ -28,7 +28,8 @@ Commitit: `71e2044` … (ks. `git log`), kaikki pushattu `main`-haaraan.
 Tarkemmin [käyttöohjeessa](kayttoohje.md). Tällä työasemalla lisäosa on jo linkitetty ja SDK
 asennettu (`kma_deps`).
 
-1. Päivitä säilö (`git pull`) ja käynnistä QGIS 3.44. *Lisäosat → Kaavamääräysavustaja →
+1. Käynnistä QGIS 3.44 (uudelleen, jos se oli auki: lisäosa on linkki työhakemistoon, joten
+   uusi koodi on jo käytössä ilman `git pull`ia). *Lisäosat → Kaavamääräysavustaja →
    Tietoja*: "Kaavamääräysavustaja 0.3.0", tietopohja TP-2026.11-3, "claude ✓".
 2. Avaa telakka (*Lisäosat → Kaavamääräysavustaja → Kaavamääräysavustaja*).
 3. **Uusi määräys**: Tila *Uusi määräys (laadinta)*, otsikko "Pientalovaltainen asuntoalue",
