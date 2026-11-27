@@ -79,10 +79,13 @@ Käynnistä QGIS uudelleen ja avaa telakka.
 
 | Askel | Toimiko? (kyllä / ei / osittain) | Huomiot |
 |---|---|---|
-| 1–2 Syötteen vaihto | | |
-| 3 Ratkaisu ja uudelleenajo | | |
-| 4 Ryhti-JSON ja tarkistussäännöt | | |
-| 5 Vienti ja Syke | | |
+| 1–2 Syötteen vaihto | kyllä | kokeiltu 27.11.2026 (versio 0.3.2) |
+| 3 Ratkaisu ja uudelleenajo | kyllä | |
+| 4 Ryhti-JSON ja tarkistussäännöt | kyllä | |
+| 5 Vienti ja Syke | kyllä | |
+
+Kokeilija: kaikki askeleet toimivat (keskustelussa 27.11.2026; numerointi keskustelun ohjeen
+mukaan 1–6, jossa QGISin käynnistys oli oma askeleensa).
 
 ## T-01 Kokeilu
 
