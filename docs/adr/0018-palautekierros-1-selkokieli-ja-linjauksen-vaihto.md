@@ -44,6 +44,23 @@ VOOKA-pyynnön on pysyttävä merkki merkiltä samana (ADR-0017), joten niitä e
   ja telakka kysyy vahvistuksen. Tiedostonimen ehdotus tulee ensimmäisen kaavamääräysryhmän
   otsikosta tai kirjaintunnuksesta ja päivittyy, ellei käyttäjä ole muuttanut nimeä.
 
+### Täydennys 27.11.2026 (versio 0.3.3, havainto P3-01)
+
+- **Kaavamääräyslaji koodistosta (K5).** Kun sopivaa Katja-koodia ei löydy, käyttäjä voi
+  ratkaista kysymyksen valitsemalla kaavamääräyslajin kansallisesta koodistosta. Ratkaisu on
+  tavallinen tulkintakysymyksen ratkaisu (`Decision`), jonka valinta on `koodi:<arvo>`.
+  Valittavissa ovat kaavatason määrityshierarkiaan kuuluvat voimassa olevat koodit ilman
+  otsikkotason koodeja, sanallisia määräyksiä ja suureita (`convert.choosable_codes`).
+- Sääntöpohjainen vaihe rakentaa ryhmän valitusta koodista samalla funktiolla kuin nimen
+  perusteella löydetystä koodista (`structure_from_code`), joten aluevaraus saa
+  pääkäyttötarkoituksen ja kirjaintunnus haetaan liitteen 4 rakenteesta. Perusteluna on
+  käyttäjän valinta (menetelmä `kayttaja`, varmuus korkea).
+- Ryhmää, jonka kaavamääräyslajin käyttäjä on valinnut, ei lähetetä kielimallille
+  (`hybrid.needs_model`), jotta malli ei korvaa käyttäjän rakennetta. Ilman tällaista ratkaisua
+  K5-kysymys ja kielimallin pyyntö ovat ennallaan.
+- Lisätietojen ja useamman koodin valinta käsin puuttuu vielä; ne kuuluvat rakenteen
+  muokkaukseen koodivalitsimilla, jonka tarve selviää palautteesta.
+
 ## Seuraukset
 
 - Uudet ytimen tekstimuodot (esim. uusi tunnistetyyppi) on lisättävä `plain_text`iin; testi

@@ -1,11 +1,12 @@
-# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.2, vaihe 3a)
+# Kaavamääräysavustaja – käyttöohje (kokeiluversio 0.3.3, vaihe 3a)
 
 Ohje on paikkatietoasiantuntijalle. Lisäosa muuntaa sanallisen kaavamääräyksen Katja-asetuksen
 mukaiseksi kaavamääräysryhmäksi QGISissa, ilman Arhoa. Kokeiluversiossa muunnetaan yksi
 määräys kerrallaan (tai lyhyt liitetty teksti). Palaute kirjataan tiedostoon
 [`palaute_vaihe3.md`](palaute_vaihe3.md) (tehtävät T-01 ja T-02,
 [`kayttajan_tehtavat.md`](kayttajan_tehtavat.md)). Versio 0.3.1 korjasi ensimmäisen
-palautekierroksen havainnot P1-01–P1-09 ja versio 0.3.2 toisen kierroksen havainnot P2-01–P2-02.
+palautekierroksen havainnot P1-01–P1-09, versio 0.3.2 toisen kierroksen havainnot P2-01–P2-03
+ja versio 0.3.3 havainnon P3-01 (kaavamääräyslajin valinta koodistosta).
 
 Ehdotus on aina ehdotus: avustaja perustelee jokaisen valinnan ja kysyy monitulkintaiset kohdat,
 ja sinä päätät. Mitään ei toimiteta Ryhtiin.
@@ -183,6 +184,16 @@ Mitä avustaja tekee laadintatilassa:
    | Lukittu linjaus 🔒 | Ei muutettavissa: Tampere on päättänyt linjauksesta, ja kortti kertoo, kuka päätti ja milloin. |
    | Muunnostila | Voimassa olevan määräyksen tekstiä ei muuteta (esim. vanhentunut lakiviittaus jää ennalleen). Jos teksti laaditaan uudelleen, valitse tila *Uusi määräys (laadinta)*. |
 
+   **Ei sopivaa Katja-koodia**: jos avustaja ei löydä merkinnälle koodia, ryhmään tulee vain
+   sanallinen määräys (ja sääntövirhe). Valitse kortin kohdasta *Tai valitse kaavamääräyslaji
+   itse kansallisesta koodistosta* sopiva laji: kirjoita hakusana (esim. "työpaikka"), valitse
+   listasta (kuvaus näkyy alla) ja paina **Tallenna koodi ratkaisuksi**. Uudelleenajossa ryhmän
+   rakenne tehdään valitusta koodista: aluevaraus saa pääkäyttötarkoituksen ja kirjaintunnuksen
+   liitteestä 4, jos sillä on siellä rivi (esim. *Työpaikkojen alue* → TP). Sanallinen teksti
+   säilyy ennallaan. Lista sisältää kaavatason kaavamääräyslajit ilman otsikkotason koodeja,
+   sanallisia määräyksiä ja suureita. Ryhmää, jonka koodin valitsit itse, ei lähetetä
+   kielimallille. Lisätietoja (esim. *ympäristö asettaa toiminnan laadulle erityisiä
+   vaatimuksia*) ei vielä voi valita.
 3. **Laajuus**: *Vain tämä merkintä* tai *Kaikki samankaltaiset tässä muunnoksessa* (sama
    tunnuksen perusosa, esim. c-1…c-4, sama otsikko ilman määreitä tai sama teksti). Kirjoita
    halutessasi perustelu ja paina **Tallenna ratkaisu**. Ratkaisu menee päätöslokiin, ja kortti
@@ -244,8 +255,9 @@ kielimallivastaukset. *Uusi muunnos* tyhjentää syötteen, ratkaisut ja tulokse
 
 - Yksi määräys tai lyhyt liitetty teksti kerrallaan; koko koosteen eräkäsittely,
   jäsennystaulukko ja rakenteen muokkaus koodivalitsimilla tulevat palautteen mukaan.
-- Ehdotusta ei voi muokata käsin telakassa: rakenteeseen vaikutetaan ratkaisuilla ja
-  linjausvalinnoilla.
+- Ehdotusta ei voi muokata käsin telakassa: rakenteeseen vaikutetaan ratkaisuilla,
+  linjausvalinnoilla ja (kun sopivaa Katja-koodia ei ole) kaavamääräyslajin valinnalla
+  koodistosta. Lisätietoja ei vielä voi valita käsin.
 - Laadintatilan muotoiluehdotuksia ei ole.
 - Välityspalvelinta ei ole testattu (tällä työasemalla sitä ei tarvita).
 - Käyttöliittymä on vain suomeksi.

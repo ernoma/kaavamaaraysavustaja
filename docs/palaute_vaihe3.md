@@ -87,6 +87,18 @@ Käynnistä QGIS uudelleen ja avaa telakka.
 Kokeilija: kaikki askeleet toimivat (keskustelussa 27.11.2026; numerointi keskustelun ohjeen
 mukaan 1–6, jossa QGISin käynnistys oli oma askeleensa).
 
+### Palautekierros 3 (27.11.2026): havainnot
+
+| # | Kohta | Havainto | Syy (versio 0.3.2) | Tehty (0.3.3) |
+|---|---|---|---|---|
+| P3-01 | 2 Ehdotus: Ei sopivaa Katja-koodia | Voimassa olevan määräyksen *TYÖPAIKKOJEN JA ELINKEINOJEN ALUE, JOLLA YMPÄRISTÖ ASETTAA TOIMINNAN LAADULLE ERITYISIÄ VAATIMUKSIA* sääntöpohjaisessa muunnoksessa kysymystä "Ei sopivaa Katja-koodia" ei pystynyt ratkaisemaan. Käyttäjän pitäisi voida halutessaan valita sopiva koodi kansallisesta kaavamääräyslaji-koodistosta. | Otsikolle ei löytynyt vastinetta liitteestä 4, koodien nimistä eikä sanastosta (lähin olisi liitteen 4 rivi TY *Teollisuusalue, jolla ympäristö asettaa…*), joten ryhmään tuli vain sanallinen määräys ja sääntövirhe R-09. Kysymyksen vaihtoehdot olivat yleisiä ("lähin perusteltu koodi"), eikä niiden valinta muuttanut rakennetta, koska konkreettista koodia ei ollut. | Kortissa on haettava lista kaavatason kaavamääräyslajeista (ei otsikkotason, sanallisia eikä suureita) ja painike *Tallenna koodi ratkaisuksi*. Ratkaisu `koodi:<arvo>` tekee uudelleenajossa ryhmän rakenteen valitusta koodista: esim. *Työpaikkojen alue* → tyopaikkojenAlue + pääkäyttötarkoitus, kirjaintunnus TP liitteestä 4, sääntövirhe poistuu, teksti säilyy. Ryhmää ei lähetetä kielimallille. Ratkaisu on muutettavissa ja poistettavissa. Lisätietojen valinta (esim. *ympäristö asettaa toiminnan laadulle erityisiä vaatimuksia*) puuttuu vielä (ADR-0018, täydennys). |
+
+Kokeile (versio 0.3.3): muunna sama määräys (Tila *Voimassa oleva määräys*, Syöte *Yksi
+määräys*), valitse kysymys "Ei sopivaa Katja-koodia", kirjoita kenttään *Tai valitse
+kaavamääräyslaji…* esim. "työpaikka", valitse *Työpaikkojen alue*, paina **Tallenna koodi
+ratkaisuksi** ja **Aja uudelleen ratkaisuin**. Rakenne-osassa pitäisi näkyä *Työpaikkojen alue
+(Pääkäyttötarkoitus)* ja yksikössä merkki ✔.
+
 ## T-01 Kokeilu
 
 ### A. Asennus ja käynnistys
